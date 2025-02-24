@@ -1,6 +1,6 @@
 # minishell
  Hive Helsinki Ecole 42 curriculum project minishell with K2mies
-##Concepts
+## Concepts
 - Command line
 - Shell
 - Bash
