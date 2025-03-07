@@ -38,3 +38,20 @@ argv:		echo	Hello world!	How are you doing?	NULL
 
 bash output:	Hello world! How are you doing?
 return value:	0
+
+-----------------------------------------
+| Command		| Token count	|
+-----------------------------------------
+| echo "Hello $USER"	| 2		|
+-----------------------------------------
+token 1:	echo
+token type:	command name
+
+token 2:	"Hello $USER"
+token type:	string literal
+
+binary command:	/usr/bin/echo
+
+argv:		echo	Hello jvarila	NULL
+
+echo cat ls lol
