@@ -56,6 +56,11 @@ typedef struct s_minishell {
 	const char	*env[];
 }	t_minishell;
 
+/* ============================= TOKENIZATION =============================== */
+
+/* --------------------------------------------- minishell_quote_validation.c */
+bool	has_unclosed_quotes(const char *str);
+
 /* ================================ UTILS =================================== */
 
 /* ----------------------------------------------- minishell_utils_memarena.c */
