@@ -12,15 +12,13 @@
 
 #include "../include/minishell.h"
 
-void	*ft_arenacalloc(t_memarena *arena, size_t number, size_t size)
-{
-	
-}
-
 int	main(void)
 {
-	t_minishell	data;
-	data.arena.heap_memory = malloc(MEM_ARENA_SIZE);
-	char	*str
+	static t_minishell	data;
+
+	data.arena = new_memarena();
+	if (!data.arena)
+		return (E_ALLOC);
+	free_memarena(data.arena);
 	return (0);
 }
