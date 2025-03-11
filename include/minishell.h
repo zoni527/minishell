@@ -13,9 +13,11 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-/*--------------------------------------------------------------------- libft */
+/* =============================== HEADERS ================================== */
+
+/* -------------------------------------------------------------------- libft */
 # include "../libft/libft.h"
-/*----------------------------------------------------------------- minishell */
+/* ---------------------------------------------------------------- minishell */
 # include <readline/readline.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -25,28 +27,41 @@
 # include <string.h>
 # include <sys/ioctl.h>
 # include <term.h>
-/*--------------------------------------------------------------------- extra */
+/* -------------------------------------------------------------------- extra */
 # include <stdbool.h>
-/*----------------------------------------------------------------------------*/
-// char	*operators[] = {"<", ">", "|", "<<", ">>", NULL};
 
-// Default size is 10 MiB
+/* =============================== MACROS =================================== */
+
+/* -------------------------------------------------------- numeric constants */
+// Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
+/* -------------------------------------------------------------- error codes */
+# define E_PERMISSION	1
+# define E_ALLOC		2
 
-typedef struct s_memarena t_memarena;
+/* ============================== TYPEDEFS ===================================*/
+
+typedef struct s_memarena	t_memarena;
 
 typedef struct s_memarena {
 	size_t		capacity;
-	size_t		offset;
+	size_t		bytes_used;
 	void		*heap_memory;
 	t_memarena	*next;
 }	t_memarena;
 
 typedef struct s_minishell {
-	t_memarena	arena;
+	t_memarena	*arena;
 	const char	*raw_input;
 	const char	*env[];
 }	t_minishell;
 
+/* ================================ UTILS =================================== */
+
+/* ----------------------------------------------- minishell_utils_memarena.c */
+void	*new_memarena(void);
+void	*memarena_calloc(t_memarena *arena, size_t nmemb, size_t size);
+void	free_memarena(t_memarena *arena);
+/* -------------------------------------------------------------------------- */
 
 #endif
