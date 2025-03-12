@@ -11,16 +11,20 @@
 # **************************************************************************** #
 
 CC		:= cc
-CFLAGS		:= -Wall -Wextra -Werror
+CFLAGS		:= -Wall -Wextra -Werror -g
 DEBUGFLAGS	:= -g
 
 LIBFTDIR	:= ../../libft
 LIBFT		:= $(LIBFTDIR)/libft.a
 
 SRCDIR		:= ../../src
-SRC		:= $(SRCDIR)/tokenization/minishell_quote_validation.c
+SRC		:= $(SRCDIR)/tokenization/minishell_quote_validation.c	\
+		   $(SRCDIR)/utils/minishell_utils_memarena.c
 
-all: minishell_test_quotes_01
+all: minishell_test_quotes_01 minishell_test_word_lexing_01
 
-minishell_test_quotes_01: $(LIBFT) $(SRC)
+minishell_test_quotes_01: minishell_test_quotes_01.c $(LIBFT) $(SRC)
+	$(CC) $(CFLAGS) $@.c $(SRC) $(LIBFT) -o $@
+
+minishell_test_word_lexing_01: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
 	$(CC) $(CFLAGS) $@.c $(SRC) $(LIBFT) -o $@

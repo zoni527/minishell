@@ -36,8 +36,13 @@
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
 /* -------------------------------------------------------------- error codes */
-# define E_PERMISSION	1
-# define E_ALLOC		2
+# define ERROR_PERMISSION	1
+# define ERROR_ALLOC		2
+# define ERROR_UNCLOSED		3
+/* ----------------------------------------------------------- error messages */
+# define MSG_ERROR_ALLOC	"ERROR: couldn't alloc"
+
+# define METACHARACTERS	"|<> \t\n"
 
 /* ============================== TYPEDEFS ===================================*/
 
