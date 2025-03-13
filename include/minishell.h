@@ -44,6 +44,20 @@
 
 # define METACHARACTERS	"|<> \t\n"
 
+/* ================================ ENUMS ====================================*/
+
+typedef enum e_token_type {
+	WORD,				// No expansion or quote removal done yet
+	COMMAND,			// First word or first word after operator
+	ARGUMENT,			// Not first word
+	BUILTIN,			// echo, cd, pwd, export, unset, env or exit
+	PIPE,				// |
+	REDIRECT_INPUT,		// <
+	REDIRECT_OUTPUT,	// >
+	HEREDOC,			// <<
+	APPEND				// >>
+}	t_token_type;
+
 /* ============================== TYPEDEFS ===================================*/
 
 typedef struct s_memarena	t_memarena;
@@ -57,9 +71,15 @@ typedef struct s_memarena {
 
 typedef struct s_minishell {
 	t_memarena	*arena;
+	t_list		*token_list;
 	const char	*raw_input;
 	const char	*env[];
 }	t_minishell;
+
+typedef struct s_token {
+	t_token_type	type;
+	const char		*value;
+}	t_token;
 
 /* ============================= TOKENIZATION =============================== */
 
