@@ -44,12 +44,9 @@ void	*memarena_calloc(t_memarena *arena, size_t nmemb, size_t size)
 	size_t	bytes_available;
 
 	bytes_required = nmemb * size;
-	printf("Bytes required: %zu\n", bytes_required);
-	printf("Arena capacity: %zu\n", arena->capacity);
 	if (bytes_required > arena->capacity)
 		return (NULL);
 	bytes_available = arena->capacity - arena->bytes_used;
-	printf("Arena bytes_availabe: %zu\n", bytes_available);
 	while (bytes_available < bytes_required)
 	{
 		if (!arena->next)

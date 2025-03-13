@@ -24,14 +24,6 @@ void	attempt_allocation(t_memarena *arena, void **target, \
 	}
 }
 
-char	*skip_operator(const char *str)
-{
-	if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
-		str++;
-	str++;
-	return ((char *)str);
-}
-
 size_t	count_tokens(const char *str)
 {
 	size_t	tokens;
@@ -44,13 +36,14 @@ size_t	count_tokens(const char *str)
 		str = skip_whitespace(str);
 		if (!*str)
 			break ;
-		if (*str == '"' || *str == '\'')
-			str = ft_strchr(str + 1, *str) + 1;
-		else if (ft_strchr("|<>", *str))
-			str = skip_operator(str);
+		if (ft_strchr("|<>", *str))
+		{
+			if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
+				str++;
+			str++;
+		}
 		else
-			while (*str && *str != '"' && *str != '\'' \
-				&& !ft_strchr(METACHARACTERS, *str))
+			while (*str && !ft_strchr(METACHARACTERS, *str))
 				str++;
 		tokens++;
 	}
@@ -59,12 +52,15 @@ size_t	count_tokens(const char *str)
 
 int	main(int argc, char *argv[])
 {
-	t_memarena	*arena;
-	char		**words;
-	char		*start_pos;
-	char		*str;
-	int			wc;
-	int			word_len;
+	t_memarena			*arena;
+	char				**tokens_array;
+	char				*start;
+	char				*raw_input;
+	int					tokens;
+	int					i;
+	int					word_len;
+	static t_list		lst;
+	t_list				*node;
 
 	if (argc != 2)
 		return (write_error_return_int("ERROR: input one argument", 1));
@@ -74,56 +70,44 @@ int	main(int argc, char *argv[])
 	arena = new_memarena();
 	if (!arena)
 		return (write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
-	attempt_allocation(arena, (void **)&words, 100, sizeof(char *));
-	str = argv[1];
-	wc = 0;
-	while (*str)
+	raw_input = argv[1];
+	tokens = count_tokens(raw_input);
+	attempt_allocation(arena, (void **)&tokens_array, tokens + 1, sizeof(char *));
+	node = &lst;
+	i = -1;
+	while (*raw_input)
 	{
-		str = skip_whitespace(str);
-		// Ignore everything within quotes
-		if (*str == '"' || *str == '\'')
+		raw_input = skip_whitespace(raw_input);
+		if (!*raw_input)
+			break ;
+		start = raw_input;
+		if (ft_strchr("|<>", *raw_input))
 		{
-			wc++;
-			start_pos = str;
-			str = ft_strchr(str + 1, *str) + 1;
-			word_len = str - start_pos;
-			ft_printf("Current position in input: %s\n", start_pos);
-			ft_printf("Current word length: %d\n", word_len);
-			attempt_allocation(arena, (void *)&words[wc - 1], word_len + 1, sizeof(char));
-			ft_strlcpy(words[wc - 1], start_pos, word_len + 1);
-			ft_printf("Word: %s\n", words[wc -1]);
-			continue ;
+			if (!ft_strncmp(raw_input, "<<", 2) || !ft_strncmp(raw_input, ">>", 2))
+				raw_input++;
+			raw_input++;
 		}
-		// When encountering a metacharacter if it is an operator count it
-		// as a word, skip whitescpae
-		if (ft_strchr(METACHARACTERS, *str))
-		{
-			wc++;
-			start_pos = str;
-			if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
-				str++;
-			str++;
-			word_len = str - start_pos;
-			ft_printf("Current position in input: %s\n", start_pos);
-			ft_printf("Current word length: %d\n", word_len);
-			attempt_allocation(arena, (void *)&words[wc - 1], word_len + 1, sizeof(char));
-			ft_strlcpy(words[wc - 1], start_pos, word_len + 1);
-			ft_printf("Word: %s\n", words[wc -1]);
-			continue ;
-		}
-		wc++;
-		start_pos = str;
-		while (*str && *str != '"' && *str != '\'' \
-			&& !ft_strchr(METACHARACTERS, *str))
-			str++;
-		word_len = str - start_pos;
-		ft_printf("Current position in input: %s\n", start_pos);
-		ft_printf("Current word length: %d\n", word_len);
-		attempt_allocation(arena, (void *)&words[wc - 1], word_len + 1, sizeof(char));
-		ft_strlcpy(words[wc - 1], start_pos, word_len + 1);
-		ft_printf("Word: %s\n", words[wc -1]);
+		else
+			while (*raw_input && !ft_strchr(METACHARACTERS, *raw_input))
+				raw_input++;
+		word_len = raw_input - start;
+		attempt_allocation(arena, (void **)&tokens_array[++i], \
+					 word_len + 1, sizeof(char));
+		attempt_allocation(arena, (void **)&node->content, word_len + 1, sizeof(char));
+		ft_strlcpy(tokens_array[i], start, word_len + 1);
+		ft_strlcpy(node->content, start, word_len + 1);
+		attempt_allocation(arena, (void **)&node->next, 1, sizeof(t_list));
+		node = node->next;
 	}
-	ft_printf("Found %d words in input %s\n", wc, argv[1]);
+	i = -1;
+	while (tokens_array[++i])
+		ft_printf("%s\n", tokens_array[i]);
+	node = &lst;
+	while (node->content)
+	{
+		ft_printf("%s\n", node->content);
+		node = node->next;
+	}
 	free_memarena(arena);
 	return (0);
 }
