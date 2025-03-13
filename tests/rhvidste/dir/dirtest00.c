@@ -6,17 +6,18 @@
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 11:27:54 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/03/12 17:00:10 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/03/12 17:07:02 by rhvidste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <errno.h>
+//# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
+//################################################LIBFT FUNTIONS###############################################################
 // Strlen function
 int	ft_strlen(const char *str)
 {
@@ -100,8 +101,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	return (0);
 }
 
-//------------------------------------------Non LIBFT functions--------------------------------------------------
-//
+//###############################################PROGRM FUNTIONS########################################################################
+
 // Function to print the current directory path
 int	get_current_dir(void)
 {
