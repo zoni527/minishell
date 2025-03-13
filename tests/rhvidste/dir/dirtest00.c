@@ -13,6 +13,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <sys/wait.h>
 //# include <errno.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -167,6 +168,40 @@ int	check_if_cd(const char *str)
 	return (1);
 } 
 
+// Function to run executibal from path.
+int	run_prog(char *input, char **envp)
+{
+	(void)input;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("fork failed");
+		return (1);
+	}
+
+	if (pid == 0)
+	{
+		char	*argv[] = {
+				"nvim",
+				"test.txt",
+				NULL
+		};
+
+		execve("/home/rhvidste/.local/bin/nvim-linux-x86_64/bin/nvim", argv, envp);
+
+		perror("execve failed");
+		exit(1);
+	}
+	else
+	{
+		int status;
+		waitpid(pid, &status, 0);
+		printf("Vim closed. Resuming parent process...\n");
+	}
+	return (0);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -180,6 +215,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*path;
 	char	*new_path;
 	char	*home_path;
+	char	*new_home_path;
 
 	while (1)
 	{
@@ -205,16 +241,32 @@ int	main(int argc, char **argv, char **envp)
 				new_path = ft_substr(path, 1, (ft_strlen(path) - 1));
 				printf("path == '~'\n");
 				home_path = getenv("HOME");
-				printf("newpath = %s%s\n", home_path, new_path);
+//				printf("newpath = %s%s\n", home_path, new_path);
+				new_home_path = ft_strjoin(home_path, new_path);
+				change_dir(new_home_path);
 			}
+			else
+			{
 //			printf("cd detected\n");
 			change_dir(path);
 //			printf("substring out : %s\n",ft_substr(input, 2, (ft_strlen(input) - 2)));
+			}
 		}
 //		change_dir(input);
-		get_current_dir();
-//		printf("you shouted: %s into the void\n", input);
 		add_history(input);
+		get_current_dir();
+		if (check_if_cd(input) != 0)
+		{
+			printf("argument is not cd\n");
+			if (ft_strncmp("nvim", input, 4) == 0)
+			{
+				printf("keyword vim found\n");
+				run_prog(input, envp);
+			}
+		}
+
+//		printf("you shouted: %s into the void\n", input);
+//		add_history(input);
 //		free(input);
 //		printf("the void shouts back the following:\n");
 //		print_history();
