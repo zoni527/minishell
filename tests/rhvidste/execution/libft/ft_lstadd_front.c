@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   argvtest00.c                                       :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 14:58:15 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/03/14 15:00:43 by rhvidste         ###   ########.fr       */
+/*   Created: 2024/11/04 12:45:18 by jvarila           #+#    #+#             */
+/*   Updated: 2024/11/19 15:20:34 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-# include <stdio.h>
-# include <stdlib.h>
-# include <unistd.h>
 
+#include "libft.h"
 
-int	main(int argc, char **argv)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	int	i = 1;
-	while (i < argc)
-	{
-		printf("argv[%d] = %s\n", i, argv[i]);
-		i++;
-	}
+	new->next = *lst;
+	*lst = new;
 }
