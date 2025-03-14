@@ -12,18 +12,59 @@
 
 #include "../../include/minishell.h"
 
-void	attempt_allocation(t_memarena *arena, void **target, \
-						size_t nmemb, size_t size)
+void	add_token_to_end(t_token **list, t_token *token)
 {
-	*target = memarena_calloc(arena, nmemb, size);
-	if (!*target)
+	t_token	*end;
+
+	if (!*list)
 	{
-		free_memarena(arena);
-		ft_putendl_fd(MSG_ERROR_ALLOC, STDERR_FILENO);
-		exit(ERROR_ALLOC);
+		*list = token;
+		return ;
+	}
+	end = *list;
+	while (end->next)
+		end = end->next;
+	end->next = token;
+	if (token)
+	{
+		token->prev = end;
+		token->id = end->id + 1;
 	}
 }
 
+void	insert_token_right(t_token *current, t_token *new)
+{
+	t_token	*next;
+
+	if (!current || !new)
+		return ;
+	next = current->next;
+	if (next)
+		next->prev = new;
+	current->next = new;
+	new->prev = current;
+	new->next = next;
+}
+
+void	insert_token_left(t_token *current, t_token *new)
+{
+	t_token	*prev;
+
+	if (!current || !new)
+		return ;
+	prev = current->prev;
+	if (prev)
+		prev->next = new;
+	current->prev = new;
+	new->prev = prev;
+	new->next = current;
+}
+
+/**
+ * DESCRIPTION
+ *     The initial token count treats "|<> \t\n" as separating characters,
+ *     later words will be expanded and split which will impact the count.
+ */
 size_t	count_tokens(const char *str)
 {
 	size_t	count;
@@ -53,12 +94,14 @@ size_t	count_tokens(const char *str)
 t_list	*new_token_node(t_memarena *arena, const char *str)
 {
 	t_list	*node;
+	t_token	*token;
 
-	attempt_allocation(arena, (void **)&node, 1, sizeof(t_list));
-	attempt_allocation(arena, (void **)&node->content, 1, sizeof(t_token));
-	((t_token *)node->content)->value = str;
+	node = memarena_calloc(arena, 1, sizeof(t_list));
+	node->content = memarena_calloc(arena, 1, sizeof(t_token));
+	token = (t_token *)node->content;
+	token->value = str;
 	if (*str == '|')
-		((t_token *)node->content)->type = PIPE;
+		token->type = PIPE;
 	else if (ft_strncmp(str, "<", 2) == 0)
 		((t_token *)node->content)->type = REDIRECT_INPUT;
 	else if (ft_strncmp(str, ">", 2) == 0)
@@ -100,44 +143,37 @@ void	build_initial_token_list(t_minishell *data)
 			while (*str && !ft_strchr(METACHARACTERS, *str))
 				str++;
 		word_len = str - start;
-		attempt_allocation(data->arena, (void **)&word, word_len, sizeof(char));
+		word = memarena_calloc(data->arena, word_len + 1, sizeof(char));
 		ft_strlcpy(word, str, word_len + 1);
 		node = new_token_node(data->arena, word);
 		ft_lstadd_back(&data->token_list, node);
 	}
 }
 
-int	main(int argc, char *argv[])
+void	parse_word(t_minishell *data, const char *src, size_t word_len)
 {
-	t_memarena	*arena;
-	char		**tokens_array;
-	char		*start;
-	char		*raw_input;
-	char		*word;
-	int			tokens;
-	int			i;
-	int			word_len;
-	t_list		*lst;
-	t_list		*node;
+	char	*word;
+	t_list	*node;
 
-	if (argc != 2)
-		return (write_error_return_int("ERROR: input one argument", 1));
-	if (has_unclosed_quotes(argv[1]))
-		return (write_error_return_int("ERROR: input has unclosed quotes", \
-								 ERROR_UNCLOSED));
-	arena = new_memarena();
-	if (!arena)
-		return (write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
-	raw_input = argv[1];
-	tokens = count_tokens(raw_input);
-	attempt_allocation(arena, (void **)&tokens_array, tokens + 1, sizeof(char *));
-	lst = NULL;
+	word = memarena_calloc(data->arena, word_len + 1, sizeof(char));
+	ft_strlcpy(word, src, word_len + 1);
+	node = new_token_node(data->arena, word);
+	ft_lstadd_back(&data->token_list, new_token_node(data->arena, word));
+}
+
+void	parse_raw_input(t_minishell *data)
+{
+	const char	*raw_input;
+	char		*start;
+	size_t		word_len;
+
+	raw_input = data->raw_input;
 	while (*raw_input)
 	{
 		raw_input = skip_whitespace(raw_input);
 		if (!*raw_input)
 			break ;
-		start = raw_input;
+		start = (char *)raw_input;
 		if (ft_strchr("|<>", *raw_input))
 		{
 			if (!ft_strncmp(raw_input, "<<", 2) || !ft_strncmp(raw_input, ">>", 2))
@@ -148,20 +184,35 @@ int	main(int argc, char *argv[])
 			while (*raw_input && !ft_strchr(METACHARACTERS, *raw_input))
 				raw_input++;
 		word_len = raw_input - start;
-		attempt_allocation(arena, (void **)&word, word_len, sizeof(char));
-		node = new_token_node(arena, word);
-		ft_lstadd_back(&lst, node);
+		parse_word(data, start, word_len);
 	}
+}
+
+int	main(int argc, char *argv[])
+{
+	static t_minishell	data;
+	int					i;
+	t_list				*node;
+
+	if (argc != 2)
+		return (write_error_return_int("ERROR: input one argument", 1));
+	if (has_unclosed_quotes(argv[1]))
+		return (write_error_return_int("ERROR: input has unclosed quotes", \
+								 ERROR_UNCLOSED));
+	data.arena = new_memarena();
+	if (!data.arena)
+		return (write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
+	data.raw_input = argv[1];
+	data.token_count = count_tokens(data.raw_input);
+	data.token_list = NULL;
+	parse_raw_input(&data);
 	i = -1;
-	while (tokens_array[++i])
-		ft_printf("%s\n", tokens_array[i]);
-	node = &lst;
-	ft_printf("\n");
-	while (node->content)
+	node = data.token_list;
+	while (node)
 	{
-		ft_printf("%s\n", node->content);
+		ft_printf("%s\n", ((t_token *)(node->content))->value);
 		node = node->next;
 	}
-	free_memarena(arena);
+	free_memarena(data.arena);
 	return (0);
 }
