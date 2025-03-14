@@ -18,7 +18,7 @@ LIBFT	= ./libft/libft.a
 SRC_DIR	= philo/
 OBJ_DIR = obj/
 
-SRCS	=  ./dirtest00.c	
+SRCS	=  ./exetest00.c	
 
 OBJS    = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 
@@ -26,7 +26,7 @@ OBJS    = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 all: $(LIBFT) $(NAME)
 
 $(LIBFT):
-		make -C ./libft
+		@make -C ./libft
 
 $(NAME): $(OBJ_DIR) $(OBJS) $(LIBFT)
 		@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(HEADERS) -o $(NAME)
