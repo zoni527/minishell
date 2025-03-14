@@ -10,97 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <sys/wait.h>
-//# include <errno.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-//################################################LIBFT FUNTIONS###############################################################
-// Strlen function
-int	ft_strlen(const char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return(i);
-}
-
-// Function to join strings
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char			*dest;
-	size_t			i;
-	size_t			j;
-	size_t			s1_len;
-	size_t			s2_len;
-
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	s1_len = ft_strlen(s1);
-	s2_len = ft_strlen(s2);
-	dest = malloc(sizeof(char) * (s1_len + s2_len) + 1);
-	if (dest == NULL)
-		return (NULL);
-	i = 0;
-	while (i < s1_len)
-	{
-		dest[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (j < s2_len)
-		dest[i++] = s2[j++];
-	dest[i] = '\0';
-	return (dest);
-}
-
-// Function to extract substring
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char		*dest;
-	size_t		i;
-
-	if (!s)
-		return (NULL);
-	if (start >= (unsigned int)ft_strlen(s))
-		start = (unsigned int)ft_strlen(s);
-	dest = malloc(sizeof(char) * len + 1);
-	if (dest == NULL)
-		return (NULL);
-	i = 0;
-	while (s[start] != '\0' && i < len)
-	{
-		dest[i] = s[start];
-		start++;
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
-// Function to strn cmp and check wether EOF is entered or not
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
-
-	if (n == 0)
-		return (0);
-	i = 0;
-	while (i < n)
-	{
-		if (s1[i] == '\0' || s2[i] == '\0')
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		if (s1[i] != s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		i++;
-	}
-	return (0);
-}
+# include "include/dir.h"
 
 //###############################################PROGRM FUNTIONS########################################################################
 
@@ -136,11 +46,16 @@ int	get_current_dir(void)
 // FUnction to switch dir
 int	change_dir(char *str)
 {
-	if (chdir(str) == 0)
-	{
-		printf("Directory changed successfully\n");
-	}
-	else
+//	if (chdir(str) == 0)
+//	{
+//		printf("Directory changed successfully\n");
+//	}
+//	else
+//	{
+//		perror("chdir() error");
+//		return (1);
+//	}
+	if (chdir(str) == -1)
 	{
 		perror("chdir() error");
 		return (1);
@@ -166,12 +81,109 @@ int	check_if_cd(const char *str)
 	if (ft_strncmp("cd", str, 2) == 0)
 		return (0);
 	return (1);
-} 
+}
+
+int	free_array(char **arr)
+{
+	int	i = 0;
+	while (arr[i])
+	{
+		free(arr[i]);
+		i++;
+	}
+	return(0);
+}
+
+//###############################################PROGRAM EXECUTION(from pipex)############################################
+char	*set_paths(char *command, char **mypaths)
+{
+	bool	it_works;
+	char	*fullpath;
+	char	*onepath;
+	int		i;
+
+	i = 0;
+	it_works = false;
+	while (mypaths[i])
+	{
+		onepath = ft_strjoin(mypaths[i], "/");
+		fullpath = ft_strjoin(onepath, command);
+//		printf("onepath = %s\n", onepath);
+//		printf("fullpath = %s\n", fullpath);
+		free(onepath);
+		if (access(fullpath, F_OK) == 0)
+		{
+			it_works = true;
+			break ;
+		}
+		else
+			free(fullpath);
+		i++;
+	}	
+	free_array(mypaths);
+	if (it_works)
+		return (fullpath);
+	return (NULL);
+}
+
+char	*path_parsing(char *command, char **envp)
+{
+	char	**mypaths;
+	char	*fullpath;
+	int		i;
+
+	if (command[0] == '.' && command[1] == '/')
+	{
+//		printf("COMMAND IS BINARY!!\n");
+		fullpath = ft_strdup(command);
+		return (fullpath);
+	}
+	i = 0;
+	while (!ft_strnstr(envp[i], "PATH", 4))
+		i++;
+	mypaths = ft_split(envp[i] + 5, ':');
+	i = 0;
+	fullpath = set_paths(command, mypaths);
+	return (fullpath);
+}
+
+void	cmd_exec(char *argv, char **envp)
+{
+	char	**command;
+	char	*path;
+	int		i;
+
+	i = -1;
+	command = ft_split(argv, ' ');
+	path = path_parsing(command[0], envp);
+
+//	while (command[++i])
+//	{
+//		printf("command is: %s\n", command[i]);
+//	}
+//	printf("path is: %s\n", path);
+
+	if (!path)
+	{
+		free_array(command);
+		exit(1);
+	}
+	if (execve(path, command, envp) == -1)
+	{
+		printf("execve failed");
+		free_array(command);
+		free(path);
+	}
+	perror("execve failed");
+	free_array(command);
+	free(path);
+}
 
 // Function to run executibal from path.
 int	run_prog(char *input, char **envp)
 {
 	(void)input;
+	(void)envp;
 	pid_t	pid;
 
 	pid = fork();
@@ -183,14 +195,15 @@ int	run_prog(char *input, char **envp)
 
 	if (pid == 0)
 	{
-		char	*argv[] = {
-				"nvim",
-				"test.txt",
-				NULL
-		};
-
-		execve("/home/rhvidste/.local/bin/nvim-linux-x86_64/bin/nvim", argv, envp);
-
+//		char	*argv[] = {
+//				"nvim",
+//				"test.txt",
+//				NULL
+//		};
+//
+//		execve("/home/rhvidste/.local/bin/nvim-linux-x86_64/bin/nvim", argv, envp);
+//
+		cmd_exec(input, envp);
 		perror("execve failed");
 		exit(1);
 	}
@@ -198,7 +211,7 @@ int	run_prog(char *input, char **envp)
 	{
 		int status;
 		waitpid(pid, &status, 0);
-		printf("Vim closed. Resuming parent process...\n");
+//		printf("program closed. Resuming parent process...\n");
 	}
 	return (0);
 }
@@ -207,19 +220,24 @@ int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	(void)envp;
+//	(void)envp;
 	
-	get_current_dir();
+//	get_current_dir();
 
 	char	*input;
 	char	*path;
 	char	*new_path;
 	char	*home_path;
 	char	*new_home_path;
+	char	*shell_dir;
 
 	while (1)
-	{
-		input = readline(">> ");
+	{	
+		char	*buffer = getcwd(NULL, 0); // Dynamically allocate memory
+		shell_dir = ft_strjoin("mini_shell: ", buffer);
+		shell_dir = ft_strjoin(shell_dir, "$ ");
+		input = readline(shell_dir);
+//		input = readline(">> ");
 		if (!input)
 			return (1);
 		//Checking for exit case where "exit"
@@ -235,36 +253,48 @@ int	main(int argc, char **argv, char **envp)
 		{
 			path = ft_substr(input, 3, (ft_strlen(input) - 2));
 
-			printf("path = %s\n", path);
+//			printf("path = %s\n", path);
 			if (path[0] == '~')
 			{
 				new_path = ft_substr(path, 1, (ft_strlen(path) - 1));
-				printf("path == '~'\n");
+//				printf("path == '~'\n");
 				home_path = getenv("HOME");
 //				printf("newpath = %s%s\n", home_path, new_path);
 				new_home_path = ft_strjoin(home_path, new_path);
 				change_dir(new_home_path);
+				free(new_home_path);
+				free(new_path);
+			}
+			//Here we check is CD is just added on its own.
+			else if (path[0] == '\0')
+			{
+//				printf("CD COMMAND ENTERED\n");
+				home_path = getenv("HOME");
+				change_dir(home_path);
 			}
 			else
 			{
-//			printf("cd detected\n");
-			change_dir(path);
-//			printf("substring out : %s\n",ft_substr(input, 2, (ft_strlen(input) - 2)));
+//				printf("cd detected\n");
+				change_dir(path);
+//				input = readline("<< ");
+//				printf("substring out : %s\n",ft_substr(input, 2, (ft_strlen(input) - 2)));
 			}
+			free(path);
 		}
 //		change_dir(input);
-		add_history(input);
-		get_current_dir();
+//		add_history(input);
+//		get_current_dir();
 		if (check_if_cd(input) != 0)
 		{
-			printf("argument is not cd\n");
-			if (ft_strncmp("nvim", input, 4) == 0)
-			{
-				printf("keyword vim found\n");
-				run_prog(input, envp);
-			}
+//			printf("argument is not cd\n");
+			run_prog(input, envp);
+//			if (ft_strncmp("nvim", input, 4) == 0)
+//			{
+//				printf("keyword vim found\n");
+//				run_prog(input, envp);
+//			}
 		}
-
+		add_history(input);
 //		printf("you shouted: %s into the void\n", input);
 //		add_history(input);
 //		free(input);
@@ -274,7 +304,7 @@ int	main(int argc, char **argv, char **envp)
 //		{
 //			printf("%s includes a '<' character\n", input);
 //		}
-		free(input);
+//		free(input);
 	}
 
 //	get_current_dir();
