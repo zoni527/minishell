@@ -64,6 +64,7 @@ typedef enum e_token_type {
 
 typedef struct s_memarena	t_memarena;
 typedef struct s_token		t_token;
+typedef struct s_var		t_var;
 
 typedef struct s_memarena {
 	size_t		capacity;
@@ -72,12 +73,21 @@ typedef struct s_memarena {
 	t_memarena	*next;
 }	t_memarena;
 
+typedef struct s_var {
+	char	*raw;
+	char	*key;
+	char	*value;
+	t_var	*next;
+	t_var	*prev;
+}	t_var;
+
 typedef struct s_minishell {
 	t_memarena	*arena;
 	t_token		*token_list;
+	t_var		*custom_env;
 	size_t		token_count;
 	const char	*raw_input;
-	const char	*env[];
+	const char	*initial_env[];
 }	t_minishell;
 
 typedef struct s_token {

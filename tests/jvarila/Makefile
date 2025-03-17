@@ -21,10 +21,10 @@ SRCDIR		:= ../../src
 SRC		:= $(SRCDIR)/tokenization/minishell_quote_validation.c	\
 		   $(SRCDIR)/utils/minishell_utils_memarena.c
 
-all: minishell_test_quotes_01 minishell_test_word_lexing_01
+all: minishell_test_quotes_01.out minishell_test_word_lexing_01.out
 
-minishell_test_quotes_01: minishell_test_quotes_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $@.c $(SRC) $(LIBFT) -o $@
+minishell_test_quotes_01.out: minishell_test_quotes_01.c $(LIBFT) $(SRC)
+	$(CC) $(CFLAGS) $< $(SRC) $(LIBFT) -o $@
 
-minishell_test_word_lexing_01: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $@.c $(SRC) $(LIBFT) -o $@
+minishell_test_word_lexing_01.out: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
+	$(CC) $(CFLAGS) $< $(SRC) $(LIBFT) -o $@

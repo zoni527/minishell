@@ -91,28 +91,25 @@ size_t	count_tokens(const char *str)
 	return (count);
 }
 
-t_list	*new_token_node(t_memarena *arena, const char *str)
+t_token	*new_token_node(t_memarena *arena, const char *str)
 {
-	t_list	*node;
 	t_token	*token;
 
-	node = memarena_calloc(arena, 1, sizeof(t_list));
-	node->content = memarena_calloc(arena, 1, sizeof(t_token));
-	token = (t_token *)node->content;
+	token = memarena_calloc(arena, 1, sizeof(t_token));
 	token->value = str;
 	if (*str == '|')
 		token->type = PIPE;
 	else if (ft_strncmp(str, "<", 2) == 0)
-		((t_token *)node->content)->type = REDIRECT_INPUT;
+		token->type = REDIRECT_INPUT;
 	else if (ft_strncmp(str, ">", 2) == 0)
-		((t_token *)node->content)->type = REDIRECT_OUTPUT;
+		token->type = REDIRECT_OUTPUT;
 	else if (ft_strncmp(str, "<<", 3) == 0)
-		((t_token *)node->content)->type = HEREDOC;
+		token->type = HEREDOC;
 	else if (ft_strncmp(str, ">>", 3) == 0)
-		((t_token *)node->content)->type = APPEND;
+		token->type = APPEND;
 	else
-		((t_token *)node->content)->type = WORD;
-	return (node);
+		token->type = WORD;
+	return (token);
 }
 
 void	skip_over_operator(const char **str)
@@ -124,7 +121,7 @@ void	skip_over_operator(const char **str)
 
 void	build_initial_token_list(t_minishell *data)
 {
-	t_list		*node;
+	t_token		*node;
 	const char	*str;
 	const char	*start;
 	char		*word;
@@ -146,19 +143,19 @@ void	build_initial_token_list(t_minishell *data)
 		word = memarena_calloc(data->arena, word_len + 1, sizeof(char));
 		ft_strlcpy(word, str, word_len + 1);
 		node = new_token_node(data->arena, word);
-		ft_lstadd_back(&data->token_list, node);
+		add_token_to_end(&data->token_list, node);
 	}
 }
 
 void	parse_word(t_minishell *data, const char *src, size_t word_len)
 {
 	char	*word;
-	t_list	*node;
+	t_token	*new;
 
 	word = memarena_calloc(data->arena, word_len + 1, sizeof(char));
 	ft_strlcpy(word, src, word_len + 1);
-	node = new_token_node(data->arena, word);
-	ft_lstadd_back(&data->token_list, new_token_node(data->arena, word));
+	new = new_token_node(data->arena, word);
+	add_token_to_end(&data->token_list, new);
 }
 
 void	parse_raw_input(t_minishell *data)
@@ -188,11 +185,22 @@ void	parse_raw_input(t_minishell *data)
 	}
 }
 
+void	print_tokens(t_minishell *data)
+{
+	t_token	*token;
+
+	token = data->token_list;
+	while (token)
+	{
+		ft_printf("%s\n", token->value);
+		token = token->next;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	static t_minishell	data;
-	int					i;
-	t_list				*node;
+	t_token				*token;
 
 	if (argc != 2)
 		return (write_error_return_int("ERROR: input one argument", 1));
@@ -206,13 +214,6 @@ int	main(int argc, char *argv[])
 	data.token_count = count_tokens(data.raw_input);
 	data.token_list = NULL;
 	parse_raw_input(&data);
-	i = -1;
-	node = data.token_list;
-	while (node)
-	{
-		ft_printf("%s\n", ((t_token *)(node->content))->value);
-		node = node->next;
-	}
 	free_memarena(data.arena);
 	return (0);
 }
