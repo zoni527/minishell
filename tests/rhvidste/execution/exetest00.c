@@ -14,8 +14,6 @@
 
 //###############################################PROGRM FUNTIONS########################################################################
 
-
-
 // Function to print the current directory path
 int	get_current_dir(void)
 {
@@ -57,7 +55,7 @@ int	free_array(char **arr)
 	return(0);
 }
 
-//###############################################PROGRAM EXECUTION(from pipex)############################################
+//###############################################PROGRAM EXECUTION(taken from pipex)############################################
 char	*set_paths(char *command, char **mypaths)
 {
 	bool	it_works;
@@ -141,7 +139,7 @@ void	cmd_exec(char *argv, char **envp)
 	free_array(command);
 	free(path);
 }
-
+//#########################################################################################################################
 // Function to run executibal from path.
 int	run_prog(char *input, char **envp)
 {
@@ -207,6 +205,39 @@ int	run_prog(char *input, char **envp)
 //	return (dest);
 //}
 
+//Function to set enviroment variable value.
+int	ft_setenv(const char *name, const char *value, char **envp)
+{
+	int	i;
+	size_t len;
+	char *new_var;
+
+	len = ft_strlen(name);
+
+	//Search for existing variable
+	i = -1;
+	while (envp[++i])
+	{
+		//If variable found, replace it
+		new_var = malloc(len + ft_strlen(value) + 2);
+		if (!new_var)
+			return (-1);
+		envp[i] = new_var;
+		free(new_var);
+//		printf("%s=%s\n", name, value);
+		return (0);
+	}
+	//if Variable not found, add a new enrty
+	new_var = malloc(len + ft_strlen(value) + 2);
+	if (!new_var)
+		return (-1);
+	envp[i] = new_var;
+	envp[i + 1] = NULL;
+	free(new_var);
+//	printf("%s=%s\n", name, value);
+	return (0);
+}
+
 //Function to remove single and double quotes from a string
 char	*remove_quotes(char *str)
 {
@@ -243,16 +274,14 @@ char	*remove_quotes(char *str)
 			i++;
 		}
 		else if (str[i] == '\'' && !in_double_quotes)
-		{
 			i++;
-		}
 		else
 			dest[j++] = str[i++];
 	}
 	dest[j] = '\0';
 	return (dest);
 }
-
+//################################################BUILT INS###########################################################################
 // Function to run ECHO builtin
 void	echo(char *input)
 {
@@ -284,12 +313,16 @@ void	echo(char *input)
 void	cd(char *input, char **envp)
 {
 	char	*path;
+	char	*old_path;
 	char	*new_path;
 	char	*home_path;
 	char	*new_home_path;
 	(void)envp;
 
+	old_path = getcwd(NULL, 0); // get current path to set as old path before change.
+	ft_setenv("OLDPWD", old_path, envp);//set the OLD pwd enviroment variable
 	path = ft_substr(input, 3, (ft_strlen(input) - 2));
+
 //	printf("path = %s\n", path);
 	if (path[0] == '~')
 	{
@@ -299,6 +332,7 @@ void	cd(char *input, char **envp)
 //		printf("newpath = %s%s\n", home_path, new_path);
 		new_home_path = ft_strjoin(home_path, new_path);
 		change_dir(new_home_path);
+		ft_setenv("PWD", new_home_path, envp);
 		free(new_home_path);
 		free(new_path);
 	}
@@ -307,12 +341,15 @@ void	cd(char *input, char **envp)
 	{
 //		printf("CD COMMAND ENTERED\n");
 		home_path = getenv("HOME");
+		ft_setenv("PWD", home_path, envp);
 		change_dir(home_path);
 	}
 	else
 	{
 //		printf("cd detected\n");
 		change_dir(path);
+		new_path = getcwd(NULL, 0);
+		ft_setenv("PWD", new_path, envp);
 	}
 	free(path);
 }
@@ -327,7 +364,7 @@ void	env(char **envp)
 		ft_putendl_fd(envp[i], 1);
 	}
 }
-
+//#################################################ROUTING##################################################################
 // Function to check wether its one of the builtins.
 int	check_if_builtin(char *input)
 {
@@ -368,6 +405,7 @@ void	reroute_builtin(char *str, char **envp)
 		printf("EXIT CALLED");
 }
 
+//############################################MAIN#############################################################################
 int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
@@ -375,10 +413,11 @@ int	main(int argc, char **argv, char **envp)
 //	(void)envp;
 	char	*input;
 	char	*shell_dir;
+	char	*buffer;
 
 	while (1)
 	{	
-		char	*buffer = getcwd(NULL, 0); // Dynamically allocate memory
+		buffer = getcwd(NULL, 0); // gets the current dir
 		shell_dir = ft_strjoin("mini_shell: ", buffer);
 		shell_dir = ft_strjoin(shell_dir, "$ ");
 		input = readline(shell_dir);
