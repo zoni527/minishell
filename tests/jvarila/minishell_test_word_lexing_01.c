@@ -197,10 +197,111 @@ void	print_tokens(t_minishell *data)
 	}
 }
 
+t_var	*find_var(t_minishell *data, const char *str)
+{
+	t_var	*var;
+
+	var = data->custom_env;
+	while (var)
+	{
+		if (ft_strnstr(str, var->key, ft_strlen(var->key)))
+			return (var);
+		var = var->next;
+	}
+	return (NULL);
+}
+
+void	expand_variable(t_minishell *data, t_token *token, \
+					  t_var *var, const char *var_pos)
+{
+	char	*new;
+	size_t	old_len;
+	size_t	new_len;
+	size_t	var_key_len;
+	size_t	var_value_len;
+
+	if (!var)
+	{
+		var_key_len = ft_strlen(var_pos);
+		var_value_len = 0;
+	}
+	else
+	{
+		var_key_len = ft_strlen(var->key);
+		var_value_len = ft_strlen(var->value);
+	}
+	old_len = ft_strlen(token->value);
+	new_len = old_len - 1 - var_key_len + var_value_len;
+	new = memarena_calloc(data->arena, new_len + 1, sizeof(char));
+	ft_strlcat(new, token->value, var_pos - token->value);
+	if (var)
+		ft_strlcat(new, var->value, new_len + 1);
+	ft_strlcat(new, var_pos + var_key_len, new_len + 1);
+	token->value = new;
+}
+
+
+bool	contains_unexpanded_variable(t_token *token)
+{
+	char	*str;
+
+	str = ft_strchr(token->value, '$');
+	if (!str)
+		return (false);
+	while (str)
+	{
+		if (!ft_isspace(*(str + 1)) && *(str + 1) != '$')
+			return (true);
+		str = ft_strchr(str + 1, '$');
+	}
+	return (false);
+}
+
+void	expand_variables(t_minishell *data, t_token *token)
+{
+	char	*str;
+	t_var	*var;
+
+	str = ft_strchr(token->value, '$');
+	while (contains_unexpanded_variable(token))
+	{
+		str++;
+		if (ft_isspace(*str))
+		{
+			str = ft_strchr(str, '$');
+			continue ;
+		}
+		var = find_var(data, str);
+		expand_variable(data, token, var, str);
+		str = ft_strchr(token->value, '$');
+	}
+}
+
+void	variable_expansion(t_minishell *data)
+{
+	char	*str;
+	t_token	*token;
+
+	token = data->token_list;
+	while (token)
+	{
+		str = ft_strchr(token->value, '$');
+		if (!str)
+		{
+			token = token->next;
+			continue ;
+		}
+		expand_variables(data, token);
+		token = token->next;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	static t_minishell	data;
-	t_token				*token;
+	//t_token				*token;
+	data.custom_env = &(t_var){.raw = "ARG=test test", .key = "ARG", .value = "|test|"};
+	data.custom_env->next = &(t_var){.raw = "", .key = "DERP", .value = "|derp|"};
 
 	if (argc != 2)
 		return (write_error_return_int("ERROR: input one argument", 1));
@@ -214,6 +315,8 @@ int	main(int argc, char *argv[])
 	data.token_count = count_tokens(data.raw_input);
 	data.token_list = NULL;
 	parse_raw_input(&data);
+	variable_expansion(&data);
+	print_tokens(&data);
 	free_memarena(data.arena);
 	return (0);
 }
