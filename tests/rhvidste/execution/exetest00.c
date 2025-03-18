@@ -139,6 +139,7 @@ void	cmd_exec(char *argv, char **envp)
 	free_array(command);
 	free(path);
 }
+
 //#########################################################################################################################
 // Function to run executibal from path.
 int	run_prog(char *input, char **envp)
@@ -176,6 +177,7 @@ int	run_prog(char *input, char **envp)
 	}
 	return (0);
 }
+
 ////Function to remove single and double quotes from a string
 //char	*remove_quotes(char *str)
 //{
@@ -281,6 +283,7 @@ char	*remove_quotes(char *str)
 	dest[j] = '\0';
 	return (dest);
 }
+
 //################################################BUILT INS###########################################################################
 // Function to run ECHO builtin
 void	echo(char *input)
@@ -309,6 +312,7 @@ void	echo(char *input)
 	}
 	free(sub_str);
 }
+
 //Function to run CD builtin
 void	cd(char *input, char **envp)
 {
@@ -354,6 +358,33 @@ void	cd(char *input, char **envp)
 	free(path);
 }
 
+// Function to call the EXPORT builtin
+void	export(char *input ,char **envp)
+{
+	(void)envp;
+	char	*sub_str;
+	char	*name;
+	char	*value;
+	int	i;
+	
+	sub_str = ft_substr(input, 7, ft_strlen(input) -7);
+
+	i = 0;
+	while (sub_str[i] != '=')
+	{
+		i++;
+	}
+
+	name = ft_substr(sub_str, 0, i);
+	value = ft_substr(sub_str, (i + 1), ft_strlen(sub_str) - (i + 1));
+	printf("name=%s\n", name);
+	printf("value=%s\n", value);
+	ft_setenv(name, value, envp);
+	free(sub_str);
+	free(name);
+	free(value);
+}
+
 // Function to call the ENV builtin
 void	env(char **envp)
 {
@@ -364,6 +395,7 @@ void	env(char **envp)
 		ft_putendl_fd(envp[i], 1);
 	}
 }
+
 //#################################################ROUTING##################################################################
 // Function to check wether its one of the builtins.
 int	check_if_builtin(char *input)
@@ -395,7 +427,8 @@ void	reroute_builtin(char *str, char **envp)
 	if (ft_strncmp("pwd", str, 3) == 0)
 		get_current_dir();
 	if (ft_strncmp("export", str, 6) == 0)
-		printf("EXPORT CALLED\n");
+		export(str, envp);
+//		printf("EXPORT CALLED\n");
 	if (ft_strncmp("unset", str, 5) == 0)
 		printf("UNSET CALLED\n");
 	if (ft_strncmp("env", str, 3) == 0)
