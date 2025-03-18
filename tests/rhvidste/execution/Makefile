@@ -9,7 +9,7 @@ MAGENTA = \033[0;95m
 CYAN = \033[0;96m
 WHITE = \033[0;97m
 #------------------------------------------------------------------------------------
-NAME	= dir_test
+NAME	= exec_test
 CC		= cc
 CFLAGS	= -Wextra -Werror -Wall -lreadline
 HEADERS = -I ./include
