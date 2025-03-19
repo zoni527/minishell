@@ -10,7 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "include/dir.h"
+# include "include/minishell.h"
+
+//###############################################LIST FUNTIONS########################################################################
+
+
+
 
 //###############################################PROGRM FUNTIONS########################################################################
 
@@ -207,37 +212,101 @@ int	run_prog(char *input, char **envp)
 //	return (dest);
 //}
 
-//Function to set enviroment variable value.
+//*note: This is for debugging perposes and should be removed.
+// Function to get specific env variable.
+char	*ft_getenv(const char *name, char **envp)
+{
+	(void)envp;
+	char	*sub_name;
+	char	*envar;
+	//getenv
+	if (ft_strncmp(name, "getenv", 6) == 0)
+	{
+		sub_name = ft_substr(sub_name, 7, ft_strlen(name) - 6);
+	}
+	else
+	{
+		sub_name = ft_strdup(name);
+	}
+	printf("sub_name = %s\n", sub_name);
+	envar = getenv(sub_name);
+	printf("envar = %s\n", envar);
+	free(sub_name);
+	return (envar);
+}	
+
+////Function to set enviroment variable value.
+//int	ft_setenv(const char *name, const char *value, char **envp)
+//{
+//	int	i;
+//	size_t len;
+//	char *new_var;
+//
+//	len = ft_strlen(name);
+//
+//	//Search for existing variable
+//	i = -1;
+//	while (envp[++i])
+//	{
+//		//If variable found, replace it
+//		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+//		{
+//			new_var = malloc(len + ft_strlen(value) + 2);
+//			if (!new_var)
+//				return (-1);
+//			free(envp[i]);
+//			envp[i] = new_var;
+////			free(new_var);
+////			printf("%s=%s\n", name, value);
+//			return (0);
+//		}
+//	}
+//	//if Variable not found, add a new enrty
+//	new_var = malloc(len + ft_strlen(value) + 2);
+//	if (!new_var)
+//		return (-1);
+//	envp[i] = new_var;
+//	envp[i + 1] = NULL;
+////	free(new_var);
+////	printf("%s=%s\n", name, value);
+//	return (0);
+//}
+
+// Function to set enviroment variable
 int	ft_setenv(const char *name, const char *value, char **envp)
 {
-	int	i;
-	size_t len;
-	char *new_var;
+	int		i;
+	size_t	name_len;
+	size_t	value_len;
+	char	*new_var;
+	char	*new_str1;
+//	char	*new_str2;
 
-	len = ft_strlen(name);
+	name_len = ft_strlen(name);
+	value_len = ft_strlen(value);
 
-	//Search for existing variable
 	i = -1;
 	while (envp[++i])
 	{
-		//If variable found, replace it
-		new_var = malloc(len + ft_strlen(value) + 2);
-		if (!new_var)
-			return (-1);
-		envp[i] = new_var;
-		free(new_var);
-//		printf("%s=%s\n", name, value);
-		return (0);
+		// if variable already exists
+		if (strncmp(envp[i], name, name_len) == 0 && envp[i][name_len] == '=')
+		{
+			new_var = malloc(name_len + value_len + 2); // +2 for '=' and '\0'
+			if (!new_var)
+			{
+				perror("malloc failed");
+				return (-1);
+			}
+			new_str1 = ft_strjoin(name, "=");
+			new_var = ft_strjoin(new_str1, value);
+			printf("new_var = %s\n", new_var);
+			envp[i] = new_var;
+			printf("envp[%d] = %s\n", i, envp[i]);
+
+			return (0);
+		}
 	}
-	//if Variable not found, add a new enrty
-	new_var = malloc(len + ft_strlen(value) + 2);
-	if (!new_var)
-		return (-1);
-	envp[i] = new_var;
-	envp[i + 1] = NULL;
-	free(new_var);
-//	printf("%s=%s\n", name, value);
-	return (0);
+	return (1);
 }
 
 //Function to remove single and double quotes from a string
@@ -380,21 +449,34 @@ void	export(char *input ,char **envp)
 	printf("name=%s\n", name);
 	printf("value=%s\n", value);
 	ft_setenv(name, value, envp);
+	ft_getenv(name, envp);
 	free(sub_str);
 	free(name);
 	free(value);
 }
 
-// Function to call the ENV builtin
-void	env(char **envp)
+// Function to call the ENV building
+void	env(t_var *env)
 {
-	int	i;
-	i = -1;
-	while (envp[++i])
+	t_var	*current;
+	current = env;
+	while (current)
 	{
-		ft_putendl_fd(envp[i], 1);
+		ft_putendl_fd(current->raw, 1);
+		current = current->next;
 	}
 }
+
+//// Function to call the ENV builtin
+//void	env(char **envp)
+//{
+//	int	i;
+//	i = -1;
+//	while (envp[++i])
+//	{
+//		ft_putendl_fd(envp[i], 1);
+//	}
+//}
 
 //#################################################ROUTING##################################################################
 // Function to check wether its one of the builtins.
@@ -414,11 +496,13 @@ int	check_if_builtin(char *input)
 		return (0);
 	if (ft_strncmp("exit", input, 4) == 0)
 		return (0);
+	if (ft_strncmp("getenv", input, 6) == 0)
+		return (0);
 	return (1);
 }
 
 // Function to reroute to relative built in functions
-void	reroute_builtin(char *str, char **envp)
+void	reroute_builtin(t_minishell *data, char *str, char **envp)
 {
 	if (ft_strncmp("echo", str, 4) == 0)
 		echo(str);
@@ -432,21 +516,101 @@ void	reroute_builtin(char *str, char **envp)
 	if (ft_strncmp("unset", str, 5) == 0)
 		printf("UNSET CALLED\n");
 	if (ft_strncmp("env", str, 3) == 0)
-		env(envp);
+		env(data->custom_env);
 //		printf("ENV CALLED");
 	if (ft_strncmp("exit", str, 4) == 0)
 		printf("EXIT CALLED");
+	if (ft_strncmp("getenv", str, 6) == 0)
+		ft_getenv(str, envp);
+}
+
+void	print_env_list(t_var *list)
+{
+//	t_var	*list;
+//	list = data->custom_env;
+//	printf("list1 = %s\n", list->key);
+	t_var *current = list;
+	while (current)
+	{
+		printf("%s\n", current->raw);
+		current = current->next;
+	}
+}
+
+t_var	*append_node(t_minishell *data, char *raw, char *key, char *value)
+{
+	(void)data;
+	t_var *new_node = (t_var *)malloc(sizeof(t_var));
+	new_node->raw = raw;
+	new_node->key = key;
+	new_node->value = value;
+	new_node->next = NULL;
+	return (new_node);
+}
+
+void	parse_env(t_minishell *data, char **envp)
+{
+	t_var	*head = NULL;
+	t_var	*current = NULL;
+	char	*raw;
+	char	*key;
+	char	*value;
+	int		i;
+	int		j;
+	
+	i = -1;
+	while (envp[++i])
+	{
+		raw = ft_strdup(envp[i]);
+//		printf("%s\n", raw);
+		j = 0;
+		while (raw[j] != '=')
+		{
+			j++;
+		}
+		key = ft_substr(raw, 0, j);
+		value = ft_substr(raw, (j + 1), ft_strlen(raw) - (j + 1));
+		
+		if (head == NULL)
+		{
+			head = append_node(data, raw, key, value);
+			current = head;
+			data->custom_env = head;
+//			printf("head raw = %s\n", data->custom_env->raw);
+//			free(raw);
+//			free(key);
+//			free(value);
+		}
+		else
+		{
+			current->next = append_node(data, raw, key, value);
+			current = current->next;
+//			printf("current raw = %s\n", current->raw);
+//			free(raw);
+//			free(key);
+//			free(value);
+		}
+	}
+//	data.custom_env = &(t_var){.raw = "ARG=test test", .key = "ARG", .value = "|test|"};
+//	data.custom_env->next = &(t_var){.raw = "", .key = "DERP", .value = "|derp|"};
 }
 
 //############################################MAIN#############################################################################
 int	main(int argc, char **argv, char **envp)
 {
+	static t_minishell	data;
 	(void)argc;
 	(void)argv;
+//	(void)data;
 //	(void)envp;
 	char	*input;
 	char	*shell_dir;
 	char	*buffer;
+//
+	//first parsing the enviroment variables into a linked list
+	parse_env(&data, envp);
+//	printf("data_test = %s\n", data.custom_env->raw);
+//	print_env_list(data.custom_env);
 
 	while (1)
 	{	
@@ -467,7 +631,7 @@ int	main(int argc, char **argv, char **envp)
 		if (check_if_builtin(input) == 0)
 		{
 //			printf("buildin detected\n");
-			reroute_builtin(input, envp);
+			reroute_builtin(&data, input, envp);
 		}
 		else
 		{

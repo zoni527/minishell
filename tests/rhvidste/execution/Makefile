@@ -11,7 +11,7 @@ WHITE = \033[0;97m
 #------------------------------------------------------------------------------------
 NAME	= exec_test
 CC		= cc
-CFLAGS	= -Wextra -Werror -Wall -lreadline
+CFLAGS	= -Wextra -Werror -Wall -lreadline -g
 HEADERS = -I ./include
 LIBFT	= ./libft/libft.a
 
