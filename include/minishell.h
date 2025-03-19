@@ -44,7 +44,8 @@
 # define MSG_ERROR_ALLOC	"ERROR: couldn't alloc"
 # define MSG_ERROR_CAPACITY	"ERROR: requested memory chunk is too large"
 
-# define METACHARACTERS	"|<> \t\n"
+# define METACHARACTERS			"|<> \t\n"
+# define EXPANSION_DELIMITER	"'\"$"
 
 /* ================================ ENUMS ====================================*/
 

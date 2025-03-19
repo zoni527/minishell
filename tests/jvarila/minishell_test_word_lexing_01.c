@@ -200,11 +200,16 @@ void	print_tokens(t_minishell *data)
 t_var	*find_var(t_minishell *data, const char *str)
 {
 	t_var	*var;
+	size_t	len;
 
+	len = 0;
+	while (str[len] && !ft_isspace(str[len]) \
+		&& !ft_strchr(EXPANSION_DELIMITER, str[len]))
+		len++;
 	var = data->custom_env;
 	while (var)
 	{
-		if (ft_strnstr(str, var->key, ft_strlen(var->key)))
+		if (ft_strncmp(var->key, str, len) == 0)
 			return (var);
 		var = var->next;
 	}
@@ -240,19 +245,34 @@ void	expand_variable(t_minishell *data, t_token *token, \
 	token->value = new;
 }
 
+void	toggle_bool(bool *value)
+{
+	if (*value == true)
+		*value = false;
+	else
+		*value = true;
+}
 
 bool	contains_unexpanded_variable(t_token *token)
 {
-	char	*str;
+	const char	*str;
+	bool		within_single_quotes;
 
-	str = ft_strchr(token->value, '$');
-	if (!str)
-		return (false);
+	str = token->value;
+	within_single_quotes = false;
 	while (str)
 	{
-		if (!ft_isspace(*(str + 1)) && *(str + 1) != '$')
+		str = skip_whitespace(str);
+		if (!*str)
+			break ;
+		if (*str++ == '\'')
+		{
+			toggle_bool(&within_single_quotes);
+			continue ;
+		}
+		if (*str == '$' && *(str + 1) && !ft_isspace(*(str + 1)) && !within_single_quotes)
 			return (true);
-		str = ft_strchr(str + 1, '$');
+		str++;
 	}
 	return (false);
 }
