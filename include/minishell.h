@@ -16,7 +16,7 @@
 /* =============================== HEADERS ================================== */
 
 /* -------------------------------------------------------------------- libft */
-# include "../libft/libft.h"
+# include "libft.h"
 /* ---------------------------------------------------------------- minishell */
 # include <readline/readline.h>
 # include <stdio.h>
@@ -103,6 +103,17 @@ typedef struct s_token {
 
 /* --------------------------------------------- minishell_quote_validation.c */
 bool	has_unclosed_quotes(const char *str);
+
+/* ============================== EXPANSION ================================= */
+
+void	toggle_bool(bool *value);
+/* ------------------------------------------------- minishell_expansion_01.c */
+void	variable_expansion(t_minishell *data);
+void	expand_variables(t_minishell *data, t_token *token);
+void	expand_variable(t_minishell *data, t_token *token, \
+					  t_var *var, const char *var_pos);
+bool	contains_unexpanded_variable(t_token *token);
+t_var	*find_var(t_minishell *data, const char *str);
 
 /* ================================ UTILS =================================== */
 
