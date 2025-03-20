@@ -13,18 +13,23 @@
 CC		:= cc
 CFLAGS		:= -Wall -Wextra -Werror -g
 DEBUGFLAGS	:= -g
+INC		:= -I ../../libft -I ../../include
 
 LIBFTDIR	:= ../../libft
 LIBFT		:= $(LIBFTDIR)/libft.a
 
 SRCDIR		:= ../../src
-SRC		:= $(SRCDIR)/tokenization/minishell_quote_validation.c	\
+
+SRC		:= $(SRCDIR)/expansion/minishell_expansion_01.c		\
+		   $(SRCDIR)/tokenization/minishell_quote_validation.c	\
+		   $(SRCDIR)/tokenization/minishell_tokenization_01.c	\
+		   $(SRCDIR)/tokenization/minishell_tokenization_02.c	\
 		   $(SRCDIR)/utils/minishell_utils_memarena.c
 
 all: minishell_test_quotes_01.out minishell_test_word_lexing_01.out
 
 minishell_test_quotes_01.out: minishell_test_quotes_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $< $(SRC) $(LIBFT) -o $@
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@
 
 minishell_test_word_lexing_01.out: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $< $(SRC) $(LIBFT) -o $@
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "minishell.h"
 
 int	main(void)
 {
@@ -18,7 +18,7 @@ int	main(void)
 
 	data.arena = new_memarena();
 	if (!data.arena)
-		return (E_ALLOC);
+		return (ERROR_ALLOC);
 	free_memarena(data.arena);
 	return (0);
 }

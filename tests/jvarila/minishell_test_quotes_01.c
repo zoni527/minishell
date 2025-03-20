@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 int	main(int argc, char *argv[])
 {
 	if (argc != 2)
-		return (write_error_return_int("ERROR: give one argument", 1));
+		return (ft_write_error_return_int("ERROR: give one argument", 1));
 	ft_printf("Argument received: %s\n", argv[1]);
 	if (has_unclosed_quotes(argv[1]))
 		ft_printf("Argument %s has unclosed quotes\n", argv[1]);
