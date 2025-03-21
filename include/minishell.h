@@ -51,7 +51,6 @@
 # define MSG_ERROR_CAPACITY	"ERROR: requested memory chunk is too large"
 
 # define METACHARACTERS			"|<> \t\n"
-# define EXPANSION_DELIMITER	"'\"$/\\,"
 
 /* ================================ ENUMS =================================== */
 
@@ -136,6 +135,10 @@ size_t	expand_variable(t_minishell *data, t_token *token, \
 					t_var *var, size_t var_index);
 bool	contains_unexpanded_variable(t_token *token);
 t_var	*find_var(t_minishell *data, const char *str);
+
+/* ------------------------------------------------- minishell_expansion_02.c */
+
+void	toggle_quote_flag(char *quote_flag, char c);
 
 /* ================================ UTILS =================================== */
 

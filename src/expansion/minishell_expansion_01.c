@@ -47,18 +47,19 @@ void	variable_expansion(t_minishell *data)
 void	expand_variables(t_minishell *data, t_token *token)
 {
 	t_var		*var;
-	bool		within_single_quotes;
+	char		quote_flag;
 	size_t		i;
 
+	quote_flag = 0;
 	i = 0;
 	while (contains_unexpanded_variable(token))
 	{
 		while (ft_isspace(token->value[i]))
 			++i;
-		if (token->value[i] == '\'')
-			ft_toggle_bool(&within_single_quotes);
+		if (token->value[i] == '\'' || token->value[i] == '"')
+			toggle_quote_flag(&quote_flag, token->value[i]);
 		if (token->value[i] == '$' && !ft_isspace(token->value[i + 1]) \
-			&& !within_single_quotes)
+			&& !(quote_flag == '\''))
 		{
 			var = find_var(data, &token->value[++i]);
 			i = expand_variable(data, token, var, i);
@@ -110,33 +111,29 @@ size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
 
 /**
  * Function for checking if token contains an unexpanded variable.
- * <p>
- * Takes into account single quotes and requires the first character after '$'
- * to be non whitespace.
  *
  * @param token	Token to check
  */
 bool	contains_unexpanded_variable(t_token *token)
 {
 	const char	*str;
-	bool		within_single_quotes;
+	char		quote_flag;
 
 	str = token->value;
-	within_single_quotes = false;
+	quote_flag = 0;
 	while (str)
 	{
 		str = ft_skip_whitespace(str);
 		if (!*str)
 			break ;
-		if (*str == '\'')
+		if (*str == '\'' || *str == '"')
 		{
-			ft_toggle_bool(&within_single_quotes);
+			toggle_quote_flag(&quote_flag, *str);
 			str++;
 			continue ;
 		}
-		if (*str == '$' && *(str + 1) \
-			&& !ft_isspace(*(str + 1)) \
-			&& !within_single_quotes)
+		if (*str == '$' && *(str + 1) && !ft_isspace(*(str + 1)) \
+			&& !(quote_flag == '\''))
 			return (true);
 		str++;
 	}
@@ -163,7 +160,8 @@ t_var	*find_var(t_minishell *data, const char *str)
 	var = data->custom_env;
 	while (var)
 	{
-		if (ft_strncmp(var->key, str, len + 1) == 0)
+		if (len == ft_strlen(var->key) \
+			&& ft_strncmp(var->key, str, len) == 0)
 			return (var);
 		var = var->next;
 	}
