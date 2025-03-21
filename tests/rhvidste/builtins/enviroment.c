@@ -123,7 +123,7 @@ char	*ft_getenv(const char *name, t_var *envp)
 		{
 			envar = ft_strdup(current->value);
 			free(sub_name);
-			ft_putendl_fd(envar, 1);
+			ft_putendl_fd(envar, STDOUT_FILENO);
 			return (envar);
 		}
 		else

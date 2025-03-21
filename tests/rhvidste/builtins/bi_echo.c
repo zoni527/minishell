@@ -30,13 +30,13 @@ void	builtin_echo(char *input, t_var *envp)
 		n_str = ft_substr(sub_str, 3, ft_strlen(sub_str) -2);
 		no_quotes = remove_quotes(n_str);
 		free(n_str);
-		ft_putstr_fd(no_quotes, 1);
+		ft_putstr_fd(no_quotes, STDOUT_FILENO);
 		free(no_quotes);
 	}
 	else
 	{
 		no_quotes = remove_quotes(sub_str);
-		ft_putendl_fd(no_quotes, 1);
+		ft_putendl_fd(no_quotes, STDOUT_FILENO);
 		free(no_quotes);
 	}
 	free(sub_str);
