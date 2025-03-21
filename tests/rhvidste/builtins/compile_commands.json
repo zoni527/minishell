@@ -1,0 +1,31 @@
+[
+ {
+  "directory": "/home/rhvidste/Documents/GIT/git_minishell/tests/rhvidste/builtins",
+  "arguments": [
+   "cc",
+   "-Wextra",
+   "-Werror",
+   "-Wall",
+   "-lreadline",
+   "-g",
+   "builtins.c",
+   "builtin_utils.c",
+   "execution.c",
+   "dir.c",
+   "enviroment.c",
+   "routing.c",
+   "list.c",
+   "bi_echo.c",
+   "bi_cd.c",
+   "bi_export.c",
+   "bi_unset.c",
+   "bi_env.c",
+   "./libft/libft.a",
+   "-I",
+   "./include",
+   "-o",
+   "builtins"
+  ],
+  "file": "bi_env.c"
+ }
+]

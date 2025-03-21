@@ -18,7 +18,18 @@ LIBFT	= ./libft/libft.a
 SRC_DIR	= philo/
 OBJ_DIR = obj/
 
-SRCS	=  ./builtins00.c	
+SRCS	=	builtins.c \
+			builtin_utils.c \
+			execution.c \
+			dir.c \
+			enviroment.c \
+			routing.c \
+			list.c \
+			bi_echo.c \
+			bi_cd.c \
+			bi_export.c \
+			bi_unset.c \
+			bi_env.c
 
 OBJS    = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
 
