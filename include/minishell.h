@@ -68,16 +68,8 @@ typedef enum e_token_type {
 
 /* ============================== TYPEDEFS ================================== */
 
-typedef struct s_memarena	t_memarena;
 typedef struct s_token		t_token;
 typedef struct s_var		t_var;
-
-typedef struct s_memarena {
-	size_t		capacity;
-	size_t		bytes_used;
-	void		*heap_memory;
-	t_memarena	*next;
-}	t_memarena;
 
 typedef struct s_var {
 	char	*raw;
