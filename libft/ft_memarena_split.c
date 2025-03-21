@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   ft_memarena_split.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/01 18:13:34 by jvarila           #+#    #+#             */
-/*   Updated: 2024/11/12 12:37:23 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/21 12:41:26 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/21 12:44:33 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ static const char	*ft_skip_over_char(const char *s, char c);
 static char			**ft_free_array(char **array, size_t len);
 static size_t		ft_len_till_c(const char *s, char c);
 
-char	**ft_split(char const *s, char c)
+char	**ft_memarena_split(t_memarena *arena, char const *s, char c)
 {
 	char		**str_array;
 	size_t		word_count;
 	size_t		i;
 
 	word_count = word_count_delim(s, c);
-	str_array = malloc((word_count + 1) * sizeof(char *));
+	str_array = ft_memarena_malloc(arena, (word_count + 1) * sizeof(char *));
 	if (str_array == NULL)
 		return (NULL);
 	i = 0;
 	while (i < word_count)
 	{
 		s = ft_skip_over_char(s, c);
-		str_array[i] = ft_substr(s, 0, ft_len_till_c(s, c));
+		str_array[i] = ft_memarena_substr(arena, s, 0, ft_len_till_c(s, c));
 		if (!str_array[i])
 			return (ft_free_array(str_array, i));
 		s = ft_strchr(s, c);

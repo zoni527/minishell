@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_quote_validation.c                       :+:      :+:    :+:   */
+/*   ft_count_char.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 16:47:03 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/11 17:02:26 by jvarila          ###   ########.fr       */
+/*   Created: 2025/02/11 14:28:30 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/20 15:58:09 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-bool	has_unclosed_quotes(const char *str)
+int	ft_count_char(const char *str, int c)
 {
+	int	count;
+
 	if (!str)
-		return (false);
+		return (-1);
+	count = 0;
 	while (*str)
-	{
-		if (*str != '\'' && *str != '"')
-		{
-			str++;
-			continue ;
-		}
-		str = ft_strchr(str + 1, *str);
-		if (!str)
-			return (true);
-		else
-			str++;
-	}
-	return (false);
+		if (*(str++) == c)
+			count++;
+	return (count);
 }

@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_quote_validation.c                       :+:      :+:    :+:   */
+/*   ft_memarena_strdup.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 16:47:03 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/11 17:02:26 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/21 12:36:41 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/21 12:38:05 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-bool	has_unclosed_quotes(const char *str)
+char	*ft_memarena_strdup(t_memarena *arena, const char *s)
 {
+	char	*str;
+	size_t	len;
+
+	len = ft_strlen(s);
+	str = ft_memarena_malloc(arena, (len + 1) * sizeof(char));
 	if (!str)
-		return (false);
-	while (*str)
-	{
-		if (*str != '\'' && *str != '"')
-		{
-			str++;
-			continue ;
-		}
-		str = ft_strchr(str + 1, *str);
-		if (!str)
-			return (true);
-		else
-			str++;
-	}
-	return (false);
+		return (NULL);
+	ft_memcpy(str, s, (len + 1) * sizeof (char));
+	return (str);
 }

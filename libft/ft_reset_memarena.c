@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_quote_validation.c                       :+:      :+:    :+:   */
+/*   ft_reset_memarena.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 16:47:03 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/11 17:02:26 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/21 12:24:26 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/21 12:26:42 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-bool	has_unclosed_quotes(const char *str)
+/**
+ * Frees all but the primary arena node, sets heap memory to 0 and resets
+ * struct member variables.
+ *
+ * @param arena	Pointer to primary memarena node
+ */
+void	ft_reset_memarena(t_memarena *arena)
 {
-	if (!str)
-		return (false);
-	while (*str)
-	{
-		if (*str != '\'' && *str != '"')
-		{
-			str++;
-			continue ;
-		}
-		str = ft_strchr(str + 1, *str);
-		if (!str)
-			return (true);
-		else
-			str++;
-	}
-	return (false);
+	if (arena->next)
+		ft_free_memarena(arena->next);
+	ft_memset(arena->heap_memory, 0, MEM_ARENA_SIZE);
+	arena->capacity = MEM_ARENA_SIZE;
+	arena->bytes_used = 0;
+	arena->next = NULL;
 }

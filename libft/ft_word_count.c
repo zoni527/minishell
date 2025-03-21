@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_quote_validation.c                       :+:      :+:    :+:   */
+/*   ft_word_count.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/11 16:47:03 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/11 17:02:26 by jvarila          ###   ########.fr       */
+/*   Created: 2024/12/27 10:42:36 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/20 12:21:20 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-bool	has_unclosed_quotes(const char *str)
+int	ft_word_count(const char *str)
 {
-	if (!str)
-		return (false);
+	int	wc;
+
+	if (!*str)
+		return (0);
+	wc = 0;
 	while (*str)
 	{
-		if (*str != '\'' && *str != '"')
+		if (*str == ' ' || (*str >= 9 && *str <= 13))
 		{
 			str++;
 			continue ;
 		}
-		str = ft_strchr(str + 1, *str);
-		if (!str)
-			return (true);
-		else
+		wc++;
+		while (*str && !(*str == ' ' || (*str >= 9 && *str <= 13)))
 			str++;
 	}
-	return (false);
+	return (wc);
 }

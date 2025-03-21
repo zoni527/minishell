@@ -16,8 +16,11 @@
 /* =============================== HEADERS ================================== */
 
 /* -------------------------------------------------------------------- libft */
-# include "../libft/libft.h"
+
+# include "libft.h"
+
 /* ---------------------------------------------------------------- minishell */
+
 # include <readline/readline.h>
 # include <stdio.h>
 # include <fcntl.h>
@@ -27,46 +30,118 @@
 # include <string.h>
 # include <sys/ioctl.h>
 # include <term.h>
-/* -------------------------------------------------------------------- extra */
-# include <stdbool.h>
 
 /* =============================== MACROS =================================== */
 
 /* -------------------------------------------------------- numeric constants */
+
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
+
 /* -------------------------------------------------------------- error codes */
-# define E_PERMISSION	1
-# define E_ALLOC		2
 
-/* ============================== TYPEDEFS ===================================*/
+# define ERROR_PERMISSION	1
+# define ERROR_ALLOC		2
+# define ERROR_UNCLOSED		3
+# define ERROR_CAPACITY		4
 
-typedef struct s_memarena	t_memarena;
+/* ----------------------------------------------------------- error messages */
 
-typedef struct s_memarena {
-	size_t		capacity;
-	size_t		bytes_used;
-	void		*heap_memory;
-	t_memarena	*next;
-}	t_memarena;
+# define MSG_ERROR_ALLOC	"ERROR: couldn't alloc"
+# define MSG_ERROR_CAPACITY	"ERROR: requested memory chunk is too large"
+
+# define METACHARACTERS			"|<> \t\n"
+
+/* ================================ ENUMS =================================== */
+
+typedef enum e_token_type {
+	WORD,
+	COMMAND,
+	ARGUMENT,
+	BUILTIN,
+	PIPE,
+	REDIRECT_INPUT,
+	REDIRECT_OUTPUT,
+	HEREDOC,
+	APPEND
+}	t_token_type;
+
+/* ============================== TYPEDEFS ================================== */
+
+typedef struct s_token		t_token;
+typedef struct s_var		t_var;
+
+typedef struct s_var {
+	char	*raw;
+	char	*key;
+	char	*value;
+	t_var	*next;
+	t_var	*prev;
+}	t_var;
 
 typedef struct s_minishell {
 	t_memarena	*arena;
+	t_token		*token_list;
+	t_var		*custom_env;
+	size_t		token_count;
 	const char	*raw_input;
-	const char	*env[];
+	const char	*initial_env[];
 }	t_minishell;
+
+typedef struct s_token {
+	t_token_type	type;
+	size_t			id;
+	t_token			*next;
+	t_token			*prev;
+	const char		*value;
+}	t_token;
 
 /* ============================= TOKENIZATION =============================== */
 
 /* --------------------------------------------- minishell_quote_validation.c */
+
 bool	has_unclosed_quotes(const char *str);
+
+/* ---------------------------------------------- minishell_tokenization_01.c */
+
+void	lex_raw_input(t_minishell *data);
+void	tokenize_word(t_minishell *data, const char *src, size_t word_len);
+void	print_tokens(t_minishell *data);
+
+/* ---------------------------------------------- minishell_tokenization_02.c */
+
+t_token	*new_token_node(t_memarena *arena, const char *str);
+void	append_token(t_token **list, t_token *token);
+void	insert_token_right(t_token *current, t_token *new);
+void	insert_token_left(t_token *current, t_token *new);
+
+/* ---------------------------------------------- minishell_tokenization_02.c */
+
+/* ============================== EXPANSION ================================= */
+
+/* ------------------------------------------------- minishell_expansion_01.c */
+
+void	variable_expansion(t_minishell *data);
+void	expand_variables(t_minishell *data, t_token *token);
+size_t	expand_variable(t_minishell *data, t_token *token, \
+					t_var *var, size_t var_index);
+bool	contains_unexpanded_variable(t_token *token);
+t_var	*find_var(t_minishell *data, const char *str);
+
+/* ------------------------------------------------- minishell_expansion_02.c */
+
+void	toggle_quote_flag(char *quote_flag, char c);
 
 /* ================================ UTILS =================================== */
 
 /* ----------------------------------------------- minishell_utils_memarena.c */
+
 void	*new_memarena(void);
 void	*memarena_calloc(t_memarena *arena, size_t nmemb, size_t size);
+void	free_memarena_exit(t_memarena *arena, const char *msg);
 void	free_memarena(t_memarena *arena);
+void	reset_memarena(t_memarena *arena);
+
 /* -------------------------------------------------------------------------- */
 
 #endif
