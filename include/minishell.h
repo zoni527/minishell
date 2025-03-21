@@ -212,6 +212,8 @@ int		remove_env(char *key, t_var *envp);
 int		get_list_size(t_var *begin);
 void	free_list(t_var *head);
 void	print_env_list(t_var *list);
+t_var	*append_var(t_minishell *data, t_var *prev, \
+				char *raw, char *key, char *value);
 
 /* -------------------------------------------------------------------------- */
 #endif

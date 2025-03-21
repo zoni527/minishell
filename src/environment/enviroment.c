@@ -43,13 +43,13 @@ void	parse_env(t_minishell *data, char **envp)
 		
 		if (head == NULL)
 		{
-			head = append_var(NULL, raw, key, value);
+			head = append_var(data, NULL, raw, key, value);
 			current = head;
 			data->custom_env = head;
 		}
 		else
 		{
-			current->next = append_var(current, raw, key, value);
+			current->next = append_var(data, current, raw, key, value);
 			current = current->next;
 		}
 	}
@@ -79,7 +79,7 @@ char	**create_envp_arr_from_custom_env(t_minishell *data ,t_var *envp_list)
 	//lets get the lengnth of the list
 	list_len = get_list_size(envp_list);
 	//using the list len to malloc the str arr
-i//	envp_arr = malloc(sizeof(char *) * list_len + 1);
+//	envp_arr = malloc(sizeof(char *) * list_len + 1);
 	envp_arr = ft_ma_malloc(data->arena, (sizeof(char *) * (list_len + 1)));
 
 	head = envp_list;
@@ -114,7 +114,7 @@ char	*ft_getenv(t_minishell *data, const char *name, t_var *envp)
 	if (ft_strncmp(name, "getenv", 6) == 0)
 		sub_name = ft_ma_substr(data->arena, name, 7, ft_strlen(name) - 6);
 	else
-		sub_name = ft_ma_strdup(name);
+		sub_name = ft_ma_strdup(data->arena, name);
 	if (!sub_name)
 		return (NULL);
 	current = envp;
