@@ -23,7 +23,7 @@ void	builtin_env(t_var *env)
 	current = env;
 	while (current)
 	{
-		ft_putendl_fd(current->raw, 1);
+		ft_putendl_fd(current->raw, STDOUT_FILENO);
 		current = current->next;
 	}
 }
