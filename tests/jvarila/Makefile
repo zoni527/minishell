@@ -22,6 +22,7 @@ SRCDIR	:=	../../src
 
 SRC	:=	$(SRCDIR)/expansion/minishell_expansion_01.c		\
 		$(SRCDIR)/expansion/minishell_expansion_02.c		\
+		$(SRCDIR)/utils/minishell_var_name_len.c		\
 		$(SRCDIR)/tokenization/minishell_quote_validation.c	\
 		$(SRCDIR)/tokenization/minishell_quote_removal.c	\
 		$(SRCDIR)/tokenization/minishell_tokenization_01.c	\

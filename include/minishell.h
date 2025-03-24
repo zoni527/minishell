@@ -105,7 +105,7 @@ bool	has_unclosed_quotes(const char *str);
 /* ---------------------------------------------- minishell_tokenization_01.c */
 
 void	lex_raw_input(t_minishell *data);
-void	tokenize_word(t_minishell *data, const char *src, size_t word_len);
+void	tokenize(t_minishell *data, const char *src, size_t len);
 void	print_tokens(t_minishell *data);
 
 /* ---------------------------------------------- minishell_tokenization_02.c */
@@ -115,7 +115,7 @@ void	append_token(t_token **list, t_token *token);
 void	insert_token_right(t_token *current, t_token *new);
 void	insert_token_left(t_token *current, t_token *new);
 
-/* ------------------------------------------------ minishell_quote_removal.c */
+/* ----------------------------------------------- minishell_quote_removal.c */
 
 void	quote_removal(t_minishell *data);
 
@@ -136,6 +136,8 @@ void	toggle_quote_flag(char *quote_flag, char c);
 
 /* ================================ UTILS =================================== */
 
-/* -------------------------------------------------------------------------- */
+/* ------------------------------------------------- minishell_var_name_len.c */
+
+size_t	var_name_len(const char *str);
 
 #endif

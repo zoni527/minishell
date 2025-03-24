@@ -42,7 +42,10 @@ void	remove_quotes_from_token(t_minishell *data, t_token *token)
 		if (token->value[i] == '\'' || token->value[i] == '"')
 			quote = token->value[i];
 		if (quote != 0)
+		{
 			i = remove_quotes_at_index(data, token, quote, i);
+			toggle_quote_flag(&quote, quote);
+		}
 		++i;
 	}
 }
@@ -64,5 +67,6 @@ size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
 	result = ft_ma_substr(data->arena, token->value, 0, quote_index);
 	result = ft_ma_strjoin(data->arena, result, within_quotes);
 	result = ft_ma_strjoin(data->arena, result, &token->value[i + 1]);
+	token->value = result;
 	return (i - 2);
 }
