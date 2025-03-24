@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routing.c                                          :+:      :+:    :+:   */
+/*   minishell_routing.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 12:19:12 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/03/21 12:20:59 by rhvidste         ###   ########.fr       */
+/*   Created: 2025/03/24 13:38:10 by rhvidste          #+#    #+#             */
+/*   Updated: 2025/03/24 13:52:04 by rhvidste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "include/minishell.h"
+#include "minishell.h"
 
 /**
  * Function to check wether input is one of the builtins
  *
  * @param input	raw input to parse
  */
-int	check_if_builtin(char *input)
+int	check_if_builtin(const char *input)
 {
 	if (ft_strncmp("echo", input, 4) == 0)
 		return (0);
@@ -48,9 +48,10 @@ int	check_if_builtin(char *input)
 void	reroute_builtin(t_minishell *data, char *str, t_var *envp)
 {
 	(void)data;
+	(void)envp;
 	if (ft_strncmp("echo", str, 4) == 0)
 //		builtin_echo(str, envp);
-		printf("ECHO CALLED");
+		printf("ECHO CALLED\n");
 	if (ft_strncmp("cd", str, 2) == 0)
 //		builtin_cd(str, envp);
 		printf("CD CALLED\n");
@@ -72,4 +73,3 @@ void	reroute_builtin(t_minishell *data, char *str, t_var *envp)
 //		ft_getenv(str, envp);
 		printf("GETENV CALLED");
 }
-

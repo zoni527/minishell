@@ -11,8 +11,9 @@ WHITE = \033[0;97m
 #------------------------------------------------------------------------------------
 NAME	= minishell
 CC		= cc
-#CFLAGS	= -Wextra -Werror -Wall -lreadline -g
+#CFLAGS	= -Wall -Wextra -Werror -lreadline -g
 CFLAGS	= -Wextra -Werror -Wall -g
+LDFLAGS = -lreadline
 HEADERS = -I ./include -I ./libft
 LIBFT	= ./libft/libft.a
 
@@ -26,7 +27,8 @@ SRCS	=	src/minishell_main.c \
 			src/tokenization/minishell_tokenization_01.c \
 			src/tokenization/minishell_tokenization_02.c \
 			src/environment/minishell_environment.c \
-			src/environment/minishell_list.c
+			src/environment/minishell_list.c \
+			src/builtins/minishell_routing.c
 
 
 OBJS    = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))
@@ -39,7 +41,7 @@ $(LIBFT):
 
 #$(NAME): $(OBJ_DIR) $(OBJS) $(LIBFT)
 $(NAME): $(OBJS) $(LIBFT)
-		@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(HEADERS) -o $(NAME)
+		@$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LDFLAGS) $(HEADERS) -o $(NAME)
 		@echo "$(GREEN)Succesfully built builtin!$(DEF_COLOR)"
 
 #$(OBJ_DIR)%.o: $(SRC_DIR)%.c

@@ -22,6 +22,7 @@
 /* ---------------------------------------------------------------- minishell */
 
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -198,7 +199,7 @@ void		print_debug(t_minishell *data);
 
 /* ============================== ENVIROMENT ================================ */
 
-/* --------------------------------------------------------------enviroment.c */
+/* ----------------------------------------------------minishell_enviroment.c */
 
 void	parse_env(t_minishell *data, char **envp);
 char	**create_envp_arr_from_custom_env(t_minishell *data , \
@@ -207,7 +208,7 @@ char	*ft_getenv(t_minishell *data, const char *name, t_var *envp);
 int		ft_setenv(t_minishell *data, char *key, char *value, t_var *envp);
 int		remove_env(char *key, t_var *envp);
 
-/* ----------------------------------------------- --------------------list.c */
+/* ----------------------------------------------------------minishell_list.c */
 
 int		get_list_size(t_var *begin);
 void	free_list(t_var *head);
@@ -216,4 +217,10 @@ t_var	*append_var(t_minishell *data, t_var *prev, \
 				char *raw, char *key, char *value);
 
 /* -------------------------------------------------------------------------- */
+
+/* ============================== BUILT INS ================================= */
+
+/* -------------------------------------------------------minishell_routing.c */
+int		check_if_builtin(const char *input);
+void	reroute_builtin(t_minishell *data, char *str, t_var *envp);
 #endif
