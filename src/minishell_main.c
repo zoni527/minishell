@@ -16,7 +16,7 @@ int	main(void)
 {
 	static t_minishell	data;
 
-	data.arena = new_memarena();
+	data.arena = ft_ma_new_memarena();
 	if (!data.arena)
 		return (ERROR_ALLOC);
 	free_memarena(data.arena);

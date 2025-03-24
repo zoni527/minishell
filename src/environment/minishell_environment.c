@@ -141,7 +141,7 @@ char	*ft_getenv(t_minishell *data, const char *name, t_var *envp)
  * @param value	value input
  * @param envp	enviroment pointer
  */
-int	ft_setenv(char *key, char *value, t_var *envp)
+int	ft_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 {
 	char	*raw;
 //	t_var	*new_node;
@@ -169,7 +169,7 @@ int	ft_setenv(char *key, char *value, t_var *envp)
 	}
 	//Else if variable does not exist, then create it
 	if (last)
-		last->next = append_var(last, raw, key, value);
+		last->next = append_var(data, last, raw, key, value);
 	return (0);
 }
 
