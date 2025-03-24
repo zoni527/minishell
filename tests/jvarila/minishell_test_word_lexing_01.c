@@ -25,13 +25,14 @@ int	main(int argc, char *argv[])
 	if (has_unclosed_quotes(argv[1]))
 		return (ft_write_error_return_int("ERROR: input has unclosed quotes", \
 								ERROR_UNCLOSED));
-	data.arena = new_memarena();
+	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
 	data.raw_input = argv[1];
 	lex_raw_input(&data);
 	variable_expansion(&data);
+	quote_removal(&data);
 	print_tokens(&data);
-	free_memarena(data.arena);
+	ft_free_memarena(data.arena);
 	return (0);
 }

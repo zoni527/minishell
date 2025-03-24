@@ -21,7 +21,7 @@ t_token	*new_token_node(t_memarena *arena, const char *str)
 {
 	t_token	*token;
 
-	token = memarena_calloc(arena, 1, sizeof(t_token));
+	token = ft_ma_calloc(arena, 1, sizeof(t_token));
 	token->value = str;
 	if (*str == '|')
 		token->type = PIPE;

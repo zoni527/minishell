@@ -16,11 +16,12 @@
  * Used like calloc, returns a pointer that is pointing to memory that
  * is inside the memory arena's preallocated pool of heap memory.
  * <p>
- * If no memory is available function returns NULL
+ * If no memory is available function calls ft_free_memarena_exit.
  *
  * @param arena	Pointer to primary memarena node
  * @param nmemb	Number of elements to allocate space for
  * @param size	Size of elements to accolate space for
+ * @see			ft_free_memarena_exit
  */
 void	*ft_ma_calloc(t_memarena *arena, size_t nmemb, size_t size)
 {
@@ -33,7 +34,7 @@ void	*ft_ma_calloc(t_memarena *arena, size_t nmemb, size_t size)
 	if (bytes_required <= 0)
 		return (NULL);
 	if (bytes_required > arena->capacity)
-		return (NULL);
+		ft_free_memarena_exit(arena, MSG_ERROR_CAPACITY);
 	bytes_available = arena->capacity - arena->bytes_used;
 	initial_arena = arena;
 	while (bytes_available < bytes_required)
@@ -41,12 +42,12 @@ void	*ft_ma_calloc(t_memarena *arena, size_t nmemb, size_t size)
 		if (!arena->next)
 			arena->next = ft_new_memarena();
 		if (!arena->next)
-			return (NULL);
+			ft_free_memarena_exit(initial_arena, MSG_ERROR_ALLOC);
 		arena = arena->next;
 		bytes_available = arena->capacity - arena->bytes_used;
 	}
 	ptr = arena->heap_memory + arena->bytes_used;
 	arena->bytes_used += bytes_required;
-	ft_memset(ptr, 0, bytes_required);
+	ft_bzero(ptr, bytes_required);
 	return (ptr);
 }

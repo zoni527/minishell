@@ -59,7 +59,7 @@ void	tokenize_word(t_minishell *data, const char *src, size_t word_len)
 	char	*word;
 	t_token	*new;
 
-	word = memarena_calloc(data->arena, word_len + 1, sizeof(char));
+	word = ft_ma_calloc(data->arena, word_len + 1, sizeof(char));
 	ft_strlcpy(word, src, word_len + 1);
 	new = new_token_node(data->arena, word);
 	append_token(&data->token_list, new);

@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_new_memarena.c                                  :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 12:09:51 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/21 12:13:03 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/23 10:40:54 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/23 12:06:19 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/**
- * Creates new memarena struct with MEM_ARENA_SIZE bytes of heap memory.
- * <p>
- * Return NULL if malloc can't return heap memory.
- */
-void	*ft_new_memarena(void)
+void	*ft_realloc(void *src, size_t size_old, size_t size_new)
 {
-	t_memarena	*arena;
+	char	*dest;
+	size_t	copy_bytes;
 
-	arena = malloc(sizeof(t_memarena));
-	if (!arena)
-		return (NULL);
-	arena->heap_memory = malloc(MEM_ARENA_SIZE);
-	if (!arena->heap_memory)
+	if (!src)
+		return (malloc(size_new));
+	if (size_new == 0)
 	{
-		free(arena);
+		free(src);
 		return (NULL);
 	}
-	arena->capacity = MEM_ARENA_SIZE;
-	arena->bytes_used = 0;
-	arena->next = NULL;
-	return (arena);
+	dest = malloc(size_new);
+	if (!dest)
+		return (NULL);
+	if (size_new > size_old)
+		copy_bytes = size_old;
+	else
+		copy_bytes = size_new;
+	while (copy_bytes--)
+		dest[copy_bytes] = ((char *)src)[copy_bytes];
+	free(src);
+	return (dest);
 }

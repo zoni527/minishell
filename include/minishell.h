@@ -115,7 +115,9 @@ void	append_token(t_token **list, t_token *token);
 void	insert_token_right(t_token *current, t_token *new);
 void	insert_token_left(t_token *current, t_token *new);
 
-/* ---------------------------------------------- minishell_tokenization_02.c */
+/* ------------------------------------------------ minishell_quote_removal.c */
+
+void	quote_removal(t_minishell *data);
 
 /* ============================== EXPANSION ================================= */
 
@@ -133,14 +135,6 @@ t_var	*find_var(t_minishell *data, const char *str);
 void	toggle_quote_flag(char *quote_flag, char c);
 
 /* ================================ UTILS =================================== */
-
-/* ----------------------------------------------- minishell_utils_memarena.c */
-
-void	*new_memarena(void);
-void	*memarena_calloc(t_memarena *arena, size_t nmemb, size_t size);
-void	free_memarena_exit(t_memarena *arena, const char *msg);
-void	free_memarena(t_memarena *arena);
-void	reset_memarena(t_memarena *arena);
 
 /* -------------------------------------------------------------------------- */
 
