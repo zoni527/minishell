@@ -100,7 +100,7 @@ size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
 	}
 	old_len = ft_strlen(token->value);
 	new_len = old_len - 1 - unexpanded_len + expanded_len;
-	new = memarena_calloc(data->arena, new_len + 1, sizeof(char));
+	new = ft_ma_calloc(data->arena, new_len + 1, sizeof(char));
 	ft_strlcat(new, token->value, var_index);
 	if (var)
 		ft_strlcat(new, var->value, new_len + 1);

@@ -31,7 +31,6 @@ void	quote_removal(t_minishell *data)
 void	remove_quotes_from_token(t_minishell *data, t_token *token)
 {
 	char		quote;
-	size_t		start_index;
 	size_t		i;
 	char		*result;
 
