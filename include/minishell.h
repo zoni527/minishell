@@ -54,7 +54,8 @@
 
 /* ================================ ENUMS =================================== */
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
 	WORD,
 	COMMAND,
 	ARGUMENT,
@@ -71,7 +72,8 @@ typedef enum e_token_type {
 typedef struct s_token		t_token;
 typedef struct s_var		t_var;
 
-typedef struct s_var {
+typedef struct s_var
+{
 	char	*raw;
 	char	*key;
 	char	*value;
@@ -79,7 +81,8 @@ typedef struct s_var {
 	t_var	*prev;
 }	t_var;
 
-typedef struct s_minishell {
+typedef struct s_minishell
+{
 	t_memarena	*arena;
 	t_token		*token_list;
 	t_var		*custom_env;
@@ -88,7 +91,8 @@ typedef struct s_minishell {
 	const char	*initial_env[];
 }	t_minishell;
 
-typedef struct s_token {
+typedef struct s_token
+{
 	t_token_type	type;
 	size_t			id;
 	t_token			*next;
@@ -115,7 +119,7 @@ void	append_token(t_token **list, t_token *token);
 void	insert_token_right(t_token *current, t_token *new);
 void	insert_token_left(t_token *current, t_token *new);
 
-/* ----------------------------------------------- minishell_quote_removal.c */
+/* ------------------------------------------------ minishell_quote_removal.c */
 
 void	quote_removal(t_minishell *data);
 
