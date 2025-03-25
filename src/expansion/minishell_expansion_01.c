@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:48:53 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/19 12:16:03 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/24 13:54:45 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	expand_variables(t_minishell *data, t_token *token)
 			++i;
 		if (token->value[i] == '\'' || token->value[i] == '"')
 			toggle_quote_flag(&quote_flag, token->value[i]);
-		if (token->value[i] == '$' && !ft_isspace(token->value[i + 1]) \
+		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1]) \
 			&& !(quote_flag == '\''))
 		{
 			var = find_var(data, &token->value[++i]);
@@ -90,7 +90,7 @@ size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
 
 	if (!var)
 	{
-		unexpanded_len = ft_strlen(&token->value[var_index]);
+		unexpanded_len = var_name_len(&token->value[var_index]);
 		expanded_len = 0;
 	}
 	else
@@ -128,14 +128,13 @@ bool	contains_unexpanded_variable(t_token *token)
 			break ;
 		if (*str == '\'' || *str == '"')
 		{
-			toggle_quote_flag(&quote_flag, *str);
-			str++;
+			toggle_quote_flag(&quote_flag, *(str++));
 			continue ;
 		}
 		if (*str == '$' && *(str + 1) && !ft_isspace(*(str + 1)) \
 			&& !(quote_flag == '\''))
 			return (true);
-		str++;
+		++str;
 	}
 	return (false);
 }
@@ -153,10 +152,7 @@ t_var	*find_var(t_minishell *data, const char *str)
 	t_var	*var;
 	size_t	len;
 
-	len = 0;
-	while (str[len] && !ft_isspace(str[len]) \
-		&& (ft_isalnum(str[len]) || str[len] == '_'))
-		len++;
+	len = var_name_len(str);
 	var = data->custom_env;
 	while (var)
 	{

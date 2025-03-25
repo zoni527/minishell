@@ -12,6 +12,29 @@
 
 #include "minishell.h"
 
+static const char	*skip_over_operator(const char *str)
+{
+	if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
+		++str;
+	return (++str);
+}
+
+static const char	*skip_over_word(const char *str)
+{
+	char	quote_flag;
+
+	quote_flag = '\0';
+	while (*str)
+	{
+		if (ft_strchr(METACHARACTERS, *str) && quote_flag == '\0')
+			break ;
+		if (*str == '\'' || *str == '"')
+			toggle_quote_flag(&quote_flag, *str);
+		++str;
+	}
+	return (str);
+}
+
 /**
  * Lexes raw input and creates list of tokens from words
  * delimited by metacharacters.
@@ -20,47 +43,43 @@
  */
 void	lex_raw_input(t_minishell *data)
 {
-	const char	*raw_input;
+	const char	*str;
 	char		*start;
 	size_t		word_len;
+	char		quote_flag;
 
-	raw_input = data->raw_input;
-	while (*raw_input)
+	str = data->raw_input;
+	quote_flag = '\0';
+	while (*str)
 	{
-		raw_input = ft_skip_whitespace(raw_input);
-		if (!*raw_input)
+		str = ft_skip_whitespace(str);
+		if (!*str)
 			break ;
-		start = (char *)raw_input;
-		if (ft_strchr("|<>", *raw_input))
-		{
-			if (!ft_strncmp(raw_input, "<<", 2) \
-				|| !ft_strncmp(raw_input, ">>", 2))
-				raw_input++;
-			raw_input++;
-		}
+		start = (char *)str;
+		if (ft_strchr("|<>", *str) && !quote_flag)
+			str = skip_over_operator(str);
 		else
-			while (*raw_input && !ft_strchr(METACHARACTERS, *raw_input))
-				raw_input++;
-		word_len = raw_input - start;
-		tokenize_word(data, start, word_len);
+			str = skip_over_word(str);
+		word_len = str - start;
+		tokenize(data, start, word_len);
 	}
 }
 
 /**
- * Creates token from word and appends the new token to data->token_list.
+ * Creates token from string and appends the new token to data->token_list.
  * Requests heap memory from the memarena.
  *
  * @param data		Pointer to main data struct
  * @param src		Source string to use for token creation
  * @param word_len	Amount of characters that are part of the token in src
  */
-void	tokenize_word(t_minishell *data, const char *src, size_t word_len)
+void	tokenize(t_minishell *data, const char *src, size_t len)
 {
 	char	*word;
 	t_token	*new;
 
-	word = ft_ma_calloc(data->arena, word_len + 1, sizeof(char));
-	ft_strlcpy(word, src, word_len + 1);
+	word = ft_ma_calloc(data->arena, len + 1, sizeof(char));
+	ft_strlcpy(word, src, len + 1);
 	new = new_token_node(data->arena, word);
 	append_token(&data->token_list, new);
 }

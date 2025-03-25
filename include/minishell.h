@@ -54,7 +54,8 @@
 
 /* ================================ ENUMS =================================== */
 
-typedef enum e_token_type {
+typedef enum e_token_type
+{
 	WORD,
 	COMMAND,
 	ARGUMENT,
@@ -71,7 +72,8 @@ typedef enum e_token_type {
 typedef struct s_token		t_token;
 typedef struct s_var		t_var;
 
-typedef struct s_var {
+typedef struct s_var
+{
 	char	*raw;
 	char	*key;
 	char	*value;
@@ -79,7 +81,8 @@ typedef struct s_var {
 	t_var	*prev;
 }	t_var;
 
-typedef struct s_minishell {
+typedef struct s_minishell
+{
 	t_memarena	*arena;
 	t_token		*token_list;
 	t_var		*custom_env;
@@ -88,7 +91,8 @@ typedef struct s_minishell {
 	const char	*initial_env[];
 }	t_minishell;
 
-typedef struct s_token {
+typedef struct s_token
+{
 	t_token_type	type;
 	size_t			id;
 	t_token			*next;
@@ -105,7 +109,7 @@ bool	has_unclosed_quotes(const char *str);
 /* ---------------------------------------------- minishell_tokenization_01.c */
 
 void	lex_raw_input(t_minishell *data);
-void	tokenize_word(t_minishell *data, const char *src, size_t word_len);
+void	tokenize(t_minishell *data, const char *src, size_t len);
 void	print_tokens(t_minishell *data);
 
 /* ---------------------------------------------- minishell_tokenization_02.c */
@@ -136,6 +140,8 @@ void	toggle_quote_flag(char *quote_flag, char c);
 
 /* ================================ UTILS =================================== */
 
-/* -------------------------------------------------------------------------- */
+/* ------------------------------------------------- minishell_var_name_len.c */
+
+size_t	var_name_len(const char *str);
 
 #endif
