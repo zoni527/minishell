@@ -218,9 +218,19 @@ t_var	*append_var(t_minishell *data, t_var *prev, \
 
 /* -------------------------------------------------------------------------- */
 
+/* ============================== EXECUTION ================================= */
+
+/* -----------------------------------------------------minishell_execution.c */
+
+char	*set_paths(t_minishell *data, const char *command, char **mypaths);
+char	*path_parsing(t_minishell *data, const char *command, char **envp);
+void	cmd_exec(t_minishell *data, const char *argv, char **envp);
+int		run_prog(t_minishell *data, const char *input, char **envp);
+int		child_process(t_minishell *data, char *argv, char **envp);
+
 /* ============================== BUILT INS ================================= */
 
 /* -------------------------------------------------------minishell_routing.c */
 int		check_if_builtin(const char *input);
-void	reroute_builtin(t_minishell *data, char *str, t_var *envp);
+void	reroute_builtin(t_minishell *data, const char *str, t_var *envp);
 #endif

@@ -21,6 +21,7 @@ SRC_DIR	= src/
 OBJ_DIR = obj/
 
 SRCS	=	src/minishell_main.c \
+			src/utils/minishell_var_name_len.c \
 			src/expansion/minishell_expansion_01.c \
 			src/expansion/minishell_expansion_02.c \
 			src/tokenization/minishell_quote_removal.c \
@@ -29,7 +30,8 @@ SRCS	=	src/minishell_main.c \
 			src/tokenization/minishell_tokenization_02.c \
 			src/environment/minishell_environment.c \
 			src/environment/minishell_list.c \
-			src/builtins/minishell_routing.c
+			src/builtins/minishell_routing.c \
+			src/execution/minishell_execution.c \
 
 
 OBJS    = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))

@@ -58,7 +58,7 @@ int	count_redirections(t_minishell *data)
 	return (count);
 }
 
-bool	builtin_check(t_minishell *data)
+int	builtin_check(t_minishell *data)
 {
 	t_token *token;
 	token = data->token_list;
@@ -67,11 +67,11 @@ bool	builtin_check(t_minishell *data)
 		if (check_if_builtin(token->value) == 0)
 		{
 			printf("builtin token detected\n");
-			return (true);
+			return (0);
 		}
 		token = token->next;
 	}
-	return (false);
+	return (1);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -79,6 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	static t_minishell	data;
 	char	*shell_dir;
 	char	*buffer;
+	char	**envp_arr;
 
 	(void)argc;
 	(void)argv;
@@ -106,8 +107,23 @@ int	main(int argc, char **argv, char **envp)
 		lex_raw_input(&data);
 		variable_expansion(&data);
 		quote_removal(&data);
-		print_tokens(&data);
-//		print_tokens_type(&data);
+//		print_tokens(&data);
+		print_tokens_type(&data);
+
+		//Checking for builtins (rewrite when tokenizer type is present)
+		if (builtin_check(&data) == 0)
+		{
+			printf("builtin detected\n");
+			reroute_builtin(&data, data.token_list->value, data.custom_env);
+		}
+		else
+		{
+			//Runs a program
+			envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
+			run_prog(&data, data.raw_input, envp_arr);
+		}
+		//need to check how many pipes are needed.
+
 		printf("number of redirections is %d\n", count_redirections(&data));
 		data.token_list = NULL;
 		free((void *)data.raw_input);

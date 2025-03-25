@@ -45,7 +45,7 @@ int	check_if_builtin(const char *input)
  * @param str	Input string
  * @param envp	Pointer to envp list
  */
-void	reroute_builtin(t_minishell *data, char *str, t_var *envp)
+void	reroute_builtin(t_minishell *data, const char *str, t_var *envp)
 {
 	(void)data;
 	(void)envp;
@@ -66,10 +66,10 @@ void	reroute_builtin(t_minishell *data, char *str, t_var *envp)
 		printf("UNSET CALLED\n");
 	if (ft_strncmp("env", str, 3) == 0)
 //		builtin_env(envp);
-		printf("ENV CALLED");
+		printf("ENV CALLED\n");
 	if (ft_strncmp("exit", str, 4) == 0)
-		printf("EXIT CALLED");
+		printf("EXIT CALLED\n");
 	if (ft_strncmp("getenv", str, 6) == 0)
 //		ft_getenv(str, envp);
-		printf("GETENV CALLED");
+		printf("GETENV CALLED\n");
 }
