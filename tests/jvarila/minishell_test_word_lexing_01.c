@@ -18,7 +18,7 @@ int	main(int argc, char *argv[])
 
 	data.custom_env = &(t_var){.raw = "ARG=|test|", \
 		.key = "ARG", .value = "|test|"};
-	data.custom_env->next = &(t_var){.raw = "", .key = "DERP", \
+	data.custom_env->next = &(t_var){.raw = "DERP=|derp|", .key = "DERP", \
 		.value = "|derp|"};
 	if (argc != 2)
 		return (ft_write_error_return_int("ERROR: input one argument", 1));
@@ -31,6 +31,7 @@ int	main(int argc, char *argv[])
 	data.raw_input = argv[1];
 	lex_raw_input(&data);
 	variable_expansion(&data);
+	word_splitting(&data);
 	quote_removal(&data);
 	print_tokens(&data);
 	ft_free_memarena(data.arena);

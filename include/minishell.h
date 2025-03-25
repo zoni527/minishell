@@ -97,7 +97,7 @@ typedef struct s_token
 	size_t			id;
 	t_token			*next;
 	t_token			*prev;
-	const char		*value;
+	char			*value;
 }	t_token;
 
 /* ============================= TOKENIZATION =============================== */
@@ -110,6 +110,8 @@ bool	has_unclosed_quotes(const char *str);
 
 void	lex_raw_input(t_minishell *data);
 void	tokenize(t_minishell *data, const char *src, size_t len);
+char	*skip_over_operator(const char *str);
+char	*skip_over_word(const char *str);
 void	print_tokens(t_minishell *data);
 
 /* ---------------------------------------------- minishell_tokenization_02.c */
@@ -135,6 +137,12 @@ size_t	expand_variable(t_minishell *data, t_token *token, \
 					t_var *var, size_t var_index);
 bool	contains_unexpanded_variable(t_token *token);
 t_var	*find_var(t_minishell *data, const char *str);
+
+/* ---------------------------- Word splitting ------------------------------ */
+
+/* ----------------------------------------------- minishell_word_splitting.c */
+
+void	word_splitting(t_minishell *data);
 
 /* ------------------------------------------------- minishell_expansion_02.c */
 

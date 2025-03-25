@@ -13,29 +13,34 @@
 #include "minishell.h"
 /**
  * Creates new token node using str, uses memory arena to request heap memory.
+ * <p>
+ * Does an initial categorization for operators, everything else will be a word
+ * at first. More granular categorization will follow after all possible
+ * expansions, word splits and quote removals are completed.
  *
  * @param arena	Pointer to first node in memarena
- * @param str	String is used as token->value, doesn't create new string
+ * @param str	String is assigned to be the value of the new token node
+ * @return		Return newly created token node
  */
 t_token	*new_token_node(t_memarena *arena, const char *str)
 {
-	t_token	*token;
+	t_token	*new;
 
-	token = ft_ma_calloc(arena, 1, sizeof(t_token));
-	token->value = str;
+	new = ft_ma_calloc(arena, 1, sizeof(t_token));
+	new->value = (char *)str;
 	if (*str == '|')
-		token->type = PIPE;
+		new->type = PIPE;
 	else if (ft_strncmp(str, "<", 2) == 0)
-		token->type = REDIRECT_INPUT;
+		new->type = REDIRECT_INPUT;
 	else if (ft_strncmp(str, ">", 2) == 0)
-		token->type = REDIRECT_OUTPUT;
+		new->type = REDIRECT_OUTPUT;
 	else if (ft_strncmp(str, "<<", 3) == 0)
-		token->type = HEREDOC;
+		new->type = HEREDOC;
 	else if (ft_strncmp(str, ">>", 3) == 0)
-		token->type = APPEND;
+		new->type = APPEND;
 	else
-		token->type = WORD;
-	return (token);
+		new->type = WORD;
+	return (new);
 }
 
 /**
@@ -48,6 +53,8 @@ void	append_token(t_token **list, t_token *token)
 {
 	t_token	*end;
 
+	if (!list || !token)
+		return ;
 	if (!*list)
 	{
 		*list = token;
@@ -100,6 +107,6 @@ void	insert_token_left(t_token *current, t_token *new)
 	if (prev)
 		prev->next = new;
 	current->prev = new;
-	new->prev = prev;
 	new->next = current;
+	new->prev = prev;
 }

@@ -26,7 +26,8 @@ SRC	:=	$(SRCDIR)/expansion/minishell_expansion_01.c		\
 		$(SRCDIR)/tokenization/minishell_quote_validation.c	\
 		$(SRCDIR)/tokenization/minishell_quote_removal.c	\
 		$(SRCDIR)/tokenization/minishell_tokenization_01.c	\
-		$(SRCDIR)/tokenization/minishell_tokenization_02.c
+		$(SRCDIR)/tokenization/minishell_tokenization_02.c	\
+		$(SRCDIR)/tokenization/minishell_word_splitting.c	\
 
 all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out 
 

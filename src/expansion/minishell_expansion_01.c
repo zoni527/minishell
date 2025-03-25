@@ -78,6 +78,8 @@ void	expand_variables(t_minishell *data, t_token *token)
  * @param var_index	Index of first character after '$', also corresponds to
  *					"len before '$'" + 1, which can be used in ft_strlcat to
  *					concatenate everything before '$'
+ * @return			Returns index for updated token->value so that expansion
+ *					can continue at the right spot
  */
 size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
 					size_t var_index)
@@ -113,6 +115,7 @@ size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
  * Function for checking if token contains an unexpanded variable.
  *
  * @param token	Token to check
+ * @return		true if an unexpanded variable is found, false if not
  */
 bool	contains_unexpanded_variable(t_token *token)
 {
@@ -146,6 +149,8 @@ bool	contains_unexpanded_variable(t_token *token)
  * @param data	Pointer to main data struct
  * @param str	String that points to the first character of the variable name
  *				(the first character after the char '$')
+ * @return		Returns variable on a match, NULL if no matching variable can
+ *				be found in data->custom_env
  */
 t_var	*find_var(t_minishell *data, const char *str)
 {
