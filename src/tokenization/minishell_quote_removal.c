@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:47:23 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/21 17:42:26 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/25 11:09:55 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,8 @@ void	remove_quotes_from_token(t_minishell *data, t_token *token)
 {
 	char		quote;
 	size_t		i;
-	char		*result;
 
 	quote = 0;
-	result = NULL;
 	i = 0;
 	while (token->value[i])
 	{

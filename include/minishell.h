@@ -119,11 +119,13 @@ void	append_token(t_token **list, t_token *token);
 void	insert_token_right(t_token *current, t_token *new);
 void	insert_token_left(t_token *current, t_token *new);
 
+/* ---------------------------- Quote removal ------------------------------- */
+
 /* ------------------------------------------------ minishell_quote_removal.c */
 
 void	quote_removal(t_minishell *data);
 
-/* ============================== EXPANSION ================================= */
+/* ------------------------------ Expansion --------------------------------- */
 
 /* ------------------------------------------------- minishell_expansion_01.c */
 
