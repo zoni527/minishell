@@ -105,9 +105,9 @@ int	main(int argc, char **argv, char **envp)
 		add_history(data.raw_input);
 		lex_raw_input(&data);
 		variable_expansion(&data);
-//		quote_removal(&data);
-//		print_tokens(&data);
-		print_tokens_type(&data);
+		quote_removal(&data);
+		print_tokens(&data);
+//		print_tokens_type(&data);
 		printf("number of redirections is %d\n", count_redirections(&data));
 		data.token_list = NULL;
 		free((void *)data.raw_input);

@@ -23,6 +23,7 @@ OBJ_DIR = obj/
 SRCS	=	src/minishell_main.c \
 			src/expansion/minishell_expansion_01.c \
 			src/expansion/minishell_expansion_02.c \
+			src/tokenization/minishell_quote_removal.c \
 			src/tokenization/minishell_quote_validation.c \
 			src/tokenization/minishell_tokenization_01.c \
 			src/tokenization/minishell_tokenization_02.c \

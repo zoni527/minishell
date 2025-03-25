@@ -34,6 +34,8 @@ static void	remove_quotes_from_token(t_minishell *data, t_token *token)
 	size_t		i;
 
 	quote_flag = '\0';
+//	char		*result;
+//	result = NULL;
 	i = 0;
 	while (token->value[i])
 	{
