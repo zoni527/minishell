@@ -1,0 +1,14 @@
+builtins
+environment
+error_handling
+execution
+expansion
+infile1
+infile2
+in.txt
+minishell_main.c
+piping
+signals
+test.txt
+tokenization
+utils

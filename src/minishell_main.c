@@ -74,15 +74,34 @@ int	builtin_check(t_minishell *data)
 	return (1);
 }
 
+t_token	*check_and_get_here_doc_token(t_minishell *data)
+{
+	t_token *token;
+
+	token = data->token_list;
+	while (token)
+	{
+		if(token->type == HEREDOC)
+		{
+			return (token);
+		}
+		token = token->next;
+	}
+	return (NULL);
+}
+
+
 int	main(int argc, char **argv, char **envp)
 {
 	static t_minishell	data;
 	char	*shell_dir;
 	char	*buffer;
 	char	**envp_arr;
+	t_token	*here_doc_token;
 
 	(void)argc;
 	(void)argv;
+	here_doc_token = NULL;
 	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ERROR_ALLOC);
@@ -111,7 +130,16 @@ int	main(int argc, char **argv, char **envp)
 		print_tokens_type(&data);
 
 		//Checking for builtins (rewrite when tokenizer type is present)
-		if (builtin_check(&data) == 0)
+//		here_doc(&data, "end");
+		here_doc_token = check_and_get_here_doc_token(&data);
+		if (here_doc_token != NULL)
+		{
+			if (here_doc_token->next == NULL)
+				printf("error case\n");
+			else
+				here_doc(&data, here_doc_token->next->value);
+		}
+		else if (builtin_check(&data) == 0)
 		{
 			printf("builtin detected\n");
 			reroute_builtin(&data, data.token_list->value, data.custom_env);

@@ -32,6 +32,7 @@ SRCS	=	src/minishell_main.c \
 			src/environment/minishell_list.c \
 			src/builtins/minishell_routing.c \
 			src/execution/minishell_execution.c \
+			src/execution/minishell_processes.c
 
 
 OBJS    = $(patsubst $(SRC_DIR)%.c,$(OBJ_DIR)%.o,$(SRCS))

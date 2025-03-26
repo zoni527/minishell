@@ -100,7 +100,10 @@ typedef struct s_minishell
 	t_token		*token_list;
 	t_var		*custom_env;
 	size_t		token_count;
+	int			fd_in;
+	int			fd_out;
 	const char	*raw_input;
+	const char	*here_doc_input;
 	const char	*initial_env[];
 }	t_minishell;
 
@@ -213,8 +216,7 @@ int		remove_env(char *key, t_var *envp);
 int		get_list_size(t_var *begin);
 void	free_list(t_var *head);
 void	print_env_list(t_var *list);
-t_var	*append_var(t_minishell *data, t_var *prev, \
-				char *raw, char *key, char *value);
+t_var	*create_new_var(t_minishell *data, char *raw, char *key, char *value);
 
 /* -------------------------------------------------------------------------- */
 
@@ -225,8 +227,14 @@ t_var	*append_var(t_minishell *data, t_var *prev, \
 char	*set_paths(t_minishell *data, const char *command, char **mypaths);
 char	*path_parsing(t_minishell *data, const char *command, char **envp);
 void	cmd_exec(t_minishell *data, const char *argv, char **envp);
+
+/* -----------------------------------------------------minishel_processes.c */
+
 int		run_prog(t_minishell *data, const char *input, char **envp);
 int		child_process(t_minishell *data, char *argv, char **envp);
+int		handle_infile(t_minishell *data, char *path);
+int		handle_outfile(t_minishell *data, char *path);
+int		here_doc(t_minishell *data, const char *limiter);
 
 /* ============================== BUILT INS ================================= */
 

@@ -21,35 +21,45 @@
  */
 void	parse_env(t_minishell *data, char **envp)
 {
-	t_var	*head = NULL;
-	t_var	*current = NULL;
-	char	*raw;
-	char	*key;
-	char	*value;
+	t_var	*head;
+	t_var	*current;
+	char	*vals[3];
+	// Vals[0] = RAW, vals[1] = KEY, vals[2] = VALUE
+//	char	*raw;
+//	char	*key;
+//	char	*value;
 	int		i;
 	int		j;
-	
+
+
+	head = NULL;
+	current = NULL;
 	i = -1;
 	while (envp[++i])
 	{
-		raw = ft_ma_strdup(data->arena, envp[i]);
+//		raw = ft_ma_strdup(data->arena, envp[i]);
+		vals[0] = ft_ma_strdup(data->arena, envp[i]);
 		j = 0;
-		while (raw[j] != '=')
+//		while (raw[j] != '=')
+		while (vals[0][j] != '=')
 		{
 			j++;
 		}
-		key = ft_ma_substr(data->arena, raw, 0, j);
-		value = ft_ma_substr(data->arena, raw, (j + 1), ft_strlen(raw) - (j + 1));
-		
+//		key = ft_ma_substr(data->arena, raw, 0, j);
+		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
+//		value = ft_ma_substr(data->arena, raw, (j + 1), ft_strlen(raw) - (j + 1));
+		vals[2] = ft_ma_substr(data->arena, vals[0], \
+						 (j + i), ft_strlen(vals[0]) - (j + 1));
 		if (head == NULL)
 		{
-			head = append_var(data, NULL, raw, key, value);
+			head = create_new_var(data, vals[0], vals[1], vals[2]);
 			current = head;
 			data->custom_env = head;
 		}
 		else
 		{
-			current->next = append_var(data, current, raw, key, value);
+			current->next = create_new_var(data, vals[0], vals[1], vals[2]);
+			current->next->prev = current;
 			current = current->next;
 		}
 	}
@@ -169,7 +179,10 @@ int	ft_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 	}
 	//Else if variable does not exist, then create it
 	if (last)
-		last->next = append_var(data, last, raw, key, value);
+	{
+		last->next = create_new_var(data, raw, key, value);
+		last->next->prev = last;
+	}
 	return (0);
 }
 

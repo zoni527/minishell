@@ -68,8 +68,7 @@ void	print_env_list(t_var *list)
  * @param key	Key input
  * @param value	Value input
  */
-t_var	*append_var(t_minishell *data, t_var *prev, \
-				char *raw, char *key, char *value)
+t_var	*create_new_var(t_minishell *data, char *raw, char *key, char *value)
 {
 //	t_var *new_node = (t_var *)malloc(sizeof(t_var));
 	t_var	*new_node;
@@ -78,6 +77,6 @@ t_var	*append_var(t_minishell *data, t_var *prev, \
 	new_node->key = key;
 	new_node->value = value;
 	new_node->next = NULL;
-	new_node->prev = prev;
+//	new_node->prev = prev;
 	return (new_node);
 }
