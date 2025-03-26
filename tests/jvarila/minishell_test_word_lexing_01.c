@@ -29,10 +29,7 @@ int	main(int argc, char *argv[])
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
 	data.raw_input = argv[1];
-	lex_raw_input(&data);
-	variable_expansion(&data);
-	word_splitting(&data);
-	quote_removal(&data);
+	tokenization(&data);
 	print_tokens(&data);
 	ft_free_memarena(data.arena);
 	return (0);

@@ -1,16 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_tokenization_02.c                        :+:      :+:    :+:   */
+/*   minishell_tokenization_utils_01.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 17:42:24 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/20 18:02:42 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:40:13 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/**
+ * Toggles quote flag to be equal to the char c if not set (0), if it was
+ * already set to c, it toggles the value back to 0.
+ *
+ * @param quote_flag	Pointer to character that holds the encountered quote
+ * @param c				Character that holds either '\'' or '"'
+ */
+void	toggle_quote_flag(char *quote_flag, char c)
+{
+	if (!(c == '\'' || c == '"'))
+		return ;
+	if (*quote_flag == 0)
+		*quote_flag = c;
+	else if (*quote_flag == c)
+		*quote_flag = 0;
+}
+
+/**
+ * Prints token values in data->token_list
+ *
+ * @param data	Pointer to main data struct
+ */
+void	print_tokens(t_minishell *data)
+{
+	t_token	*token;
+
+	token = data->token_list;
+	while (token)
+	{
+		ft_printf("%s\n", token->value);
+		token = token->next;
+	}
+}
+
 /**
  * Creates new token node using str, uses memory arena to request heap memory.
  * <p>
@@ -67,28 +102,8 @@ void	append_token(t_token **list, t_token *token)
 	if (token)
 	{
 		token->prev = end;
-		token->id = end->id + 1;
+		token->index = end->index + 1;
 	}
-}
-
-/**
- * Inserts node "new" to be the next node of node "current".
- *
- * @param current	Pointer to selected token node
- * @param new		Pointer to instertable token node
- */
-void	insert_token_right(t_token *current, t_token *new)
-{
-	t_token	*next;
-
-	if (!current || !new)
-		return ;
-	next = current->next;
-	if (next)
-		next->prev = new;
-	current->next = new;
-	new->prev = current;
-	new->next = next;
 }
 
 /**

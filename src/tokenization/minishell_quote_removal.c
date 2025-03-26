@@ -6,15 +6,15 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:47:23 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/25 11:09:55 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:53:09 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	remove_quotes_from_token(t_minishell *data, t_token *token);
-size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
-							char quote, size_t i);
+static void		remove_quotes_from_token(t_minishell *data, t_token *token);
+static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
+									char quote, size_t i);
 
 void	quote_removal(t_minishell *data)
 {
@@ -28,28 +28,28 @@ void	quote_removal(t_minishell *data)
 	}
 }
 
-void	remove_quotes_from_token(t_minishell *data, t_token *token)
+static void	remove_quotes_from_token(t_minishell *data, t_token *token)
 {
-	char		quote;
+	char		quote_flag;
 	size_t		i;
 
-	quote = 0;
+	quote_flag = '\0';
 	i = 0;
 	while (token->value[i])
 	{
 		if (token->value[i] == '\'' || token->value[i] == '"')
-			quote = token->value[i];
-		if (quote != 0)
+			quote_flag = token->value[i];
+		if (quote_flag != '\0')
 		{
-			i = remove_quotes_at_index(data, token, quote, i);
-			toggle_quote_flag(&quote, quote);
+			i = remove_quotes_at_index(data, token, quote_flag, i);
+			quote_flag = '\0';
 		}
 		++i;
 	}
 }
 
-size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
-							char quote, size_t i)
+static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
+									char quote, size_t i)
 {
 	size_t	quote_index;
 	char	*within_quotes;

@@ -1,16 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_tokenization_01.c                        :+:      :+:    :+:   */
+/*   minishell_tokenization.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 17:49:09 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/20 17:59:35 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/26 18:34:54 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	lex_raw_input(t_minishell *data);
+static void	tokenize(t_minishell *data, const char *src, size_t len);
+static char	*skip_over_operator(const char *str);
+static char	*skip_over_word(const char *str);
+
+void	tokenization(t_minishell *data)
+{
+	lex_raw_input(data);
+	variable_expansion(data);
+	word_splitting(data);
+	quote_removal(data);
+	token_classification(data);
+	assign_token_indices(data);
+}
 
 /**
  * Lexes raw input and creates list of tokens from words
@@ -18,7 +33,7 @@
  *
  * @param data	Pointer to main data struct
  */
-void	lex_raw_input(t_minishell *data)
+static void	lex_raw_input(t_minishell *data)
 {
 	const char	*str;
 	char		*start;
@@ -49,7 +64,7 @@ void	lex_raw_input(t_minishell *data)
  * @param src		Source string to use for token creation
  * @param word_len	Amount of characters that are part of the token in src
  */
-void	tokenize(t_minishell *data, const char *src, size_t len)
+static void	tokenize(t_minishell *data, const char *src, size_t len)
 {
 	char	*word;
 	t_token	*new;
@@ -59,14 +74,14 @@ void	tokenize(t_minishell *data, const char *src, size_t len)
 	append_token(&data->token_list, new);
 }
 
-char	*skip_over_operator(const char *str)
+static char	*skip_over_operator(const char *str)
 {
 	if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
 		++str;
 	return ((char *)++str);
 }
 
-char	*skip_over_word(const char *str)
+static char	*skip_over_word(const char *str)
 {
 	char	quote_flag;
 
@@ -80,21 +95,4 @@ char	*skip_over_word(const char *str)
 		++str;
 	}
 	return ((char *)str);
-}
-
-/**
- * Prints token values in data->token_list
- *
- * @param data	Pointer to main data struct
- */
-void	print_tokens(t_minishell *data)
-{
-	t_token	*token;
-
-	token = data->token_list;
-	while (token)
-	{
-		ft_printf("%s\n", token->value);
-		token = token->next;
-	}
 }

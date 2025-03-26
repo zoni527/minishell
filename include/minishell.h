@@ -60,12 +60,24 @@ typedef enum e_token_type
 	COMMAND,
 	ARGUMENT,
 	BUILTIN,
+	FILE_NAME,
 	PIPE,
 	REDIRECT_INPUT,
 	REDIRECT_OUTPUT,
 	HEREDOC,
 	APPEND
 }	t_token_type;
+
+typedef enum e_bltn_type
+{
+	BLTN_ECHO,
+	BLTN_CD,
+	BLTN_PWD,
+	BLTN_EXPORT,
+	BLTN_UNSET,
+	BLTN_ENV,
+	BLTN_EXIT,
+}	t_bltn_type;
 
 /* ============================== TYPEDEFS ================================== */
 
@@ -94,64 +106,89 @@ typedef struct s_minishell
 typedef struct s_token
 {
 	t_token_type	type;
-	size_t			id;
+	size_t			index;
 	t_token			*next;
 	t_token			*prev;
 	char			*value;
 }	t_token;
 
-/* ============================= TOKENIZATION =============================== */
+/* =========================== EXTERNAL VARIABLES =========================== */
+
+extern volatile int\
+		g_signal;
+
+/* ============================ INPUT VALIDATION ============================ */
 
 /* --------------------------------------------- minishell_quote_validation.c */
 
-bool	has_unclosed_quotes(const char *str);
+bool		has_unclosed_quotes(const char *str);
 
-/* ---------------------------------------------- minishell_tokenization_01.c */
+/* ============================== TOKENIZATION ============================== */
 
-void	lex_raw_input(t_minishell *data);
-void	tokenize(t_minishell *data, const char *src, size_t len);
-char	*skip_over_operator(const char *str);
-char	*skip_over_word(const char *str);
-void	print_tokens(t_minishell *data);
+/* ------------------------------------------------- minishell_tokenization.c */
 
-/* ---------------------------------------------- minishell_tokenization_02.c */
+void		tokenization(t_minishell *data);
 
-t_token	*new_token_node(t_memarena *arena, const char *str);
-void	append_token(t_token **list, t_token *token);
-void	insert_token_right(t_token *current, t_token *new);
-void	insert_token_left(t_token *current, t_token *new);
+/* ------------------------------------------- minishell_variable_expansion.c */
 
-/* ---------------------------- Quote removal ------------------------------- */
-
-/* ------------------------------------------------ minishell_quote_removal.c */
-
-void	quote_removal(t_minishell *data);
-
-/* ------------------------------ Expansion --------------------------------- */
-
-/* ------------------------------------------------- minishell_expansion_01.c */
-
-void	variable_expansion(t_minishell *data);
-void	expand_variables(t_minishell *data, t_token *token);
-size_t	expand_variable(t_minishell *data, t_token *token, \
-					t_var *var, size_t var_index);
-bool	contains_unexpanded_variable(t_token *token);
-t_var	*find_var(t_minishell *data, const char *str);
-
-/* ---------------------------- Word splitting ------------------------------ */
+void		variable_expansion(t_minishell *data);
 
 /* ----------------------------------------------- minishell_word_splitting.c */
 
-void	word_splitting(t_minishell *data);
+void		word_splitting(t_minishell *data);
 
-/* ------------------------------------------------- minishell_expansion_02.c */
+/* ------------------------------------------------ minishell_quote_removal.c */
 
-void	toggle_quote_flag(char *quote_flag, char c);
+void		quote_removal(t_minishell *data);
+
+/* ------------------------ Classification and ids -------------------------- */
+
+/* ----------------------------------------- minishell_token_classification.c */
+
+void		token_classification(t_minishell *data);
+
+/* -------------------------------------------------- minishell_is_token_01.c */
+
+bool		is_operator(t_token *token);
+bool		is_pipe(t_token *token);
+bool		is_redirection(t_token *token);
+bool		is_input_redirection(t_token *token);
+bool		is_output_redirection(t_token *token);
+
+/* -------------------------------------------------- minishell_is_token_02.c */
+
+bool		is_append(t_token *token);
+bool		is_heredoc(t_token *token);
+bool		is_builtin(t_token *token);
+
+/* ----------------------------------------- minishell_assign_token_indices.c */
+
+void		assign_token_indices(t_minishell *data);
+
+/* ------------------------------------------------ minishell_token_getters.c */
+
+t_bltn_type	get_builtin_type(t_token *token);
+t_token		*get_token_by_index(t_token *list, int id);
+int			get_token_index(t_token *list, t_token *token);
+
+/* ----------------------------------------------- minishell_token_analysis.c */
+
+size_t		count_tokens(t_token *list);
+size_t		count_pipes(t_token *list);
+
+/* ---------------------------------------- minishell_tokenization_utils_01.c */
+
+void		toggle_quote_flag(char *quote_flag, char c);
+void		print_tokens(t_minishell *data);
+t_token		*new_token_node(t_memarena *arena, const char *str);
+void		append_token(t_token **list, t_token *token);
+void		insert_token_left(t_token *current, t_token *new);
 
 /* ================================ UTILS =================================== */
 
 /* ------------------------------------------------- minishell_var_name_len.c */
 
-size_t	var_name_len(const char *str);
+size_t		var_name_len(const char *str);
 
+/* -------------------------------------------------------------------------- */
 #endif
