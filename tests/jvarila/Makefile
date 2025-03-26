@@ -20,16 +20,16 @@ LIBFT		:= $(LIBFTDIR)/libft.a
 
 SRCDIR	:=	../../src
 
-SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c			\
-		$(SRCDIR)/tokenization/minishell_variable_expansion.c		\
-		$(SRCDIR)/tokenization/minishell_word_splitting.c		\
-		$(SRCDIR)/tokenization/minishell_quote_removal.c		\
-		$(SRCDIR)/tokenization/minishell_token_classification.c		\
-		$(SRCDIR)/tokenization/minishell_is_token_01.c			\
-		$(SRCDIR)/tokenization/minishell_is_token_02.c			\
-		$(SRCDIR)/tokenization/minishell_assign_token_indices.c		\
-		$(SRCDIR)/tokenization/minishell_tokenization_utils_01.c	\
-		$(SRCDIR)/tokenization/minishell_quote_validation.c		\
+SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c		\
+		$(SRCDIR)/tokenization/minishell_variable_expansion.c	\
+		$(SRCDIR)/tokenization/minishell_word_splitting.c	\
+		$(SRCDIR)/tokenization/minishell_quote_removal.c	\
+		$(SRCDIR)/tokenization/minishell_token_classification.c	\
+		$(SRCDIR)/tokenization/minishell_is_token_01.c		\
+		$(SRCDIR)/tokenization/minishell_is_token_02.c		\
+		$(SRCDIR)/tokenization/minishell_assign_token_indices.c	\
+		$(SRCDIR)/tokenization/minishell_tokenization_utils_01.c\
+		$(SRCDIR)/tokenization/minishell_quote_validation.c	\
 		$(SRCDIR)/utils/minishell_var_name_len.c
 
 all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out 
