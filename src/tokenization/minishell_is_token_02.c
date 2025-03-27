@@ -30,13 +30,27 @@ bool	is_heredoc(t_token *token)
 	return (false);
 }
 
+bool	is_builtin_or_command(t_token *token)
+{
+	if (!token)
+		return (false);
+	token = token->prev;
+	if (!token || is_pipe(token))
+		return (true);
+	while (token && token->type == FILE_NAME)
+		token = token->prev->prev;
+	if (!token || is_pipe(token))
+		return (true);
+	return (false);
+}
+
 bool	is_builtin(t_token *token)
 {
 	if (!token)
 		return (false);
 	if (token->type == BUILTIN)
 		return (true);
-	if ((!token->prev || is_pipe(token->prev)) \
+	if (is_builtin_or_command(token) \
 		&& (ft_strncmp(token->value, "echo", ft_strlen("echo") + 1) == 0 \
 		|| ft_strncmp(token->value, "cd", ft_strlen("cd") + 1) == 0 \
 		|| ft_strncmp(token->value, "pwd", ft_strlen("pwd") + 1) == 0 \

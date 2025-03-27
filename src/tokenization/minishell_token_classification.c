@@ -27,7 +27,7 @@ void	token_classification(t_minishell *data)
 	{
 		if (is_operator(token))
 			;
-		else if (!token->prev || is_pipe(token->prev))
+		else if (is_builtin_or_command(token))
 		{
 			if (is_builtin(token))
 				token->type = BUILTIN;

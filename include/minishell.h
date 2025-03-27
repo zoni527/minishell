@@ -159,6 +159,7 @@ bool		is_output_redirection(t_token *token);
 
 bool		is_append(t_token *token);
 bool		is_heredoc(t_token *token);
+bool		is_builtin_or_command(t_token *token);
 bool		is_builtin(t_token *token);
 
 /* ----------------------------------------- minishell_assign_token_indices.c */
