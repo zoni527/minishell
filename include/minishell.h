@@ -234,6 +234,9 @@ int		run_prog(t_minishell *data, const char *input, char **envp);
 int		child_process(t_minishell *data, char *argv, char **envp);
 int		handle_infile(t_minishell *data, char *path);
 int		handle_outfile(t_minishell *data, char *path);
+//int		here_doc(t_minishell *data, const char *limiter);
+
+/* -----------------------------------------------------minishel_heredoc.c */
 int		here_doc(t_minishell *data, const char *limiter);
 
 /* ============================== BUILT INS ================================= */

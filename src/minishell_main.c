@@ -90,6 +90,24 @@ t_token	*check_and_get_here_doc_token(t_minishell *data)
 	return (NULL);
 }
 
+t_token *return_first_pipe_token(t_minishell *data)
+{
+	t_token *token;
+
+	token = data->token_list;
+	while (token)
+	{
+		if (token->type == PIPE)
+		{
+			return (token);
+		}
+		token = token->next;
+	}
+	return (NULL);
+}
+
+
+
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -129,20 +147,21 @@ int	main(int argc, char **argv, char **envp)
 //		print_tokens(&data);
 		print_tokens_type(&data);
 
-		//Checking for builtins (rewrite when tokenizer type is present)
-//		here_doc(&data, "end");
+
 		here_doc_token = check_and_get_here_doc_token(&data);
-		if (here_doc_token != NULL)
+		//Checking for builtins (rewrite when tokenizer type is present)
+		if (builtin_check(&data) == 0)
+		{
+			printf("builtin detected\n");
+			reroute_builtin(&data, data.token_list->value, data.custom_env);
+		}
+//		here_doc_token = check_and_get_here_doc_token(&data);
+		else if (here_doc_token != NULL)
 		{
 			if (here_doc_token->next == NULL)
 				printf("error case\n");
 			else
 				here_doc(&data, here_doc_token->next->value);
-		}
-		else if (builtin_check(&data) == 0)
-		{
-			printf("builtin detected\n");
-			reroute_builtin(&data, data.token_list->value, data.custom_env);
 		}
 		else
 		{
