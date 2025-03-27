@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:09:56 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/11 11:48:29 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/27 10:33:24 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,8 +168,8 @@ void		assign_token_indices(t_minishell *data);
 /* ------------------------------------------------ minishell_token_getters.c */
 
 t_bltn_type	get_builtin_type(t_token *token);
-t_token		*get_token_by_index(t_token *list, int id);
-int			get_token_index(t_token *list, t_token *token);
+const char	*get_token_type_str(t_token *token);
+t_token		*get_token_by_index(t_token *list, int index);
 
 /* ----------------------------------------------- minishell_token_analysis.c */
 
@@ -189,6 +189,11 @@ void		insert_token_left(t_token *current, t_token *new);
 /* ------------------------------------------------- minishell_var_name_len.c */
 
 size_t		var_name_len(const char *str);
+
+/* -------------------------------------------------- minishell_print_debug.c */
+
+void		print_debug_tokens(t_token *list);
+void		print_debug(t_minishell *data);
 
 /* -------------------------------------------------------------------------- */
 #endif

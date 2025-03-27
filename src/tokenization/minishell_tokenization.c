@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 17:49:09 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/26 18:34:54 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/27 09:53:01 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	tokenization(t_minishell *data)
 	quote_removal(data);
 	token_classification(data);
 	assign_token_indices(data);
+	data->token_count = count_tokens(data->token_list);
 }
 
 /**
