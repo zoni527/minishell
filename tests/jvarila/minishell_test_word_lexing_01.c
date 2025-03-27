@@ -12,27 +12,44 @@
 
 #include "minishell.h"
 
-int	main(int argc, char *argv[])
+void	loop(t_minishell *data)
+{
+	char	*line;
+
+	while (1)
+	{
+		line = readline("minishell lexing test: ");
+		if (ft_strncmp(line, "exit", 5) == 0)
+		{
+			free(line);
+			break ;
+		}
+		if (has_unclosed_quotes(line))
+		{
+			ft_putendl("Input has unclosed quotes");
+			free(line);
+			continue ;
+		}
+		data->raw_input = line;
+		tokenization(data);
+		print_debug(data);
+		data->token_list = NULL;
+		free(line);
+	}
+}
+
+int	main(void)
 {
 	static t_minishell	data;
 
 	data.custom_env = &(t_var){.raw = "ARG=|test|", \
 		.key = "ARG", .value = "|test|"};
-	data.custom_env->next = &(t_var){.raw = "", .key = "DERP", \
+	data.custom_env->next = &(t_var){.raw = "DERP=|derp|", .key = "DERP", \
 		.value = "|derp|"};
-	if (argc != 2)
-		return (ft_write_error_return_int("ERROR: input one argument", 1));
-	if (has_unclosed_quotes(argv[1]))
-		return (ft_write_error_return_int("ERROR: input has unclosed quotes", \
-								ERROR_UNCLOSED));
 	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
-	data.raw_input = argv[1];
-	lex_raw_input(&data);
-	variable_expansion(&data);
-	quote_removal(&data);
-	print_tokens(&data);
+	loop(&data);
 	ft_free_memarena(data.arena);
 	return (0);
 }

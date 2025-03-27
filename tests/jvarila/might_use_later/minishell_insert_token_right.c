@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_expansion_02.c                           :+:      :+:    :+:   */
+/*   minishell_insert_token_right.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/21 10:24:04 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/21 10:26:30 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/26 15:04:35 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/26 15:05:14 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * Toggles quote flag to be equal to the char c if not set (0), if it was
- * already set to c, it toggles the value back to 0.
+ * Inserts node "new" to be the next node of node "current".
  *
- * @param quote_flag	Pointer to character that holds the encountered quote
- * @param c				Character that holds either '\'' or '"'
+ * @param current	Pointer to selected token node
+ * @param new		Pointer to instertable token node
  */
-void	toggle_quote_flag(char *quote_flag, char c)
+void	insert_token_right(t_token *current, t_token *new)
 {
-	if (!(c == '\'' || c == '"'))
+	t_token	*next;
+
+	if (!current || !new)
 		return ;
-	if (*quote_flag == 0)
-		*quote_flag = c;
-	else if (*quote_flag == c)
-		*quote_flag = 0;
+	next = current->next;
+	if (next)
+		next->prev = new;
+	current->next = new;
+	new->prev = current;
+	new->next = next;
 }
