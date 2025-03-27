@@ -22,12 +22,18 @@ OBJ_DIR = obj/
 
 SRCS	=	src/minishell_main.c \
 			src/utils/minishell_var_name_len.c \
-			src/expansion/minishell_expansion_01.c \
-			src/expansion/minishell_expansion_02.c \
+			src/utils/minishell_print_debug.c \
+			src/tokenization/minishell_tokenization.c \
+			src/tokenization/minishell_variable_expansion.c \
+			src/tokenization/minishell_word_splitting.c \
 			src/tokenization/minishell_quote_removal.c \
-			src/tokenization/minishell_quote_validation.c \
-			src/tokenization/minishell_tokenization_01.c \
-			src/tokenization/minishell_tokenization_02.c \
+			src/tokenization/minishell_token_classification.c \
+			src/tokenization/minishell_is_token_01.c \
+			src/tokenization/minishell_is_token_02.c \
+			src/tokenization/minishell_assign_token_indices.c \
+			src/tokenization/minishell_token_getters.c \
+			src/tokenization/minishell_token_analysis.c \
+			src/tokenization/minishell_tokenization_utils_01.c \
 			src/environment/minishell_environment.c \
 			src/environment/minishell_list.c \
 			src/builtins/minishell_routing.c \

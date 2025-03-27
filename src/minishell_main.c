@@ -20,23 +20,25 @@ void	print_tokens_type(t_minishell *data)
 	while (token)
 	{
 //		ft_printf("%d\n", token->type);
-		if (token->type == 0)
+		if (token->type == WORD)
 			ft_printf("WORD\n");
-		if (token->type == 1)
+		if (token->type == COMMAND)
 			ft_printf("COMMAND\n");
-		if (token->type == 2)
+		if (token->type == ARGUMENT)
 			ft_printf("ARGUMENT\n");
-		if (token->type == 3)
+		if (token->type == BUILTIN)
 			ft_printf("BUILTIN\n");
-		if (token->type == 4)
+		if	(token->type == FILE_NAME)
+			ft_printf("FILE_NAME\n");
+		if (token->type == PIPE)
 			ft_printf("PIPE\n");
-		if (token->type == 5)
+		if (token->type == REDIRECT_INPUT)
 			ft_printf("REDIRECT_INPUT\n");
-		if (token->type == 6)
+		if (token->type == REDIRECT_OUTPUT)
 			ft_printf("REDIRECT_OUTPUT\n");
-		if (token->type == 7)
+		if (token->type == HEREDOC)
 			ft_printf("HEREDOC\n");
-		if (token->type == 8)
+		if (token->type == APPEND)
 			ft_printf("APPEND\n");
 		token = token->next;
 	}
@@ -51,7 +53,7 @@ int	count_redirections(t_minishell *data)
 	count = 0;
 	while (token)
 	{
-		if (token->type >= 4 && token->type <= 8)
+		if (token->type >= 6 && token->type <= 9)
 			count++;
 		token = token->next;
 	}
@@ -106,9 +108,6 @@ t_token *return_first_pipe_token(t_minishell *data)
 	return (NULL);
 }
 
-
-
-
 int	main(int argc, char **argv, char **envp)
 {
 	static t_minishell	data;
@@ -141,8 +140,10 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		}
 		add_history(data.raw_input);
-		lex_raw_input(&data);
+//		lex_raw_input(&data);
+		tokenization(&data);
 		variable_expansion(&data);
+		word_splitting(&data);
 		quote_removal(&data);
 //		print_tokens(&data);
 		print_tokens_type(&data);
@@ -161,11 +162,24 @@ int	main(int argc, char **argv, char **envp)
 			if (here_doc_token->next == NULL)
 				printf("error case\n");
 			else
+			{	
+				printf("entering here_doc\n");
 				here_doc(&data, here_doc_token->next->value);
+			}
 		}
-		else
+		else if (data.token_list->type == REDIRECT_INPUT)
+		{
+			if (data.token_list->next->type == FILE_NAME)
+			{
+				printf("handling in file\n");
+				handle_infile(&data, data.token_list->next->value);
+				printf("infile set to fd_in\n");
+			}
+		}
+		else if(data.token_list->type == COMMAND)
 		{
 			//Runs a program
+			printf("running program\n");
 			envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
 			run_prog(&data, data.raw_input, envp_arr);
 		}
