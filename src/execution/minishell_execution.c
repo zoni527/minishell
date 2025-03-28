@@ -82,12 +82,13 @@ char	*path_parsing(t_minishell *data, const char *command, char **envp)
  * @param argv	argument input vector
  * @param envp	envp_arr (not list)
  */
-void	cmd_exec(t_minishell *data, const char *argv, char **envp)
+void	cmd_exec(t_minishell *data, char **command, char **envp)
 {
-	char	**command;
+//	char	**command;
 	char	*path;
 
-	command = ft_ma_split(data->arena, argv, ' ');
+	printf("inside of cmd_exe\n");
+//	command = ft_ma_split(data->arena, argv, ' ');
 	path = path_parsing(data, command[0], envp);
 	if (!path)
 	{
@@ -102,5 +103,34 @@ void	cmd_exec(t_minishell *data, const char *argv, char **envp)
 	}
 	perror("execve failed");
 //	free_array(command);
-	free(path);
+//	free(path);
 }
+
+///**
+// * Function that runs execve / execution
+// *
+// * @param argv	argument input vector
+// * @param envp	envp_arr (not list)
+// */
+//void	cmd_exec(t_minishell *data, const char *argv, char **envp)
+//{
+//	char	**command;
+//	char	*path;
+//
+//	command = ft_ma_split(data->arena, argv, ' ');
+//	path = path_parsing(data, command[0], envp);
+//	if (!path)
+//	{
+////		free_array(command);
+//		exit(1);
+//	}
+//	if (execve(path, command, envp) == -1)
+//	{
+//		printf("execve failed");
+////		free_array(command);
+////		free(path);
+//	}
+//	perror("execve failed");
+////	free_array(command);
+//	free(path);
+//}

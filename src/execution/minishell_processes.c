@@ -19,7 +19,7 @@
  * @param input	raw input string
  * @param envp	pointer to first element in envp list
  */
-int	run_prog(t_minishell *data, const char *input, char **envp)
+int	run_prog(t_minishell *data, char **input, char **envp)
 {
 	pid_t	pid;
 
@@ -52,37 +52,66 @@ int	run_prog(t_minishell *data, const char *input, char **envp)
 	return (0);
 }
 
-int		child_process_pipe(t_minishell *data, char *argv, char **envp)
+int		child_process_pipe(t_minishell *data, char **argv, char **envp)
 {
 	pid_t	pid;
 	int		fd[2];
+	int		status;
 
+	printf("ENTER\n");
 	if (pipe(fd) == -1)
 		return (1);
 //		ft_error();
 	pid = fork();
 	if (pid == -1)
+	{
+		close(fd[0]);
+		close(fd[1]);
 		return (1);
+	}
 //		ft_error();
 	if (pid == 0)
 	{
-		close(fd[0]);
-		if (dup2(fd[1], STDOUT_FILENO) == -1)
-			return (1);
-//			ft_error();
+		close(fd[0]); //close read end, child only writes.
+		if (data->fd_out == 0)
+		{
+			if (dup2(fd[1], STDOUT_FILENO) == -1)
+			{
+				return (1);
+			}
+		}
+		else
+		{
+			if (dup2(fd[1], data->fd_out) == -1)
+				return (1);
+		}
 		close(fd[1]);
+		printf("going to execution\n");
 		cmd_exec(data, argv, envp);
 		perror("execve failed");
-		return (1);
+//		return (1);
 	}
 	else
 	{
 		close(fd[1]);
-		if (dup2(fd[0], STDIN_FILENO) == -1)
-			return (1);
-//			ft_error();
+		if (data->fd_in == 0)
+		{
+			if (dup2(fd[0], STDIN_FILENO) == -1)
+				return (1);
+		}
+		else
+		{
+			if (dup2(fd[0], data->fd_in) == -1)
+				return (1);
+//				ft_error();
+		}
 		close(fd[0]);
-		waitpid(pid, NULL, 0);
+		if(waitpid(pid, &status, 0) == -1)
+		{
+			perror("waitpid");
+			return (1);
+		}
+		printf("EXIT\n");
 	}
 	return (0);
 }

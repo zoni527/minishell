@@ -226,12 +226,12 @@ t_var	*create_new_var(t_minishell *data, char *raw, char *key, char *value);
 
 char	*set_paths(t_minishell *data, const char *command, char **mypaths);
 char	*path_parsing(t_minishell *data, const char *command, char **envp);
-void	cmd_exec(t_minishell *data, const char *argv, char **envp);
+void	cmd_exec(t_minishell *data, char **command, char **envp);
 
 /* -----------------------------------------------------minishel_processes.c */
 
-int		run_prog(t_minishell *data, const char *input, char **envp);
-int		child_process(t_minishell *data, char *argv, char **envp);
+int		run_prog(t_minishell *data, char **input, char **envp);
+int		child_process_pipe(t_minishell *data, char **argv, char **envp);
 int		handle_infile(t_minishell *data, char *path);
 int		handle_outfile(t_minishell *data, char *path);
 //int		here_doc(t_minishell *data, const char *limiter);
