@@ -35,10 +35,13 @@ SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c		\
 		$(SRCDIR)/utils/minishell_var_name_len.c		\
 		$(SRCDIR)/utils/minishell_print_debug.c
 
-all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out 
+all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out minishell_test_signals.out
 
 minishell_test_quotes_01.out: minishell_test_quotes_01.c $(LIBFT) $(SRC)
 	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@
 
 minishell_test_word_lexing_01.out: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
 	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@ -lreadline
+
+minishell_test_signals.out: minishell_test_signals.c $(LIBFT) $(SRC)
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(SRCDIR)/signals/minishell_signals.c $(LIBFT) -o $@ -lreadline

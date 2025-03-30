@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:09:56 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/27 10:33:24 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:54:56 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,13 @@ typedef struct s_var
 
 typedef struct s_minishell
 {
-	t_memarena	*arena;
-	t_token		*token_list;
-	t_var		*custom_env;
-	size_t		token_count;
-	const char	*raw_input;
-	const char	*initial_env[];
+	t_memarena			*arena;
+	t_token				*token_list;
+	t_var				*custom_env;
+	size_t				token_count;
+	struct sigaction	act;
+	const char			*raw_input;
+	const char			*initial_env[];
 }	t_minishell;
 
 typedef struct s_token
@@ -184,6 +185,12 @@ void		print_tokens(t_minishell *data);
 t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
+
+/* =============================== SIGNALS ================================== */
+
+/* ------------------------------------------------------ minishell_signals.c */
+
+void		setup_signal_handler(t_minishell *data);
 
 /* ================================ UTILS =================================== */
 
