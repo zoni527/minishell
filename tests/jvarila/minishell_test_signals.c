@@ -38,6 +38,7 @@ int	main(void)
 {
 	static t_minishell	data;
 
+	set_terminal(&data);
 	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));

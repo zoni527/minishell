@@ -44,11 +44,15 @@
 # define ERROR_ALLOC		2
 # define ERROR_UNCLOSED		3
 # define ERROR_CAPACITY		4
+# define ERROR_TCGETATTR	5
+# define ERROR_TCSETATTR	6
 
 /* ----------------------------------------------------------- error messages */
 
-# define MSG_ERROR_ALLOC	"ERROR: couldn't alloc"
-# define MSG_ERROR_CAPACITY	"ERROR: requested memory chunk is too large"
+# define MSG_ERROR_ALLOC		"ERROR: couldn't alloc"
+# define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
+# define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
+# define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -204,4 +208,8 @@ void		print_debug_tokens(t_token *list);
 void		print_debug(t_minishell *data);
 
 /* -------------------------------------------------------------------------- */
+
+void		clean_exit(t_minishell *data, int exit_code);
+void		set_terminal(t_minishell *data);
+
 #endif
