@@ -60,11 +60,16 @@ int		child_process_pipe(t_minishell *data, char **argv, char **envp)
 
 	printf("ENTER\n");
 	if (pipe(fd) == -1)
+	{
+		perror("Pipe failure");
 		return (1);
 //		ft_error();
+	}
 	pid = fork();
+	printf("process forked\n");
 	if (pid == -1)
 	{
+		printf("PID FAILED\n");
 		close(fd[0]);
 		close(fd[1]);
 		return (1);
@@ -72,18 +77,31 @@ int		child_process_pipe(t_minishell *data, char **argv, char **envp)
 //		ft_error();
 	if (pid == 0)
 	{
+		printf("CHILD PROCCESS ENTERED\n");
 		close(fd[0]); //close read end, child only writes.
 		if (data->fd_out == 0)
 		{
+			printf("fd_out = 0\n");
 			if (dup2(fd[1], STDOUT_FILENO) == -1)
 			{
-				return (1);
+				printf("dup2 failed\n");
+				ft_putendl_fd("dup2 failed\n", 2);
+				close(fd[1]);
+				exit(1);
 			}
+			printf("fd[1] = %d\n", fd[1]);
+			ft_putendl_fd("fd[1] = test", 2);
 		}
 		else
 		{
+			printf("fd_out = fd_out\n");
+			ft_putendl_fd("fd_out = fd_out\n", 2);
 			if (dup2(fd[1], data->fd_out) == -1)
+			{
+				printf("dup2 failed\n");
+				close(fd[1]);
 				return (1);
+			}
 		}
 		close(fd[1]);
 		printf("going to execution\n");
@@ -93,24 +111,36 @@ int		child_process_pipe(t_minishell *data, char **argv, char **envp)
 	}
 	else
 	{
+		printf("PARENT PROCESS ENTERED\n");
 		close(fd[1]);
 		if (data->fd_in == 0)
 		{
+			printf("fd_in = 0\n");
 			if (dup2(fd[0], STDIN_FILENO) == -1)
+			{
+				printf("dup2 failed\n");
 				return (1);
+			}
 		}
 		else
 		{
+			printf("fd_in = fd_in\n");
 			if (dup2(fd[0], data->fd_in) == -1)
+			{
+				printf("dup2 failed\n");
 				return (1);
 //				ft_error();
+			}
 		}
 		close(fd[0]);
+		printf("entering waitpid\n");
+//		waitpid(pid, &status, 0);
 		if(waitpid(pid, &status, 0) == -1)
 		{
-			perror("waitpid");
+			perror("waitpid failed\n");
 			return (1);
 		}
+		printf("waitpid successfull\n");
 		printf("EXIT\n");
 	}
 	return (0);

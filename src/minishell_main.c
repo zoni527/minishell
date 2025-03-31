@@ -246,14 +246,13 @@ int	main(int argc, char **argv, char **envp)
 			t_token	*command_token;
 			command_token = get_cmd_token(&data);
 			printf("COMMMAND TOKEN ASSIGNED\n");
-			if (command_token != NULL)
+			else if (command_token != NULL)
 			{
 				printf("COMMAND FOUND\n");
 				envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
 				if (command_token->next->type == ARGUMENT)
 				{
 					args = create_args_arr(&data, command_token);
-					//need to create an argv[]
 					printf("argument detected\n");
 					child_process_pipe(&data, args, envp_arr);
 				}
@@ -270,9 +269,9 @@ int	main(int argc, char **argv, char **envp)
 			printf("running program\n");
 			envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
 			args = create_args_arr(&data, data.token_list);
-			//run_prog(&data, args, envp_arr);
+			run_prog(&data, args, envp_arr);
 			printf("entering child process pipe\n");
-			child_process_pipe(&data, args, envp_arr);
+//			child_process_pipe(&data, args, envp_arr);
 		}
 		//need to check how many pipes are needed.
 
