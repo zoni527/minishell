@@ -26,24 +26,19 @@ minishell specific:
 ```
 $ not_a_command
 > not_a_command: command not found
-```
-```
+
 $ cat/
 > bash: cat/: No such file or directory
-```
-```
+
 $ /usr/bin/cat/
 > bash: /usr/bin/cat: Not a directory
-```
-```
+
 $ /usr/bin
 > bash: /usr/bin: Is a directory
-```
-```
+
 $ /usr/bin/
 > bash: /usr/bin/: Is a directory
-```
-```
+
 $ /root/doesnt_exist
 > bash: /root/doesn_exist: Permission denied
 ```

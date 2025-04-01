@@ -12,6 +12,10 @@
 
 #include "minishell.h"
 
+// clean_exit(data, ERROR_TCGETATTR);
+//term.c_lflag |= ISIG;
+//term.c_cc[VQUIT] = _POSIX_VDISABLE;
+// clean_exit(data, ERROR_TCGETATTR);
 void	set_terminal(t_minishell *data)
 {
 	struct termios	term;
@@ -21,17 +25,13 @@ void	set_terminal(t_minishell *data)
 	{
 		ft_putendl_fd(MSG_ERROR_TCGETATTR, \
 				STDERR_FILENO);
-		// clean_exit(data, ERROR_TCGETATTR);
 		exit(ERROR_TCGETATTR);
 	}
 	term.c_lflag &= ~ECHOCTL;
-	//term.c_lflag |= ISIG;
-	//term.c_cc[VQUIT] = _POSIX_VDISABLE;
 	if (tcsetattr(STDIN_FILENO, TCSANOW, &term))
 	{
 		ft_putendl_fd(MSG_ERROR_TCSETATTR, \
 				STDERR_FILENO);
-		// clean_exit(data, ERROR_TCGETATTR);
 		exit(ERROR_TCSETATTR);
 	}
 }

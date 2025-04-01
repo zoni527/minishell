@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-volatile int g_signal = 0;
-
 void	loop(t_minishell *data)
 {
 	char	*line;

@@ -41,11 +41,22 @@
 /* -------------------------------------------------------------- error codes */
 
 # define ERROR_PERMISSION	1
-# define ERROR_ALLOC		2
-# define ERROR_UNCLOSED		3
-# define ERROR_CAPACITY		4
-# define ERROR_TCGETATTR	5
-# define ERROR_TCSETATTR	6
+# define ERROR_BINPERM		126
+# define ERROR_NOTFOUND		127
+
+# define ERROR_PIPE			4
+# define ERROR_FORK			5
+# define ERROR_DUP2			6
+# define ERROR_OPEN			7
+# define ERROR_CLOSE		8
+# define ERROR_EXEC			9
+# define ERROR_ACCESS		10
+# define ERROR_NOPATH		11
+# define ERROR_INPUT		12
+# define ERROR_UNLINK		13
+# define ERROR_UNCLOSED		14
+# define ERROR_TCGETATTR	15
+# define ERROR_TCSETATTR	16
 
 /* ----------------------------------------------------------- error messages */
 
@@ -88,6 +99,19 @@ typedef enum e_bltn_type
 typedef struct s_token		t_token;
 typedef struct s_var		t_var;
 
+typedef struct s_minishell
+{
+	t_memarena			*arena;
+	t_var				*custom_env;
+	t_token				*token_list;
+	size_t				token_count;
+	int					last_rval;
+	struct sigaction	act;
+	struct sigaction	actold;
+	const char			*raw_input;
+	const char			*initial_env[];
+}	t_minishell;
+
 typedef struct s_var
 {
 	char	*raw;
@@ -96,17 +120,6 @@ typedef struct s_var
 	t_var	*next;
 	t_var	*prev;
 }	t_var;
-
-typedef struct s_minishell
-{
-	t_memarena			*arena;
-	t_token				*token_list;
-	t_var				*custom_env;
-	size_t				token_count;
-	struct sigaction	act;
-	const char			*raw_input;
-	const char			*initial_env[];
-}	t_minishell;
 
 typedef struct s_token
 {

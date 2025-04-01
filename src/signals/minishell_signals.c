@@ -12,12 +12,11 @@
 
 #include "minishell.h"
 
+volatile int	g_signal = 0;
+
 void	signal_handler(int signal_type)
 {
-	if (signal_type == SIGINT)
-		g_signal = SIGINT;
-	else if (signal_type == SIGQUIT)
-		g_signal = SIGQUIT;
+	g_signal = signal_type;
 }
 
 void	setup_signal_handler(t_minishell *data)
