@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 # include "minishell.h"
+#include <unistd.h>
 
 // Function to run executibal from path.
 /**
@@ -81,24 +82,20 @@ int		child_process_pipe(t_minishell *data, char **argv, char **envp)
 		close(fd[0]); //close read end, child only writes.
 		if (data->fd_out == 0)
 		{
-			printf("fd_out = 0\n");
+			ft_putendl_fd ("fd_out = 0", 2);
 			if (dup2(fd[1], STDOUT_FILENO) == -1)
 			{
-				printf("dup2 failed\n");
-				ft_putendl_fd("dup2 failed\n", 2);
+				ft_putendl_fd("dup2 failed", 2);
 				close(fd[1]);
 				exit(1);
 			}
-			printf("fd[1] = %d\n", fd[1]);
-			ft_putendl_fd("fd[1] = test", 2);
 		}
 		else
 		{
-			printf("fd_out = fd_out\n");
-			ft_putendl_fd("fd_out = fd_out\n", 2);
+			ft_putendl_fd("fd_out = fd_out", 2);
 			if (dup2(fd[1], data->fd_out) == -1)
 			{
-				printf("dup2 failed\n");
+				ft_putendl_fd("dup2 failed", 2);
 				close(fd[1]);
 				return (1);
 			}
@@ -149,6 +146,12 @@ int		child_process_pipe(t_minishell *data, char **argv, char **envp)
 int	handle_infile(t_minishell *data, char *path)
 {
 	data->fd_in = open(path, O_RDONLY);
+	data->std_in = 	dup(STDIN_FILENO);
+	if (data->fd_in == -1)
+	{
+		perror ("Error opening infile");
+		data->fd_in = 0;
+	}
 	if (data->fd_in < 0)
 	{
 		ft_putstr_fd("minishell: infile: No such file or directory\n", STDERR_FILENO);
@@ -160,7 +163,12 @@ int	handle_infile(t_minishell *data, char *path)
 		return (1);
 	}
 	if (data->fd_in > 0)
+	{
+		ft_putstr_fd("minishell : fd > 0, closing fd_in\n", STDERR_FILENO);
 		close(data->fd_in);
+	}
+
+	printf("DATA->FD_IN: %d\n", data->fd_in);
 	return (0);
 }
 

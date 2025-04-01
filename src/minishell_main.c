@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <unistd.h>
 
 void	print_tokens_type(t_minishell *data)
 {
@@ -191,13 +192,27 @@ int	main(int argc, char **argv, char **envp)
 		buffer = getcwd(NULL, 0);
 		shell_dir = ft_ma_strjoin(data.arena, "mini_shell: ", buffer);
 		shell_dir = ft_ma_strjoin(data.arena, shell_dir, "$ ");
+//		data.raw_input = NULL;
 		data.raw_input	= readline(shell_dir);
+		if (!data.raw_input)
+		{
+			printf("readline failed...exiting..\n");
+			free(buffer);
+			break ;
+		}
+		if (ft_strlen(data.raw_input) == 0)
+		{
+			free((void *)data.raw_input);
+			printf("loop reset\n");
+			continue ;
+		}
 //		printf("raw_input: %s\n", data.raw_input);
 		//exit case (technically a builtin)
 		if (ft_strncmp(data.raw_input, "exit", 4) == 0)
 		{
 			ft_putendl("exiting program");
 			free((void *)data.raw_input);
+			free(buffer);
 			break ;
 		}
 		add_history(data.raw_input);
@@ -209,7 +224,6 @@ int	main(int argc, char **argv, char **envp)
 		quote_removal(&data);
 //		print_tokens(&data);
 		print_tokens_type(&data);
-
 
 		//==========================BUILT INS===================================*/
 		here_doc_token = check_and_get_here_doc_token(&data);
@@ -236,30 +250,36 @@ int	main(int argc, char **argv, char **envp)
 		{
 			if (data.token_list->next->type == FILE_NAME)
 			{
-				printf("handling in file\n");
 				handle_infile(&data, data.token_list->next->value);
-				printf("fd_in = %d\n", data.fd_in);
-				printf("fd_out = %d\n", data.fd_out);
-				printf("infile set to fd_in\n");
 			}
 //			t_token	command_token = *data.token_list->next->next;
 			t_token	*command_token;
 			command_token = get_cmd_token(&data);
 			printf("COMMMAND TOKEN ASSIGNED\n");
-			else if (command_token != NULL)
+			if (command_token != NULL)
 			{
 				printf("COMMAND FOUND\n");
 				envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
-				if (command_token->next->type == ARGUMENT)
+				if (command_token->next && command_token->next->type == ARGUMENT)
 				{
 					args = create_args_arr(&data, command_token);
 					printf("argument detected\n");
-					child_process_pipe(&data, args, envp_arr);
+					run_prog(&data, args, envp_arr);
+					printf("program sucessfully run\n");
+					//child_process_pipe(&data, args, envp_arr);
 				}
 			}
 			else
 			{
 				printf("COMMAND NOT FOUND\n");
+			}
+			// We need to return stdout to its natural state. and close it in the struct
+			if (data.fd_in > 0)
+			{
+				printf("reseting FD_IN to 0...\n");
+				close (data.fd_in);
+				dup2(data.std_in, STDIN_FILENO);
+				close(data.fd_in);
 			}
 		}
 		//========================RUN PROGRAM===================================*/
@@ -270,14 +290,16 @@ int	main(int argc, char **argv, char **envp)
 			envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
 			args = create_args_arr(&data, data.token_list);
 			run_prog(&data, args, envp_arr);
-			printf("entering child process pipe\n");
+//			printf("entering child process pipe\n");
 //			child_process_pipe(&data, args, envp_arr);
 		}
 		//need to check how many pipes are needed.
-
 		printf("number of redirections is %d\n", count_redirections(&data));
 		data.token_list = NULL;
+//		printf("token_list resest\n");
 		free((void *)data.raw_input);
+//		printf("readline reset\n");
+		free(buffer);
 //		data.raw_input = NULL;
 	}
 	//Free memory arena here

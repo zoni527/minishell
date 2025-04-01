@@ -100,6 +100,7 @@ typedef struct s_minishell
 	t_token		*token_list;
 	t_var		*custom_env;
 	size_t		token_count;
+	int			std_in;
 	int			fd_in;
 	int			fd_out;
 	const char	*raw_input;
