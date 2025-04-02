@@ -19,7 +19,7 @@
 
 # include "libft.h"
 
-/* ---------------------------------------------------------------- minishell */
+/* -------------------------------------------- minishell specific inclusions */
 
 # include <readline/readline.h>
 # include <stdio.h>
@@ -94,7 +94,7 @@ typedef enum e_bltn_type
 	BLTN_EXIT,
 }	t_bltn_type;
 
-/* ============================== TYPEDEFS ================================== */
+/* ================================ TYPEDEFS ================================ */
 
 typedef struct s_token		t_token;
 typedef struct s_var		t_var;
@@ -106,8 +106,10 @@ typedef struct s_minishell
 	t_token				*token_list;
 	size_t				token_count;
 	int					last_rval;
-	struct sigaction	act;
-	struct sigaction	actold;
+	struct sigaction	act_int;
+	struct sigaction	act_int_old;
+	struct sigaction	act_quit;
+	struct sigaction	act_quit_old;
 	const char			*raw_input;
 	const char			*initial_env[];
 }	t_minishell;
@@ -207,7 +209,21 @@ void		insert_token_left(t_token *current, t_token *new);
 
 /* ------------------------------------------------------ minishell_signals.c */
 
-void		setup_signal_handler(t_minishell *data);
+void		set_default_signal_handling(t_minishell *data);
+void		activate_sigquit(t_minishell *data);
+void		deactivate_sigquit(t_minishell *data);
+
+/* =============================== ERRORS =================================== */
+
+/* ------------------------------------------------ minishell_error_logging.c */
+
+void		ms_perror(const char *file, const char *msg);
+void		log_syntax_error(t_token *token);
+
+/* ------------------------------------------------- minishell_syntax_error.c */
+
+bool		contains_syntax_error(t_token *list);
+t_token		*syntax_error_at_token(t_token *list);
 
 /* ================================ UTILS =================================== */
 

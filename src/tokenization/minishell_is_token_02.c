@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * Checks if token->type is APPEND.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_append(t_token *token)
 {
 	if (!token)
@@ -21,6 +26,11 @@ bool	is_append(t_token *token)
 	return (false);
 }
 
+/**
+ * Checks if token->type is HEREDOC.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_heredoc(t_token *token)
 {
 	if (!token)
@@ -30,10 +40,18 @@ bool	is_heredoc(t_token *token)
 	return (false);
 }
 
+/**
+ * Checks if token is a builtin or command, based on its position in relation
+ * to other tokens, or the previously assigned type.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_builtin_or_command(t_token *token)
 {
 	if (!token)
 		return (false);
+	if (token->type == BUILTIN || token->type == COMMAND)
+		return (true);
 	token = token->prev;
 	if (!token || is_pipe(token))
 		return (true);
@@ -44,6 +62,13 @@ bool	is_builtin_or_command(t_token *token)
 	return (false);
 }
 
+/**
+ * Checks if token is a builtin based on its position in relation to other
+ * tokens in combination with the the token->value, or the previously
+ * assigned type.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_builtin(t_token *token)
 {
 	if (!token)

@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * Assigns each token an index, starting at 0.
+ *
+ * @param data	Pointer to main data struct
+ */
 void	assign_token_indices(t_minishell *data)
 {
 	t_token	*token;

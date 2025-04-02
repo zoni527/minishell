@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * Counts tokens in token list.
+ *
+ * @param list	First node in list of tokens
+ */
 size_t	count_tokens(t_token *list)
 {
 	size_t	count;
@@ -27,6 +32,11 @@ size_t	count_tokens(t_token *list)
 	return (count);
 }
 
+/**
+ * Counts pipe tokens in token list.
+ *
+ * @param list	First node in list of tokens
+ */
 size_t	count_pipes(t_token *list)
 {
 	size_t	pipes;

@@ -40,7 +40,7 @@ SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c			\
 all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out minishell_test_signals.out
 
 minishell_test_quotes_01.out: minishell_test_quotes_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@ -lreadline
 
 minishell_test_word_lexing_01.out: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
 	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@ -lreadline
