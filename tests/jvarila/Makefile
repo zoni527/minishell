@@ -32,18 +32,24 @@ SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c			\
 		$(SRCDIR)/tokenization/minishell_token_analysis.c		\
 		$(SRCDIR)/tokenization/minishell_tokenization_utils_01.c	\
 		$(SRCDIR)/tokenization/minishell_quote_validation.c		\
+		$(SRCDIR)/error_handling/minishell_error_logging.c		\
+		$(SRCDIR)/error_handling/minishell_syntax_error.c		\
 		$(SRCDIR)/utils/minishell_var_name_len.c			\
 		$(SRCDIR)/terminal_behaviour/minishell_terminal_behaviour.c	\
 		$(SRCDIR)/signals/minishell_signals.c				\
+		$(SRCDIR)/piping/minishell_piping.c				\
 		$(SRCDIR)/utils/minishell_print_debug.c
 
-all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out minishell_test_signals.out
+all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out minishell_test_signals.out minishell_test_pipe.out
 
 minishell_test_quotes_01.out: minishell_test_quotes_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@ 
 
 minishell_test_word_lexing_01.out: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@
 
 minishell_test_signals.out: minishell_test_signals.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -o $@ -lreadline
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@
+
+minishell_test_pipe.out: minishell_test_pipe.c $(LIBFT) $(SRC)
+	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@

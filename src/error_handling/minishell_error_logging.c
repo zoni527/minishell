@@ -22,7 +22,7 @@
  */
 void	ms_perror(const char *file, const char *msg)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(STR_MINISHELL, STDERR_FILENO);
 	if (file)
 	{
 		ft_putstr_fd(file, STDERR_FILENO);
@@ -46,8 +46,7 @@ void	log_syntax_error(t_token *token)
 		str = token->value;
 	else
 		str = "(NULL)";
-	ft_putstr_fd("minishell: syntax error near unexpecter token `", \
-			STDERR_FILENO);
+	ft_putstr_fd(STR_MINISHELL MSG_ERROR_SYNTAX, STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putendl_fd("'", STDERR_FILENO);
 }

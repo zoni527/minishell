@@ -58,14 +58,27 @@
 # define ERROR_TCGETATTR	15
 # define ERROR_TCSETATTR	16
 
+/* ---------------------------------------------------------- string literals */
+
+# define STR_MINISHELL			"minishell: "
+
 /* ----------------------------------------------------------- error messages */
 
 # define MSG_ERROR_ALLOC		"ERROR: couldn't alloc"
 # define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
 # define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
 # define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
+# define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
 
 # define METACHARACTERS			"|<> \t\n"
+
+# ifndef READ
+#  define READ	0
+# endif
+
+# ifndef WRITE
+#  define WRITE	1
+# endif
 
 /* ================================ ENUMS =================================== */
 
@@ -105,7 +118,9 @@ typedef struct s_minishell
 	t_var				*custom_env;
 	t_token				*token_list;
 	size_t				token_count;
+	size_t				pipe_count;
 	int					last_rval;
+	int					pipe_fds[2];
 	struct sigaction	act_int;
 	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
@@ -240,5 +255,6 @@ void		print_debug(t_minishell *data);
 
 void		clean_exit(t_minishell *data, int exit_code);
 void		set_terminal(t_minishell *data);
+void		piping(t_minishell *data, char *envp[]);
 
 #endif
