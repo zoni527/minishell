@@ -68,6 +68,8 @@
 # define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
 # define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
 # define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
+# define MSG_ERROR_CLOSE		"ERROR: failed to close file"
+# define MSG_ERROR_DUP2			"ERROR: failed to dup2"
 # define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
 
 # define METACHARACTERS			"|<> \t\n"
@@ -119,8 +121,11 @@ typedef struct s_minishell
 	t_token				*token_list;
 	size_t				token_count;
 	size_t				pipe_count;
+	size_t				pipe_index;
 	int					last_rval;
 	int					pipe_fds[2];
+	int					final_fd_out;
+	int					final_ft_in;
 	struct sigaction	act_int;
 	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
