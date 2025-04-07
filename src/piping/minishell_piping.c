@@ -12,100 +12,84 @@
 
 #include "minishell.h"
 
-static void	chain_of_pipes(t_minishell *data, char *envp[]);
+static void	child_process(t_minishell *data);
+static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
+									int *prev_pipe_read_fd);
+static void	wait_for_children(t_minishell *data);
+static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe, \
+									int prev_pipe_read_fd);
 
-void	clean_exit(t_minishell *data, int exit_code)
+void	handle_fork_failure(t_minishell *data, int *new_pipe, \
+						int prev_pipe_read_fd)
 {
-	if (data->pipe_fds[READ] >= 0)
-		close(data->pipe_fds[READ]);
-	if (data->pipe_fds[WRITE] >= 0)
-		close(data->pipe_fds[WRITE]);
-	free((void *)data->raw_input);
-	ft_free_memarena(data->arena);
-	exit(exit_code);
+	if (prev_pipe_read_fd != -1)
+		close(prev_pipe_read_fd);
+	if (new_pipe[READ] > 2)
+		close(new_pipe[READ]);
+	wait_for_children(data);
+	clean_error_exit(data, MSG_ERROR_FORK, ERROR_FORK);
 }
 
-void	try_to_close_fd(t_minishell *data, int *fd)
-{
-	if (fd < 0)
-		return ;
-	if (close(*fd) < 0)
-	{
-		ft_putendl_fd(MSG_ERROR_CLOSE, STDERR_FILENO);
-		clean_exit(data, ERROR_CLOSE);
-	}
-	*fd = -1;
-}
-
-void	try_to_dup2(t_minishell *data, int fd1, int fd2)
-{
-	if (fd1 < 0 || fd2 < 0)
-		return ;
-	if (dup2(fd1, fd2) < 0)
-	{
-		ft_putendl_fd(MSG_ERROR_DUP2, STDERR_FILENO);
-		clean_exit(data, ERROR_DUP2);
-	}
-}
-
-void	redirect_stdout(t_minishell *data)
-{
-	try_to_dup2(data, data->pipe_fds[WRITE], STDOUT_FILENO);
-	try_to_close_fd(data, &data->pipe_fds[WRITE]);
-}
-
-void	redirect_stdin(t_minishell *data)
-{
-	try_to_dup2(data, data->pipe_fds[READ], STDIN_FILENO);
-	try_to_close_fd(data, &data->pipe_fds[READ]);
-}
-
-void	piping(t_minishell *data, char *envp[])
+void	piping(t_minishell *data)
 {
 	int		new_pipe[2];
-	size_t	index;
 	pid_t	pid;
 	int		prev_pipe_read_fd;
-	//data->pipe_count = count_pipes(data->token_list);
-	//if (data->pipe_count <= 0)
-	//	return ;
 
 	data->pipe_count = 2;
-	index = 0;
+	data->pipe_index = 0;
 	pid = 1;
 	prev_pipe_read_fd = -1;
-	while (index <= data->pipe_count && pid != 0)
+	while (data->pipe_index <= data->pipe_count && pid != 0)
 	{
-		if (index != data->pipe_count)
-		{
-			if (pipe(new_pipe) < 0)
-				exit(ERROR_PIPE);
-			ft_putendl_fd("Pipe created", STDERR_FILENO);
-		}
-		if (prev_pipe_read_fd != -1)
-			data->pipe_fds[READ] = prev_pipe_read_fd;
-		if (index != data->pipe_count)
-			data->pipe_fds[WRITE] = new_pipe[WRITE];
-		data->pipe_index = index;
+		create_new_pipe_and_assign_fds(data, new_pipe, prev_pipe_read_fd);
 		pid = fork();
-		if (pid != 0)
-		{
-			if (index != data->pipe_count)
-				try_to_close_fd(data, &new_pipe[WRITE]);
-			if (index != 0)
-				try_to_close_fd(data, &prev_pipe_read_fd);
-		}
+		if (pid < 0)
+			handle_fork_failure(data, new_pipe, prev_pipe_read_fd);
+		else if (pid == 0)
+			break ;
+		else if (pid != 0)
+			close_pipe_fds_in_parent(data, new_pipe, &prev_pipe_read_fd);
 		prev_pipe_read_fd = new_pipe[READ];
-		index++;
+		data->pipe_index++;
 	}
 	if (pid == 0)
-		chain_of_pipes(data, envp);
+		child_process(data);
 	else
-	{
-		int i = data->pipe_count + 1;
-		while (i--)
-			wait(NULL);
-	}
+		wait_for_children(data);
+}
+
+static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe, \
+									int prev_pipe_read_fd)
+{
+	if (data->pipe_index != data->pipe_count)
+		try_to_pipe(data, new_pipe);
+	if (prev_pipe_read_fd != -1)
+		data->pipe_fds[READ] = prev_pipe_read_fd;
+	if (data->pipe_index != data->pipe_count)
+		data->pipe_fds[WRITE] = new_pipe[WRITE];
+}
+
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !! Catch exit values later !!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+static void	wait_for_children(t_minishell *data)
+{
+	size_t	children;
+	pid_t	pid;
+
+	children = data->pipe_index + 1;
+	while (children--)
+		pid = wait(NULL);
+}
+
+static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
+									int *prev_pipe_read_fd)
+{
+	if (data->pipe_index != data->pipe_count)
+		try_to_close_fd(data, &new_pipe[WRITE]);
+	if (data->pipe_index != 0)
+		try_to_close_fd(data, prev_pipe_read_fd);
 }
 
 bool	pipe_has_redirections(t_minishell *data)
@@ -113,6 +97,8 @@ bool	pipe_has_redirections(t_minishell *data)
 	size_t	pipe_index;
 	t_token	*token;
 
+	if (!data || !data->token_list)
+		return (false);
 	pipe_index = data->pipe_index;
 	token = data->token_list;
 	while (pipe_index)
@@ -136,33 +122,32 @@ void	handle_redirections(t_minishell *data)
 	(void)data;
 }
 
-static void chain_of_pipes(t_minishell *data, char *envp[])
+static void	child_process(t_minishell *data)
 {
+	char	**argv;
+
 	if (data->pipe_index != 0)
-		redirect_stdin(data);
+		redirect_stdin_and_close_fd(data, &data->pipe_fds[READ]);
 	if (data->pipe_index != data->pipe_count)
-		redirect_stdout(data);
+		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
 	if (pipe_has_redirections(data))
 		handle_redirections(data);
 	if (data->pipe_index == 0)
 	{
-		char *argv[] = {"ls", NULL};
-		ft_putendl_fd("Made it above execve in first command, wish me luck", 2);
-		execve("/usr/bin/ls", argv, envp);
-		ft_putstr_fd("You have made it past execve, you shouldn't be here", STDERR_FILENO);
+		char	*argv[] = {"ls", NULL};
+		execve("/usr/bin/ls", argv, (char **)data->initial_env);
+		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
 	}
 	else if (data->pipe_index == 1)
 	{
-		char *argv[] = {"cat", NULL};
-		ft_putendl_fd("Made it above execve in second command, wish me luck", 2);
-		execve("/usr/bin/cat", argv, envp);
-		ft_putstr_fd("You have made it past execve, you shouldn't be here", STDERR_FILENO);
+		char	*argv[] = {"cat", NULL};
+		execve("/usr/bin/cat", argv, (char **)data->initial_env);
+		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
 	}
 	else
 	{
-		char *argv[] = {"wc", NULL};
-		ft_putendl_fd("Made it above execve in third command, wish me luck", 2);
-		execve("/usr/bin/wc", argv, envp);
-		ft_putstr_fd("You have made it past execve, you shouldn't be here", STDERR_FILENO);
+		char	*argv[] = {"wc", NULL};
+		execve("/usr/bin/wc", argv, (char **)data->initial_env);
+		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
 	}
 }

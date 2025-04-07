@@ -34,10 +34,13 @@ SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c			\
 		$(SRCDIR)/tokenization/minishell_quote_validation.c		\
 		$(SRCDIR)/error_handling/minishell_error_logging.c		\
 		$(SRCDIR)/error_handling/minishell_syntax_error.c		\
-		$(SRCDIR)/utils/minishell_var_name_len.c			\
 		$(SRCDIR)/terminal_behaviour/minishell_terminal_behaviour.c	\
 		$(SRCDIR)/signals/minishell_signals.c				\
 		$(SRCDIR)/piping/minishell_piping.c				\
+		$(SRCDIR)/utils/minishell_var_name_len.c			\
+		$(SRCDIR)/utils/minishell_cleanup_and_exiting.c			\
+		$(SRCDIR)/utils/minishell_safe_fd_management.c			\
+		$(SRCDIR)/utils/minishell_safe_pipe_management.c		\
 		$(SRCDIR)/utils/minishell_print_debug.c
 
 all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out minishell_test_signals.out minishell_test_pipe.out

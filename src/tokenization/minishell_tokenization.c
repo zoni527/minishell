@@ -26,6 +26,7 @@ void	tokenization(t_minishell *data)
 	token_classification(data);
 	assign_token_indices(data);
 	data->token_count = count_tokens(data->token_list);
+	data->pipe_count = count_pipes(data->token_list);
 }
 
 /**

@@ -12,29 +12,12 @@
 
 #include "minishell.h"
 
-void	loop(t_minishell *data, char *envp[])
+void	loop(t_minishell *data)
 {
-	//char	*line;
-
 	while (1)
 	{
-		//line = readline("minishell piping test: ");
-		//if (ft_strncmp(line, "exit", 5) == 0)
-		//{
-		//	free(line);
-		//	break ;
-		//}
-		//if (has_unclosed_quotes(line))
-		//{
-		//	ft_putendl("Input has unclosed quotes");
-		//	free(line);
-		//	continue ;
-		//}
-		//data->raw_input = line;
-		//tokenization(data);
-		piping(data, envp);
+		piping(data);
 		data->token_list = NULL;
-		//free(line);
 		break ;
 	}
 }
@@ -47,9 +30,10 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argv;
 	(void)envp;
 	data.arena = ft_new_memarena();
+	data.initial_env = (const char **)envp;
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
-	loop(&data, envp);
+	loop(&data);
 	ft_free_memarena(data.arena);
 	return (0);
 }

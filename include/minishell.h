@@ -69,7 +69,10 @@
 # define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
 # define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
 # define MSG_ERROR_CLOSE		"ERROR: failed to close file"
+# define MSG_ERROR_PIPE			"ERROR: failed to pipe"
+# define MSG_ERROR_FORK			"ERROR: failed to fork"
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
+# define MSG_ERROR_EXECVE		"ERROR: made it past execve"
 # define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
 
 # define METACHARACTERS			"|<> \t\n"
@@ -131,7 +134,7 @@ typedef struct s_minishell
 	struct sigaction	act_quit;
 	struct sigaction	act_quit_old;
 	const char			*raw_input;
-	const char			*initial_env[];
+	const char			**initial_env;
 }	t_minishell;
 
 typedef struct s_var
@@ -225,7 +228,11 @@ t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
 
-/* =============================== SIGNALS ================================== */
+/* ================================= PIPING ================================= */
+
+/* ------------------------------------------------------- minishell_piping.c */
+
+/* ================================= SIGNALS ================================ */
 
 /* ------------------------------------------------------ minishell_signals.c */
 
@@ -233,7 +240,7 @@ void		set_default_signal_handling(t_minishell *data);
 void		activate_sigquit(t_minishell *data);
 void		deactivate_sigquit(t_minishell *data);
 
-/* =============================== ERRORS =================================== */
+/* ================================= ERRORS ================================= */
 
 /* ------------------------------------------------ minishell_error_logging.c */
 
@@ -245,7 +252,7 @@ void		log_syntax_error(t_token *token);
 bool		contains_syntax_error(t_token *list);
 t_token		*syntax_error_at_token(t_token *list);
 
-/* ================================ UTILS =================================== */
+/* ================================== UTILS ================================= */
 
 /* ------------------------------------------------- minishell_var_name_len.c */
 
@@ -256,10 +263,29 @@ size_t		var_name_len(const char *str);
 void		print_debug_tokens(t_token *list);
 void		print_debug(t_minishell *data);
 
+/* ------------------------------------------ minishell_cleanup_and_exiting.c */
+
+void		free_heap_memory(t_minishell *data);
+void		close_fds(t_minishell *data);
+void		clean(t_minishell *data);
+void		clean_exit(t_minishell *data, int exit_code);
+void		clean_error_exit(t_minishell *data, const char *msg, int exit_code);
+
+/* ------------------------------------------- minishell_safe_fd_management.c */
+
+void		try_to_close_fd(t_minishell *data, int *fd);
+void		try_to_dup2(t_minishell *data, int fd1, int fd2);
+void		redirect_stdout_and_close_fd(t_minishell *data, int *fd);
+void		redirect_stdin_and_close_fd(t_minishell *data, int *fd);
+
+/* ----------------------------------------- minishell_safe_pipe_management.c */
+
+void		try_to_pipe(t_minishell *data, int *new_pipe);
+
 /* -------------------------------------------------------------------------- */
 
-void		clean_exit(t_minishell *data, int exit_code);
 void		set_terminal(t_minishell *data);
-void		piping(t_minishell *data, char *envp[]);
+void		piping(t_minishell *data);
+void		execution(t_minishell *data);
 
 #endif
