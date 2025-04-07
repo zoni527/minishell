@@ -109,23 +109,26 @@ t_token *return_first_pipe_token(t_minishell *data)
 	return (NULL);
 }
 
+/**
+ * Function that creates a null terminated argv to pass to execve
+ *
+ * @param data	main data struct
+ * @param command	token for the relevant command
+ */
 char	**create_args_arr(t_minishell *data, t_token *command)
 {
 	char	**args;
 	t_token *token;
-	int	count;
-	int	i;
+	int		count;
+	int		i;
 
 	token = command;
-//	token = token->next;
 	count = 1;
 	while (token->next && token->next->type == ARGUMENT)
 	{
-	//	token = token->next;
 		count++;
 		token = token->next;
 	}
-//	printf("token count is %d\n", count);
 	args = ft_ma_malloc(data->arena, sizeof(char *) * (count + 1));
 	i = -1;
 	token = command;

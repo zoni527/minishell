@@ -72,7 +72,7 @@ char	*path_parsing(t_minishell *data, const char *command, char **envp)
 	return (fullpath);
 }
 
-/**
+/*
  * Function that runs execve / execution
  *
  * @param argv	argument input vector

@@ -48,7 +48,7 @@ int	run_prog(t_minishell *data, char **input, char **envp)
 //		close (data,pipe[0]);
 //
 		cmd_exec(data, input, envp);
-//		perror("execve failed");
+		perror("execve failed");
 		exit(1);
 	}
 	else
