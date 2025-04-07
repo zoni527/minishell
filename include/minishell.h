@@ -98,11 +98,14 @@ typedef struct s_minishell
 {
 	t_memarena	*arena;
 	t_token		*token_list;
+	t_token		*pipe_token;
 	t_var		*custom_env;
 	size_t		token_count;
 	int			std_in;
 	int			fd_in;
 	int			fd_out;
+	int			pipe[2];
+	int			number_of_pipes;
 	const char	*raw_input;
 	const char	*here_doc_input;
 	const char	*initial_env[];
@@ -208,8 +211,8 @@ void		print_debug(t_minishell *data);
 void	parse_env(t_minishell *data, char **envp);
 char	**create_envp_arr_from_custom_env(t_minishell *data , \
 									   t_var *envp_list);
-char	*ft_getenv(t_minishell *data, const char *name, t_var *envp);
-int		ft_setenv(t_minishell *data, char *key, char *value, t_var *envp);
+char	*ms_getenv(t_minishell *data, const char *name, t_var *envp);
+int		ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
 int		remove_env(char *key, t_var *envp);
 
 /* ----------------------------------------------------------minishell_list.c */

@@ -21,50 +21,30 @@
  */
 void	parse_env(t_minishell *data, char **envp)
 {
-	t_var	*head;
 	t_var	*current;
 	char	*vals[3];
-	// Vals[0] = RAW, vals[1] = KEY, vals[2] = VALUE
-//	char	*raw;
-//	char	*key;
-//	char	*value;
 	int		i;
 	int		j;
 
-
-	head = NULL;
 	current = NULL;
 	i = -1;
 	while (envp[++i])
 	{
-//		raw = ft_ma_strdup(data->arena, envp[i]);
 		vals[0] = ft_ma_strdup(data->arena, envp[i]);
-		j = 0;
-//		while (raw[j] != '=')
-		while (vals[0][j] != '=')
-		{
-			j++;
-		}
-//		key = ft_ma_substr(data->arena, raw, 0, j);
+		j = ft_char_index(vals[0], '=');
 		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
-//		value = ft_ma_substr(data->arena, raw, (j + 1), ft_strlen(raw) - (j + 1));
 		vals[2] = ft_ma_substr(data->arena, vals[0], \
-						 (j + i), ft_strlen(vals[0]) - (j + 1));
-		if (head == NULL)
+						(j + i), ft_strlen(vals[0]) - (j + 1));
+		if (current == NULL)
 		{
-			head = create_new_var(data, vals[0], vals[1], vals[2]);
-			current = head;
-			data->custom_env = head;
+			current = create_new_var(data, vals[0], vals[1], vals[2]);
+			data->custom_env = current;
+			continue ;
 		}
-		else
-		{
-			current->next = create_new_var(data, vals[0], vals[1], vals[2]);
-			current->next->prev = current;
-			current = current->next;
-		}
+		current->next = create_new_var(data, vals[0], vals[1], vals[2]);
+		current->next->prev = current;
+		current = current->next;
 	}
-//	data.custom_env = &(t_var){.raw = "ARG=test test", .key = "ARG", .value = "|test|"};
-//	data.custom_env->next = &(t_var){.raw = "", .key = "DERP", .value = "|derp|"};
 }
 
 /**
@@ -111,7 +91,7 @@ char	**create_envp_arr_from_custom_env(t_minishell *data ,t_var *envp_list)
  * @param name	name of target envp variable
  * @param envp	pointer to first envp element
  */
-char	*ft_getenv(t_minishell *data, const char *name, t_var *envp)
+char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 {
 	t_var	*current;
 	char	*sub_name;
@@ -151,7 +131,7 @@ char	*ft_getenv(t_minishell *data, const char *name, t_var *envp)
  * @param value	value input
  * @param envp	enviroment pointer
  */
-int	ft_setenv(t_minishell *data, char *key, char *value, t_var *envp)
+int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 {
 	char	*raw;
 //	t_var	*new_node;

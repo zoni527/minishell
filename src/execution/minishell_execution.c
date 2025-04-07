@@ -31,7 +31,6 @@ char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 	{
 		onepath = ft_ma_strjoin(data->arena, mypaths[i], "/");
 		fullpath = ft_ma_strjoin(data->arena, onepath, command);
-//		free(onepath);
 		onepath = NULL;
 		if (access(fullpath, F_OK) == 0)
 		{
@@ -40,10 +39,8 @@ char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 		}
 		else
 			fullpath = NULL;
-//			free(fullpath);
 		i++;
 	}	
-//	free_array(mypaths);
 	if (it_works)
 		return (fullpath);
 	return (NULL);
@@ -61,9 +58,8 @@ char	*path_parsing(t_minishell *data, const char *command, char **envp)
 	char	*fullpath;
 	int		i;
 
-	if (command[0] == '.' && command[1] == '/')
+	if (ft_strncmp(command, "./", 2) == 0 || (command[0] == '/'))
 	{
-//		printf("COMMAND IS BINARY!!\n");
 		fullpath = ft_ma_strdup(data->arena, command);
 		return (fullpath);
 	}
@@ -84,53 +80,18 @@ char	*path_parsing(t_minishell *data, const char *command, char **envp)
  */
 void	cmd_exec(t_minishell *data, char **command, char **envp)
 {
-//	char	**command;
 	char	*path;
 
-	printf("inside of cmd_exe\n");
-//	command = ft_ma_split(data->arena, argv, ' ');
+	ft_putendl_fd("inside of cmd exe\n", 2);
 	path = path_parsing(data, command[0], envp);
+	ft_putendl_fd("path passing complete:", 2);
+	ft_putendl_fd(path, 2);
 	if (!path)
 	{
-//		free_array(command);
 		exit(1);
 	}
 	if (execve(path, command, envp) == -1)
 	{
 		printf("execve failed");
-//		free_array(command);
-//		free(path);
 	}
-	perror("execve failed");
-//	free_array(command);
-//	free(path);
 }
-
-///**
-// * Function that runs execve / execution
-// *
-// * @param argv	argument input vector
-// * @param envp	envp_arr (not list)
-// */
-//void	cmd_exec(t_minishell *data, const char *argv, char **envp)
-//{
-//	char	**command;
-//	char	*path;
-//
-//	command = ft_ma_split(data->arena, argv, ' ');
-//	path = path_parsing(data, command[0], envp);
-//	if (!path)
-//	{
-////		free_array(command);
-//		exit(1);
-//	}
-//	if (execve(path, command, envp) == -1)
-//	{
-//		printf("execve failed");
-////		free_array(command);
-////		free(path);
-//	}
-//	perror("execve failed");
-////	free_array(command);
-//	free(path);
-//}

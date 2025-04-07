@@ -125,7 +125,7 @@ char	**create_args_arr(t_minishell *data, t_token *command)
 		count++;
 		token = token->next;
 	}
-	printf("token count is %d\n", count);
+//	printf("token count is %d\n", count);
 	args = ft_ma_malloc(data->arena, sizeof(char *) * (count + 1));
 	i = -1;
 	token = command;
@@ -136,6 +136,7 @@ char	**create_args_arr(t_minishell *data, t_token *command)
 	}
 	args[count] = NULL;
 
+	// This can be deleted after debugging, just prints args for reference.
 	i = 0;
 	printf("print out of args:\n");
 	while (i < count + 1)
@@ -166,7 +167,33 @@ t_token	*get_cmd_token(t_minishell *data)
 	}
 	return (NULL);
 }
+
 //args = create_args_arr(&data, command_token->value, command_token->next->value)
+//
+
+t_token *get_next_pipe_token(t_token *token)
+{
+//	printf("ONE\n");
+	if (token->next)
+	{
+		token = token->next;
+	}
+	else
+	{
+		return (NULL);
+	}
+	while (token)
+	{	
+		if (token->type == PIPE)
+		{
+			printf("found pipe\n");
+			return (token);
+		}
+		token = token->next;
+	}
+	printf("no pipe found\n");
+	return (NULL);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -260,14 +287,9 @@ int	main(int argc, char **argv, char **envp)
 			{
 				printf("COMMAND FOUND\n");
 				envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
-				if (command_token->next && command_token->next->type == ARGUMENT)
-				{
-					args = create_args_arr(&data, command_token);
-					printf("argument detected\n");
-					run_prog(&data, args, envp_arr);
-					printf("program sucessfully run\n");
-					//child_process_pipe(&data, args, envp_arr);
-				}
+				args = create_args_arr(&data, command_token);
+				run_prog(&data, args, envp_arr);
+//				child_process_pipe(&data, args, envp_arr);
 			}
 			else
 			{
@@ -276,14 +298,40 @@ int	main(int argc, char **argv, char **envp)
 			// We need to return stdout to its natural state. and close it in the struct
 			if (data.fd_in > 0)
 			{
-				printf("reseting FD_IN to 0...\n");
+//				printf("reseting FD_IN to 0...\n");
 				close (data.fd_in);
 				dup2(data.std_in, STDIN_FILENO);
 				close(data.fd_in);
 			}
 		}
+		//======================= PIPES ===================================*/
+		t_token	*token;
+		token = data.token_list;
+		while (token)
+		{
+//			int	i = 0;
+			token = get_next_pipe_token(token);
+			if (token == NULL)
+				break ;
+//			i++;
+//			printf("FOUND PIPE %d\n", i);
+			envp_arr = create_envp_arr_from_custom_env(&data, data.custom_env);
+			args = create_args_arr(&data, token->next);
+			printf("TWO\n");
+			child_process_pipe(&data, args, envp_arr);
+//			token = get_next_pipe_token(token);
+		}
+		// We need to return stdout to its natural state. and close it in the struct
+		if (data.fd_in > 0)
+		{
+//			printf("reseting FD_IN to 0...\n");
+			close (data.fd_in);
+			dup2(data.std_in, STDIN_FILENO);
+			close(data.fd_in);
+		}
+
 		//========================RUN PROGRAM===================================*/
-		else if(data.token_list->type == COMMAND)
+		if(data.token_list->type == COMMAND)
 		{
 			//Runs a program
 			printf("running program\n");
