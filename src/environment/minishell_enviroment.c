@@ -53,7 +53,7 @@ void	parse_env(t_minishell *data, char **envp)
  *
  * @param envp	pointer to first envp element
  */
-char	**create_envp_arr_from_custom_env(t_minishell *data ,t_var *envp_list)
+char	**create_envp_arr_from_custom_env(t_minishell *data, t_var *envp_list)
 {
 	t_var	*head;
 	t_var	*current;
@@ -89,7 +89,6 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 {
 	t_var	*current;
 	char	*sub_name;
-	char	*envar;
 
 	if (!name || !envp)
 		return (NULL);
@@ -105,9 +104,9 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 	{
 		if (ft_strncmp(sub_name, current->key, ft_strlen(sub_name)) == 0)
 		{
-			envar = ft_ma_strdup(data->arena, current->value);
-			ft_putendl_fd(envar, STDOUT_FILENO);
-			return (envar);
+			sub_name = ft_ma_strdup(data->arena, current->value);
+			ft_putendl_fd(sub_name, STDOUT_FILENO);
+			return (sub_name);
 		}
 		else
 			current = current->next;
@@ -128,10 +127,8 @@ int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 	t_var	*current;
 	t_var	*last;
 
-	current = NULL;
-	last = NULL;
-	raw = ft_strjoin(key, "=");
-	raw = ft_strjoin(raw, value);
+	raw = ft_ma_strjoin(data->arena, key, "=");
+	raw = ft_ma_strjoin(data->arena, raw, value);
 	current = envp;
 	while (current)
 	{
@@ -179,5 +176,5 @@ int	remove_env(char *key, t_var *envp)
 		}
 		current = current->next;
 	}
-	return (0);	
+	return (0);
 }

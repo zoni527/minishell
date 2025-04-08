@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
-#include <unistd.h>
+#include "minishell.h"
 
 /**
  * Function that creates a null terminated argv to pass to execve
@@ -22,7 +21,7 @@
 char	**create_args_arr(t_minishell *data, t_token *command)
 {
 	char	**args;
-	t_token *token;
+	t_token	*token;
 	int		count;
 	int		i;
 
@@ -42,7 +41,7 @@ char	**create_args_arr(t_minishell *data, t_token *command)
 		token = token->next;
 	}
 	args[count] = NULL;
-	return (args);	
+	return (args);
 }
 
 /**

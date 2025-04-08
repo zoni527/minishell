@@ -33,7 +33,9 @@ int	get_env_list_size(t_var *begin)
  */
 void	print_env_list(t_var *list)
 {
-	t_var *current = list;
+	t_var	*current;
+
+	current = list;
 	while (current)
 	{
 		ft_putendl_fd(current->raw, 1);
@@ -50,9 +52,11 @@ void	print_env_list(t_var *list)
  * @param key	Key input
  * @param value	Value input
  */
-t_var	*create_new_env_var(t_minishell *data, char *raw, char *key, char *value)
+t_var	*create_new_env_var(t_minishell *data, \
+						char *raw, char *key, char *value)
 {
 	t_var	*new_node;
+
 	new_node = ft_ma_malloc(data->arena, sizeof(t_var));
 	new_node->raw = raw;
 	new_node->key = key;

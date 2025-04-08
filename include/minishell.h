@@ -232,18 +232,19 @@ void		insert_token_left(t_token *current, t_token *new);
 
 /* --------------------------------------------------- minishell_enviroment.c */
 
-void	parse_env(t_minishell *data, char **envp);
-char	**create_envp_arr_from_custom_env(t_minishell *data ,t_var *envp_list);
-char	*ms_getenv(t_minishell *data, const char *name, t_var *envp);
-int		ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
-int		remove_env(char *key, t_var *envp);
-
+void		parse_env(t_minishell *data, char **envp);
+char		**create_envp_arr_from_custom_env(t_minishell *data , \
+									t_var *envp_list);
+char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
+int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
+int			remove_env(char *key, t_var *envp);
 
 /* ---------------------------------------------- minishell_enviroment_list.c */
 
-int		get_env_list_size(t_var *begin);
-void	print_env_list(t_var *list);
-t_var	*create_new_env_var(t_minishell *data, char *raw, char *key, char *value);
+int			get_env_list_size(t_var *begin);
+void		print_env_list(t_var *list);
+t_var		*create_new_env_var(t_minishell *data, \
+						char *raw, char *key, char *value);
 
 /* ================================= PIPING ================================= */
 
@@ -270,13 +271,12 @@ void		deactivate_sigquit(t_minishell *data);
 
 void		handle_redirections(t_minishell *data);
 
-
 /* =============================== EXECUTION ================================ */
 
 /* ------------------------------------------------ minishell_execution.c */
 
-char	**create_args_arr(t_minishell *data, t_token *command);
-void	cmd_exec(t_minishell *data, char **command, char **envp);
+char		**create_args_arr(t_minishell *data, t_token *command);
+void		cmd_exec(t_minishell *data, char **command, char **envp);
 
 /* ================================= ERRORS ================================= */
 
