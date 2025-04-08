@@ -65,15 +65,12 @@ static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 		fullpath = ft_ma_strjoin(data->arena, onepath, command);
 		if (access(fullpath, F_OK) == 0)
 		{
-			it_works = true;
-			break ;
+			return (fullpath);
 		}
 		else
 			fullpath = NULL;
 		i++;
-	}	
-	if (it_works)
-		return (fullpath);
+	}
 	return (NULL);
 }
 
