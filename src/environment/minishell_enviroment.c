@@ -19,7 +19,7 @@
  * @param data	Main data struct
  * @param envp	system envp input
  */
-void	parse_env(t_minishell *data, char **envp)
+void	env_list_from_envp(t_minishell *data, char **envp)
 {
 	t_var	*current;
 	char	*vals[3];
