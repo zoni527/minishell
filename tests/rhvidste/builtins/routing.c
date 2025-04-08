@@ -48,6 +48,7 @@ int	check_if_builtin(char *input)
 void	reroute_builtin(t_minishell *data, char *str, t_var *envp)
 {
 	(void)data;
+	(void)envp;
 	if (ft_strncmp("echo", str, 4) == 0)
 //		builtin_echo(str, envp);
 		printf("ECHO CALLED");
