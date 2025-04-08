@@ -52,13 +52,11 @@ char	**create_args_arr(t_minishell *data, t_token *command)
  */
 static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 {
-	bool	it_works;
 	char	*fullpath;
 	char	*onepath;
 	int		i;
 
 	i = 0;
-	it_works = false;
 	while (mypaths[i])
 	{
 		onepath = ft_ma_strjoin(data->arena, mypaths[i], "/");
