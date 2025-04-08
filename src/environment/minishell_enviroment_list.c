@@ -44,8 +44,8 @@ void	print_env_list(t_var *list)
 }
 
 /**
- * Function appends node and adds values
- * variable it finds.
+ * Function creates and returns an 
+ * env node
  *
  * @param data	Main data struct
  * @param raw	Raw input
