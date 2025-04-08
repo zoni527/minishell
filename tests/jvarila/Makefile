@@ -36,7 +36,12 @@ SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c			\
 		$(SRCDIR)/error_handling/minishell_syntax_error.c		\
 		$(SRCDIR)/terminal_behaviour/minishell_terminal_behaviour.c	\
 		$(SRCDIR)/signals/minishell_signals.c				\
-		$(SRCDIR)/piping/minishell_piping.c				\
+		$(SRCDIR)/piping/minishell_piping_01.c				\
+		$(SRCDIR)/piping/minishell_piping_02.c				\
+		$(SRCDIR)/redirections/minishell_redirections_01.c		\
+		$(SRCDIR)/execution/minishell_execution.c			\
+		$(SRCDIR)/environment/minishell_environment.c			\
+		$(SRCDIR)/environment/minishell_environment_list.c		\
 		$(SRCDIR)/utils/minishell_var_name_len.c			\
 		$(SRCDIR)/utils/minishell_cleanup_and_exiting.c			\
 		$(SRCDIR)/utils/minishell_safe_fd_management.c			\

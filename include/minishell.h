@@ -22,6 +22,7 @@
 /* -------------------------------------------- minishell specific inclusions */
 
 # include <readline/readline.h>
+# include <readline/history.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -232,9 +233,9 @@ t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
 
-/* =============================== ENVIROMENT =============================== */
+/* =============================== ENVIRONMENT ============================== */
 
-/* --------------------------------------------------- minishell_enviroment.c */
+/* -------------------------------------------------- minishell_environment.c */
 
 void		env_list_from_envp(t_minishell *data, char **envp);
 char		**create_envp_arr_from_custom_env(t_minishell *data, \
@@ -277,7 +278,7 @@ void		handle_redirections(t_minishell *data);
 
 /* =============================== EXECUTION ================================ */
 
-/* ------------------------------------------------ minishell_execution.c */
+/* ---------------------------------------------------- minishell_execution.c */
 
 char		**create_args_arr(t_minishell *data, t_token *command);
 void		cmd_exec(t_minishell *data, char **command, char **envp);

@@ -15,6 +15,9 @@
 void	child_process(t_minishell *data)
 {
 	char	**argv;
+	char	**envp;
+	t_token	*command;
+	size_t	i;
 
 	if (data->pipe_index != 0)
 		redirect_stdin_and_close_fd(data, &data->pipe_fds[READ]);
@@ -22,24 +25,37 @@ void	child_process(t_minishell *data)
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
 	if (pipe_has_redirections(data))
 		handle_redirections(data);
-	if (data->pipe_index == 0)
+	i = 0;
+	command = data->token_list;
+	while (i < data->pipe_index)
 	{
-		char	*argv[] = {"ls", NULL};
-		execve("/usr/bin/ls", argv, (char **)data->initial_env);
-		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
+		while (command->type != PIPE)
+			command = command->next;
+		command = command->next;
+		++i;
 	}
-	else if (data->pipe_index == 1)
-	{
-		char	*argv[] = {"cat", NULL};
-		execve("/usr/bin/cat", argv, (char **)data->initial_env);
-		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-	}
-	else
-	{
-		char	*argv[] = {"wc", NULL};
-		execve("/usr/bin/wc", argv, (char **)data->initial_env);
-		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-	}
+	argv = create_args_arr(data, command);
+	envp = create_envp_arr_from_custom_env(data, data->custom_env);
+	cmd_exec(data, argv, envp);
+	ft_putendl_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
+	// if (data->pipe_index == 0)
+	// {
+	// 	char	*argv[] = {"ls", NULL};
+	// 	execve("/usr/bin/ls", argv, (char **)data->initial_env);
+	// 	ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
+	// }
+	// else if (data->pipe_index == 1)
+	// {
+	// 	char	*argv[] = {"cat", NULL};
+	// 	execve("/usr/bin/cat", argv, (char **)data->initial_env);
+	// 	ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
+	// }
+	// else
+	// {
+	// 	char	*argv[] = {"wc", NULL};
+	// 	execve("/usr/bin/wc", argv, (char **)data->initial_env);
+	// 	ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
+	// }
 }
 
 bool	pipe_has_redirections(t_minishell *data)

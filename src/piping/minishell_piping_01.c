@@ -34,7 +34,6 @@ void	piping(t_minishell *data)
 	pid_t	pid;
 	int		prev_pipe_read_fd;
 
-	data->pipe_count = 2;
 	data->pipe_index = 0;
 	pid = 1;
 	prev_pipe_read_fd = -1;
