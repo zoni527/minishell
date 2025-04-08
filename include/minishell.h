@@ -242,7 +242,7 @@ int			remove_env(char *key, t_var *envp);
 /* ---------------------------------------------- minishell_enviroment_list.c */
 
 int			get_env_list_size(t_var *begin);
-void		print_env_list(t_var *list);
+void		print_custom_env(t_var *list);
 t_var		*create_new_env_var(t_minishell *data, \
 						char *raw, char *key, char *value);
 
