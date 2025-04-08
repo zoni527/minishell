@@ -40,10 +40,14 @@
 
 /* -------------------------------------------------------------- error codes */
 
+/* Execution errors */
 # define ERROR_PERMISSION	1
 # define ERROR_BINPERM		126
 # define ERROR_NOTFOUND		127
 
+/* Function/system resource errors */
+// libft.h: ERROR_ALLOC		2
+// libft.h: ERROR_CAPACITY	3
 # define ERROR_PIPE			4
 # define ERROR_FORK			5
 # define ERROR_DUP2			6
