@@ -31,7 +31,7 @@ int	get_env_list_size(t_var *begin)
  *
  * @param list	list to print contents of
  */
-void	print_env_list(t_var *list)
+void	print_custom_env(t_var *list)
 {
 	t_var	*current;
 
