@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_test_word_lexing_01.c                    :+:      :+:    :+:   */
+/*   minishell_test_signals.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/12 10:49:35 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/12 15:16:14 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/28 16:30:12 by jvarila           #+#    #+#             */
+/*   Updated: 2025/03/28 16:30:13 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,26 +16,22 @@ void	loop(t_minishell *data)
 {
 	char	*line;
 
+	(void)data;
 	while (1)
 	{
-		line = readline("minishell lexing test: ");
-		if (ft_strncmp(line, "exit", 5) == 0)
+		line = readline("To exit, write exit and press enter: ");
+		if (!line)
+			;
+		else if (ft_strncmp(line, "activate sigquit", 17) == 0)
+			activate_sigquit(data);
+		else if (ft_strncmp(line, "deactivate sigquit", 19) == 0)
+			deactivate_sigquit(data);
+		else if (ft_strncmp(line, "exit", 5) == 0)
 		{
 			free(line);
 			break ;
 		}
-		if (has_unclosed_quotes(line))
-		{
-			ft_putendl("Input has unclosed quotes");
-			free(line);
-			continue ;
-		}
-		data->raw_input = line;
-		tokenization(data);
-		if (contains_syntax_error(data->token_list))
-			log_syntax_error(syntax_error_at_token(data->token_list));
-		print_debug(data);
-		data->token_list = NULL;
+		ft_printf("Signal value is: %d\n", g_signal);
 		free(line);
 	}
 }
@@ -44,13 +40,11 @@ int	main(void)
 {
 	static t_minishell	data;
 
-	data.custom_env = &(t_var){.raw = "ARG=|test|", \
-		.key = "ARG", .value = "|test|"};
-	data.custom_env->next = &(t_var){.raw = "DERP=|derp|", .key = "DERP", \
-		.value = "|derp|"};
+	set_terminal(&data);
 	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
+	set_default_signal_handling(&data);
 	loop(&data);
 	ft_free_memarena(data.arena);
 	return (0);

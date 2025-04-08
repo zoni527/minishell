@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/**
+ * Checks whether str contains unclosed quotes by attempting to skip to a
+ * closing quote when a quote is found. If a closing quote can't be found it
+ * means that the string contains an unclosed quote.
+ *
+ * @param str	String to be searched
+ */
 bool	has_unclosed_quotes(const char *str)
 {
 	if (!str)

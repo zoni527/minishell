@@ -14,8 +14,13 @@
 
 static void		remove_quotes_from_token(t_minishell *data, t_token *token);
 static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
-									char quote, size_t i);
+									size_t i);
 
+/**
+ * Loops through tokens and calls remove_quotes_from_token with all of them.
+ *
+ * @param data	Pointer to main data struct
+ */
 void	quote_removal(t_minishell *data)
 {
 	t_token	*token;
@@ -28,41 +33,57 @@ void	quote_removal(t_minishell *data)
 	}
 }
 
+/**
+ * Looks for quotes within token->value, calls remove_quotes_at_index when it
+ * finds '"' or '\''.
+ *
+ * @param data	Pointer to main data struct
+ */
 static void	remove_quotes_from_token(t_minishell *data, t_token *token)
 {
-	char		quote_flag;
 	size_t		i;
 
-	quote_flag = '\0';
 	i = 0;
 	while (token->value[i])
 	{
 		if (token->value[i] == '\'' || token->value[i] == '"')
-			quote_flag = token->value[i];
-		if (quote_flag != '\0')
-		{
-			i = remove_quotes_at_index(data, token, quote_flag, i);
-			quote_flag = '\0';
-		}
+			i = remove_quotes_at_index(data, token, i);
 		++i;
 	}
 }
 
+/**
+ * Saves the quote character at index i, looks for the closing quote further
+ * in the string. Calculates the length of the portion of the string that is
+ * within these quotes, then creates the resulting string with quotes removed
+ * out of three parts: the portion before the opening quote, the portion
+ * between quotes, and the portion after the closing quote. token->value is
+ * then set to the new string, and the index of the character that was next to
+ * the closing quote is returned, so that the rest of token->value can be
+ * traversed correctly.
+ *
+ * @param data	Pointer to main data struct
+ * @param token	Pointer to token from which quotes are being removed
+ * @param i		Index of opening quote, which will be removed as well as the
+ *				matching closing quote
+ */
 static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
-									char quote, size_t i)
+									size_t i)
 {
-	size_t	quote_index;
+	char	quote;
+	size_t	opening_quote_index;
 	char	*within_quotes;
 	size_t	within_quotes_len;
 	char	*result;
 
-	quote_index = i++;
+	quote = token->value[i];
+	opening_quote_index = i++;
 	while (token->value[i] != quote)
 		++i;
-	within_quotes_len = i - quote_index - 1;
+	within_quotes_len = i - opening_quote_index - 1;
 	within_quotes = ft_ma_substr(data->arena, token->value, \
-							quote_index + 1, within_quotes_len);
-	result = ft_ma_substr(data->arena, token->value, 0, quote_index);
+							opening_quote_index + 1, within_quotes_len);
+	result = ft_ma_substr(data->arena, token->value, 0, opening_quote_index);
 	result = ft_ma_strjoin(data->arena, result, within_quotes);
 	result = ft_ma_strjoin(data->arena, result, &token->value[i + 1]);
 	token->value = result;

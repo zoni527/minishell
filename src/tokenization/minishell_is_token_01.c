@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * Checks if token->type is an operator type.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_operator(t_token *token)
 {
 	if (!token)
@@ -19,6 +24,11 @@ bool	is_operator(t_token *token)
 	return (token->type >= PIPE && token->type <= APPEND);
 }
 
+/**
+ * Checks if token->type is PIPE.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_pipe(t_token *token)
 {
 	if (!token)
@@ -28,6 +38,11 @@ bool	is_pipe(t_token *token)
 	return (false);
 }
 
+/**
+ * Checks if token->type matches input or ouptut redirection or appending.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_redirection(t_token *token)
 {
 	if (!token)
@@ -38,6 +53,11 @@ bool	is_redirection(t_token *token)
 	return (false);
 }
 
+/**
+ * Checks if token->type is REDIRECT_INPUT.
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_input_redirection(t_token *token)
 {
 	if (!token)
@@ -47,6 +67,11 @@ bool	is_input_redirection(t_token *token)
 	return (false);
 }
 
+/**
+ * Checks if token->type is REDIRECT_OUTPUT
+ *
+ * @param token	Pointer to token which is checked
+ */
 bool	is_output_redirection(t_token *token)
 {
 	if (!token)

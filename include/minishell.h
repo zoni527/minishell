@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:09:56 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/27 10:33:24 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:54:56 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 # include "libft.h"
 
-/* ---------------------------------------------------------------- minishell */
+/* -------------------------------------------- minishell specific inclusions */
 
 # include <readline/readline.h>
 # include <stdio.h>
@@ -41,16 +41,49 @@
 /* -------------------------------------------------------------- error codes */
 
 # define ERROR_PERMISSION	1
-# define ERROR_ALLOC		2
-# define ERROR_UNCLOSED		3
-# define ERROR_CAPACITY		4
+# define ERROR_BINPERM		126
+# define ERROR_NOTFOUND		127
+
+# define ERROR_PIPE			4
+# define ERROR_FORK			5
+# define ERROR_DUP2			6
+# define ERROR_OPEN			7
+# define ERROR_CLOSE		8
+# define ERROR_EXEC			9
+# define ERROR_ACCESS		10
+# define ERROR_NOPATH		11
+# define ERROR_INPUT		12
+# define ERROR_UNLINK		13
+# define ERROR_UNCLOSED		14
+# define ERROR_TCGETATTR	15
+# define ERROR_TCSETATTR	16
+
+/* ---------------------------------------------------------- string literals */
+
+# define STR_MINISHELL			"minishell: "
 
 /* ----------------------------------------------------------- error messages */
 
-# define MSG_ERROR_ALLOC	"ERROR: couldn't alloc"
-# define MSG_ERROR_CAPACITY	"ERROR: requested memory chunk is too large"
+# define MSG_ERROR_ALLOC		"ERROR: couldn't alloc"
+# define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
+# define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
+# define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
+# define MSG_ERROR_CLOSE		"ERROR: failed to close file"
+# define MSG_ERROR_PIPE			"ERROR: failed to pipe"
+# define MSG_ERROR_FORK			"ERROR: failed to fork"
+# define MSG_ERROR_DUP2			"ERROR: failed to dup2"
+# define MSG_ERROR_EXECVE		"ERROR: made it past execve"
+# define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
 
 # define METACHARACTERS			"|<> \t\n"
+
+# ifndef READ
+#  define READ	0
+# endif
+
+# ifndef WRITE
+#  define WRITE	1
+# endif
 
 /* ================================ ENUMS =================================== */
 
@@ -79,10 +112,30 @@ typedef enum e_bltn_type
 	BLTN_EXIT,
 }	t_bltn_type;
 
-/* ============================== TYPEDEFS ================================== */
+/* ================================ TYPEDEFS ================================ */
 
 typedef struct s_token		t_token;
 typedef struct s_var		t_var;
+
+typedef struct s_minishell
+{
+	t_memarena			*arena;
+	t_var				*custom_env;
+	t_token				*token_list;
+	size_t				token_count;
+	size_t				pipe_count;
+	size_t				pipe_index;
+	int					last_rval;
+	int					pipe_fds[2];
+	int					final_fd_out;
+	int					final_ft_in;
+	struct sigaction	act_int;
+	struct sigaction	act_int_old;
+	struct sigaction	act_quit;
+	struct sigaction	act_quit_old;
+	const char			*raw_input;
+	const char			**initial_env;
+}	t_minishell;
 
 typedef struct s_var
 {
@@ -92,16 +145,6 @@ typedef struct s_var
 	t_var	*next;
 	t_var	*prev;
 }	t_var;
-
-typedef struct s_minishell
-{
-	t_memarena	*arena;
-	t_token		*token_list;
-	t_var		*custom_env;
-	size_t		token_count;
-	const char	*raw_input;
-	const char	*initial_env[];
-}	t_minishell;
 
 typedef struct s_token
 {
@@ -185,7 +228,44 @@ t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
 
-/* ================================ UTILS =================================== */
+/* ================================= PIPING ================================= */
+
+/* ---------------------------------------------------- minishell_piping_01.c */
+
+void		piping(t_minishell *data);
+
+/* ---------------------------------------------------- minishell_piping_02.c */
+
+void		child_process(t_minishell *data);
+bool		pipe_has_redirections(t_minishell *data);
+
+/* ================================= SIGNALS ================================ */
+
+/* ------------------------------------------------------ minishell_signals.c */
+
+void		set_default_signal_handling(t_minishell *data);
+void		activate_sigquit(t_minishell *data);
+void		deactivate_sigquit(t_minishell *data);
+
+/* ============================== REDIRECTIONS ============================== */
+
+/* ---------------------------------------------- minishell_redirections_01.c */
+
+void		handle_redirections(t_minishell *data);
+
+/* ================================= ERRORS ================================= */
+
+/* ------------------------------------------------ minishell_error_logging.c */
+
+void		ms_perror(const char *file, const char *msg);
+void		log_syntax_error(t_token *token);
+
+/* ------------------------------------------------- minishell_syntax_error.c */
+
+bool		contains_syntax_error(t_token *list);
+t_token		*syntax_error_at_token(t_token *list);
+
+/* ================================== UTILS ================================= */
 
 /* ------------------------------------------------- minishell_var_name_len.c */
 
@@ -196,5 +276,28 @@ size_t		var_name_len(const char *str);
 void		print_debug_tokens(t_token *list);
 void		print_debug(t_minishell *data);
 
+/* ------------------------------------------ minishell_cleanup_and_exiting.c */
+
+void		free_heap_memory(t_minishell *data);
+void		close_fds(t_minishell *data);
+void		clean(t_minishell *data);
+void		clean_exit(t_minishell *data, int exit_code);
+void		clean_error_exit(t_minishell *data, const char *msg, int exit_code);
+
+/* ------------------------------------------- minishell_safe_fd_management.c */
+
+void		try_to_close_fd(t_minishell *data, int *fd);
+void		try_to_dup2(t_minishell *data, int fd1, int fd2);
+void		redirect_stdout_and_close_fd(t_minishell *data, int *fd);
+void		redirect_stdin_and_close_fd(t_minishell *data, int *fd);
+
+/* ----------------------------------------- minishell_safe_pipe_management.c */
+
+void		try_to_pipe(t_minishell *data, int *new_pipe);
+
 /* -------------------------------------------------------------------------- */
+
+void		set_terminal(t_minishell *data);
+void		execution(t_minishell *data);
+
 #endif
