@@ -230,7 +230,14 @@ void		insert_token_left(t_token *current, t_token *new);
 
 /* ================================= PIPING ================================= */
 
-/* ------------------------------------------------------- minishell_piping.c */
+/* ---------------------------------------------------- minishell_piping_01.c */
+
+void		piping(t_minishell *data);
+
+/* ---------------------------------------------------- minishell_piping_02.c */
+
+void		child_process(t_minishell *data);
+bool		pipe_has_redirections(t_minishell *data);
 
 /* ================================= SIGNALS ================================ */
 
@@ -239,6 +246,12 @@ void		insert_token_left(t_token *current, t_token *new);
 void		set_default_signal_handling(t_minishell *data);
 void		activate_sigquit(t_minishell *data);
 void		deactivate_sigquit(t_minishell *data);
+
+/* ============================== REDIRECTIONS ============================== */
+
+/* ---------------------------------------------- minishell_redirections_01.c */
+
+void		handle_redirections(t_minishell *data);
 
 /* ================================= ERRORS ================================= */
 
@@ -285,7 +298,6 @@ void		try_to_pipe(t_minishell *data, int *new_pipe);
 /* -------------------------------------------------------------------------- */
 
 void		set_terminal(t_minishell *data);
-void		piping(t_minishell *data);
 void		execution(t_minishell *data);
 
 #endif

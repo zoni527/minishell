@@ -1,9 +1,0 @@
-*.o
-*.swo
-.makefile_copy
-*_copy
-*.out
-*.a
-*.so
-*.sh
-.bonus
