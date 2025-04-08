@@ -233,7 +233,7 @@ void		insert_token_left(t_token *current, t_token *new);
 /* --------------------------------------------------- minishell_enviroment.c */
 
 void		parse_env(t_minishell *data, char **envp);
-char		**create_envp_arr_from_custom_env(t_minishell *data , \
+char		**create_envp_arr_from_custom_env(t_minishell *data, \
 									t_var *envp_list);
 char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
 int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
