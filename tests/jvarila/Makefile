@@ -14,50 +14,69 @@ CC		:= cc
 CFLAGS		:= -Wall -Wextra -Werror -g
 DEBUGFLAGS	:= -g
 INC		:= -I ../../libft -I ../../include
+#------------------------------------------------------------------------------#
+LIBFT_DIR	:= ../../libft
+LIBFT		:= $(LIBFT_DIR)/libft.a
+#------------------------------------------------------------------------------#
+SRC_DIR	:=	../../src
+OBJ_DIR	:=	./obj
+#------------------------------------------------------------------------------#
+SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
+	$(SRC_DIR)/tokenization/minishell_variable_expansion.c		\
+	$(SRC_DIR)/tokenization/minishell_word_splitting.c		\
+	$(SRC_DIR)/tokenization/minishell_quote_removal.c		\
+	$(SRC_DIR)/tokenization/minishell_token_classification.c	\
+	$(SRC_DIR)/tokenization/minishell_is_token_01.c			\
+	$(SRC_DIR)/tokenization/minishell_is_token_02.c			\
+	$(SRC_DIR)/tokenization/minishell_assign_token_indices.c	\
+	$(SRC_DIR)/tokenization/minishell_token_getters.c		\
+	$(SRC_DIR)/tokenization/minishell_token_analysis.c		\
+	$(SRC_DIR)/tokenization/minishell_tokenization_utils_01.c	\
+	$(SRC_DIR)/tokenization/minishell_quote_validation.c		\
+	$(SRC_DIR)/error_handling/minishell_error_logging.c		\
+	$(SRC_DIR)/error_handling/minishell_syntax_error.c		\
+	$(SRC_DIR)/terminal_behaviour/minishell_terminal_behaviour.c	\
+	$(SRC_DIR)/signals/minishell_signals.c				\
+	$(SRC_DIR)/piping/minishell_piping_01.c				\
+	$(SRC_DIR)/piping/minishell_piping_02.c				\
+	$(SRC_DIR)/redirections/minishell_redirections_01.c		\
+	$(SRC_DIR)/execution/minishell_execution.c			\
+	$(SRC_DIR)/environment/minishell_environment.c			\
+	$(SRC_DIR)/environment/minishell_environment_list.c		\
+	$(SRC_DIR)/redirections/minishell_heredoc.c			\
+	$(SRC_DIR)/utils/minishell_var_name_len.c			\
+	$(SRC_DIR)/utils/minishell_cleanup_and_exiting.c		\
+	$(SRC_DIR)/utils/minishell_safe_fd_management.c			\
+	$(SRC_DIR)/utils/minishell_safe_pipe_management.c		\
+	$(SRC_DIR)/utils/minishell_print_debug.c
+#------------------------------------------------------------------------------#
+TESTS :=	minishell_test_word_lexing_01.out	\
+		minishell_test_quotes_01.out		\
+		minishell_test_signals.out		\
+		minishell_test_pipe.out			\
+		minishell_test_heredoc.out
+#------------------------------------------------------------------------------#
+OBJ :=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+#------------------------------------------------------------------------------#
+all: $(TESTS)
 
-LIBFTDIR	:= ../../libft
-LIBFT		:= $(LIBFTDIR)/libft.a
+$(TESTS): %.out: %.c $(LIBFT) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(INC) $< $(LIBFT) -lreadline -o $@ 
 
-SRCDIR	:=	../../src
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< $(INC) -o $@
+#------------------------------------------------------------------------------#
+clean:
+	rm -rf $(OBJ_DIR)
 
-SRC	:=	$(SRCDIR)/tokenization/minishell_tokenization.c			\
-		$(SRCDIR)/tokenization/minishell_variable_expansion.c		\
-		$(SRCDIR)/tokenization/minishell_word_splitting.c		\
-		$(SRCDIR)/tokenization/minishell_quote_removal.c		\
-		$(SRCDIR)/tokenization/minishell_token_classification.c		\
-		$(SRCDIR)/tokenization/minishell_is_token_01.c			\
-		$(SRCDIR)/tokenization/minishell_is_token_02.c			\
-		$(SRCDIR)/tokenization/minishell_assign_token_indices.c		\
-		$(SRCDIR)/tokenization/minishell_token_getters.c		\
-		$(SRCDIR)/tokenization/minishell_token_analysis.c		\
-		$(SRCDIR)/tokenization/minishell_tokenization_utils_01.c	\
-		$(SRCDIR)/tokenization/minishell_quote_validation.c		\
-		$(SRCDIR)/error_handling/minishell_error_logging.c		\
-		$(SRCDIR)/error_handling/minishell_syntax_error.c		\
-		$(SRCDIR)/terminal_behaviour/minishell_terminal_behaviour.c	\
-		$(SRCDIR)/signals/minishell_signals.c				\
-		$(SRCDIR)/piping/minishell_piping_01.c				\
-		$(SRCDIR)/piping/minishell_piping_02.c				\
-		$(SRCDIR)/redirections/minishell_redirections_01.c		\
-		$(SRCDIR)/execution/minishell_execution.c			\
-		$(SRCDIR)/environment/minishell_environment.c			\
-		$(SRCDIR)/environment/minishell_environment_list.c		\
-		$(SRCDIR)/utils/minishell_var_name_len.c			\
-		$(SRCDIR)/utils/minishell_cleanup_and_exiting.c			\
-		$(SRCDIR)/utils/minishell_safe_fd_management.c			\
-		$(SRCDIR)/utils/minishell_safe_pipe_management.c		\
-		$(SRCDIR)/utils/minishell_print_debug.c
+fclean: clean
+	rm -f $(TESTS)
 
-all: minishell_test_word_lexing_01.out minishell_test_quotes_01.out minishell_test_signals.out minishell_test_pipe.out
-
-minishell_test_quotes_01.out: minishell_test_quotes_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@ 
-
-minishell_test_word_lexing_01.out: minishell_test_word_lexing_01.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@
-
-minishell_test_signals.out: minishell_test_signals.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@
-
-minishell_test_pipe.out: minishell_test_pipe.c $(LIBFT) $(SRC)
-	$(CC) $(CFLAGS) $(INC) $< $(SRC) $(LIBFT) -lreadline -o $@
+re: fclean all
+#------------------------------------------------------------------------------#
+debug: CFLAGS += $(DEBUGFLAGS)
+debug: re
+#------------------------------------------------------------------------------#
+.PHONY: all clean fclean re debug libftdebug
+#------------------------------------------------------------------------------#

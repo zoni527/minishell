@@ -276,6 +276,11 @@ void		deactivate_sigquit(t_minishell *data);
 
 void		handle_redirections(t_minishell *data);
 
+/* ------------------------------------------------------ minishell_heredoc.c */
+
+void		heredoc(t_minishell *data);
+bool		contains_heredoc(t_token *list);
+
 /* =============================== EXECUTION ================================ */
 
 /* ---------------------------------------------------- minishell_execution.c */

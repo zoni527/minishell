@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 09:51:37 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/08 09:58:35 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/09 11:35:04 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,6 @@ void	child_process(t_minishell *data)
 	envp = create_envp_arr_from_custom_env(data, data->custom_env);
 	cmd_exec(data, argv, envp);
 	ft_putendl_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-	// if (data->pipe_index == 0)
-	// {
-	// 	char	*argv[] = {"ls", NULL};
-	// 	execve("/usr/bin/ls", argv, (char **)data->initial_env);
-	// 	ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-	// }
-	// else if (data->pipe_index == 1)
-	// {
-	// 	char	*argv[] = {"cat", NULL};
-	// 	execve("/usr/bin/cat", argv, (char **)data->initial_env);
-	// 	ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-	// }
-	// else
-	// {
-	// 	char	*argv[] = {"wc", NULL};
-	// 	execve("/usr/bin/wc", argv, (char **)data->initial_env);
-	// 	ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-	// }
 }
 
 bool	pipe_has_redirections(t_minishell *data)
