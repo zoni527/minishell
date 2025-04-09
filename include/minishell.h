@@ -40,10 +40,13 @@
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
 
+# define MAX_HEREDOCS	16
+
 /* -------------------------------------------------------------- error codes */
 
 /* Execution errors */
 # define ERROR_PERMISSION	1
+# define ERROR_NOSUCH		1
 # define ERROR_BINPERM		126
 # define ERROR_NOTFOUND		127
 
@@ -78,12 +81,16 @@
 # define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
 # define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
 # define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
-# define MSG_ERROR_CLOSE		"ERROR: failed to close file"
+# define MSG_ERROR_OPEN			"ERROR: failed to open"
+# define MSG_ERROR_CLOSE		"ERROR: failed to close"
 # define MSG_ERROR_PIPE			"ERROR: failed to pipe"
 # define MSG_ERROR_FORK			"ERROR: failed to fork"
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
 # define MSG_ERROR_EXECVE		"ERROR: made it past execve"
 # define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
+# define MSG_ERROR_NOSUCH		"No such file or directory"
+# define MSG_ERROR_TOOMANYARGS	"too many arguments"
+# define MSG_ERROR_PERMISSION	"Permission denied"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -139,6 +146,7 @@ typedef struct s_minishell
 	int					pipe_fds[2];
 	int					final_fd_out;
 	int					final_ft_in;
+	int					error;
 	struct sigaction	act_int;
 	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
@@ -174,86 +182,87 @@ extern volatile int\
 
 /* --------------------------------------------- minishell_quote_validation.c */
 
-bool		has_unclosed_quotes(const char *str);
+bool			has_unclosed_quotes(const char *str);
 
 /* ============================== TOKENIZATION ============================== */
 
 /* ------------------------------------------------- minishell_tokenization.c */
 
-void		tokenization(t_minishell *data);
+void			tokenization(t_minishell *data);
 
 /* ------------------------------------------- minishell_variable_expansion.c */
 
-void		variable_expansion(t_minishell *data);
+void			variable_expansion(t_minishell *data);
 
 /* ----------------------------------------------- minishell_word_splitting.c */
 
-void		word_splitting(t_minishell *data);
+void			word_splitting(t_minishell *data);
 
 /* ------------------------------------------------ minishell_quote_removal.c */
 
-void		quote_removal(t_minishell *data);
+void			quote_removal(t_minishell *data);
 
 /* ------------------------ Classification and ids -------------------------- */
 
 /* ----------------------------------------- minishell_token_classification.c */
 
-void		token_classification(t_minishell *data);
+void			token_classification(t_minishell *data);
 
 /* -------------------------------------------------- minishell_is_token_01.c */
 
-bool		is_operator(t_token *token);
-bool		is_pipe(t_token *token);
-bool		is_redirection(t_token *token);
-bool		is_input_redirection(t_token *token);
-bool		is_output_redirection(t_token *token);
+bool			is_operator(t_token *token);
+bool			is_pipe(t_token *token);
+bool			is_redirection(t_token *token);
+bool			is_input_redirection(t_token *token);
+bool			is_output_redirection(t_token *token);
 
 /* -------------------------------------------------- minishell_is_token_02.c */
 
-bool		is_append(t_token *token);
-bool		is_heredoc(t_token *token);
-bool		is_builtin_or_command(t_token *token);
-bool		is_builtin(t_token *token);
+bool			is_append(t_token *token);
+bool			is_heredoc(t_token *token);
+bool			is_builtin_or_command(t_token *token);
+bool			is_builtin(t_token *token);
 
 /* ----------------------------------------- minishell_assign_token_indices.c */
 
-void		assign_token_indices(t_minishell *data);
+void			assign_token_indices(t_minishell *data);
 
 /* ------------------------------------------------ minishell_token_getters.c */
 
-t_bltn_type	get_builtin_type(t_token *token);
-const char	*get_token_type_str(t_token *token);
-t_token		*get_token_by_index(t_token *list, int index);
+t_bltn_type		get_builtin_type(t_token *token);
+const char		*get_token_type_str(t_token *token);
+t_token			*get_token_by_index(t_token *list, int index);
 
 /* ----------------------------------------------- minishell_token_analysis.c */
 
-size_t		count_tokens(t_token *list);
-size_t		count_pipes(t_token *list);
+size_t			count_tokens(t_token *list);
+size_t			count_pipes(t_token *list);
 
 /* ---------------------------------------- minishell_tokenization_utils_01.c */
 
-void		toggle_quote_flag(char *quote_flag, char c);
-void		print_tokens(t_minishell *data);
-t_token		*new_token_node(t_memarena *arena, const char *str);
-void		append_token(t_token **list, t_token *token);
-void		insert_token_left(t_token *current, t_token *new);
+void			toggle_quote_flag(char *quote_flag, char c);
+void			print_tokens(t_minishell *data);
+t_token			*new_token_node(t_memarena *arena, const char *str);
+void			append_token(t_token **list, t_token *token);
+void			insert_token_left(t_token *current, t_token *new);
 
 /* =============================== ENVIRONMENT ============================== */
 
 /* -------------------------------------------------- minishell_environment.c */
 
-void		env_list_from_envp(t_minishell *data, char **envp);
-char		**create_envp_arr_from_custom_env(t_minishell *data, \
-									t_var *envp_list);
-char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
-int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
-int			remove_env(char *key, t_var *envp);
+void			env_list_from_envp(t_minishell *data, char **envp);
+char			**create_envp_arr_from_custom_env(t_minishell *data, \
+										t_var *envp_list);
+char			*ms_getenv(t_minishell *data, const char *name, t_var *envp);
+int				ms_setenv(t_minishell *data, char *key, char *value, \
+				t_var *envp);
+int				remove_env(char *key, t_var *envp);
 
 /* --------------------------------------------- minishell_environment_list.c */
 
-int			get_env_list_size(t_var *begin);
-void		print_env_list(t_var *list);
-t_var		*create_new_env_var(t_minishell *data, \
+int				get_env_list_size(t_var *begin);
+void			print_custom_env(t_var *list);
+t_var			*create_new_env_var(t_minishell *data, \
 						char *raw, char *key, char *value);
 
 /* ================================ BUILTINS ================================ */
@@ -299,84 +308,92 @@ int		builtin_exit(t_minishell *data, t_token *builtin_token);
 
 /* ---------------------------------------------------- minishell_piping_01.c */
 
-void		piping(t_minishell *data);
+void			piping(t_minishell *data);
 
 /* ---------------------------------------------------- minishell_piping_02.c */
 
-void		child_process(t_minishell *data);
-bool		pipe_has_redirections(t_minishell *data);
+void			child_process(t_minishell *data);
+bool			pipe_has_redirections(t_minishell *data);
 
 /* ================================= SIGNALS ================================ */
 
 /* ------------------------------------------------------ minishell_signals.c */
 
-void		set_default_signal_handling(t_minishell *data);
-void		activate_sigquit(t_minishell *data);
-void		deactivate_sigquit(t_minishell *data);
+void			set_default_signal_handling(t_minishell *data);
+void			activate_sigquit(t_minishell *data);
+void			deactivate_sigquit(t_minishell *data);
 
 /* ============================== REDIRECTIONS ============================== */
 
 /* ---------------------------------------------- minishell_redirections_01.c */
 
-void		handle_redirections(t_minishell *data);
+void			handle_redirections(t_minishell *data);
+
+/* ----------------------------------------------- minishell_redirect_input.c */
+
+void			redirect_input(t_minishell *data, const t_token *token);
+const t_token	*skip_to_input_redirection(const t_token *list);
+int				validate_infile(t_minishell *data, const char *file_name);
+bool			contains_input_redirection(const t_token *list);
 
 /* ------------------------------------------------------ minishell_heredoc.c */
 
-void		heredoc(t_minishell *data);
-bool		contains_heredoc(t_token *list);
+void			heredoc(t_minishell *data);
+bool			contains_heredoc(t_token *list);
 
 /* =============================== EXECUTION ================================ */
 
 /* ---------------------------------------------------- minishell_execution.c */
 
-char		**create_args_arr(t_minishell *data, t_token *command);
-void		cmd_exec(t_minishell *data, char **command, char **envp);
+char			**create_args_arr(t_minishell *data, t_token *command);
+void			cmd_exec(t_minishell *data, char **command, char **envp);
 
 /* ================================= ERRORS ================================= */
 
 /* ------------------------------------------------ minishell_error_logging.c */
 
-void		ms_perror(const char *file, const char *msg);
-void		log_syntax_error(t_token *token);
+void			ms_perror(const char *file, const char *msg);
+void			log_syntax_error(t_token *token);
 
 /* ------------------------------------------------- minishell_syntax_error.c */
 
-bool		contains_syntax_error(t_token *list);
-t_token		*syntax_error_at_token(t_token *list);
+bool			contains_syntax_error(t_token *list);
+t_token			*syntax_error_at_token(t_token *list);
 
 /* ================================== UTILS ================================= */
 
 /* ------------------------------------------------- minishell_var_name_len.c */
 
-size_t		var_name_len(const char *str);
+size_t			var_name_len(const char *str);
 
 /* -------------------------------------------------- minishell_print_debug.c */
 
-void		print_debug_tokens(t_token *list);
-void		print_debug(t_minishell *data);
+void			print_debug_tokens(t_token *list);
+void			print_debug(t_minishell *data);
 
 /* ------------------------------------------ minishell_cleanup_and_exiting.c */
 
-void		free_heap_memory(t_minishell *data);
-void		close_fds(t_minishell *data);
-void		clean(t_minishell *data);
-void		clean_exit(t_minishell *data, int exit_code);
-void		clean_error_exit(t_minishell *data, const char *msg, int exit_code);
+void			free_heap_memory(t_minishell *data);
+void			close_fds(t_minishell *data);
+void			clean(t_minishell *data);
+void			clean_exit(t_minishell *data, int exit_code);
+void			clean_error_exit(t_minishell *data, const char *msg, \
+						int exit_code);
 
 /* ------------------------------------------- minishell_safe_fd_management.c */
 
-void		try_to_close_fd(t_minishell *data, int *fd);
-void		try_to_dup2(t_minishell *data, int fd1, int fd2);
-void		redirect_stdout_and_close_fd(t_minishell *data, int *fd);
-void		redirect_stdin_and_close_fd(t_minishell *data, int *fd);
+void			try_to_close_fd(t_minishell *data, int *fd);
+void			try_to_dup2(t_minishell *data, int fd1, int fd2);
+void			redirect_stdout_and_close_fd(t_minishell *data, int *fd);
+void			redirect_stdin_and_close_fd(t_minishell *data, int *fd);
 
 /* ----------------------------------------- minishell_safe_pipe_management.c */
 
-void		try_to_pipe(t_minishell *data, int *new_pipe);
+void			try_to_pipe(t_minishell *data, int *new_pipe);
 
 /* -------------------------------------------------------------------------- */
 
-void		set_terminal(t_minishell *data);
-void		execution(t_minishell *data);
+void			set_terminal(t_minishell *data);
+void			execution(t_minishell *data);
 
 #endif
