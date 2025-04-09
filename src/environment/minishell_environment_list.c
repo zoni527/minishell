@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_enviroment_list.c                        :+:      :+:    :+:   */
+/*   minishell_environment_list.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:58:45 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/08 12:03:10 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/04/08 16:50:38 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	print_custom_env(t_var *list)
  * @param key	Key input
  * @param value	Value input
  */
-t_var	*create_new_env_var(t_minishell *data,\
+t_var	*create_new_env_var(t_minishell *data, \
 						char *raw, char *key, char *value)
 {
 	t_var	*new_node;
