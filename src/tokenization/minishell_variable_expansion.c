@@ -149,7 +149,7 @@ static bool	contains_unexpanded_variable(t_token *token)
 }
 
 /**
- * Looks through custom_env in data for a variable whose key matches the
+ * Looks through minishell_env in data for a variable whose key matches the
  * argument str.
  *
  * @param data	Pointer to main data struct
