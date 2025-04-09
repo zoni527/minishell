@@ -164,7 +164,7 @@ t_var	*find_var(t_minishell *data, const char *str)
 	size_t	len;
 
 	len = var_name_len(str);
-	var = data->custom_env;
+	var = data->minishell_env;
 	while (var)
 	{
 		if (len == ft_strlen(var->key) \

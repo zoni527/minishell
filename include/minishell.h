@@ -125,7 +125,7 @@ typedef struct s_var		t_var;
 typedef struct s_minishell
 {
 	t_memarena			*arena;
-	t_var				*custom_env;
+	t_var				*minishell_env;
 	t_token				*token_list;
 	size_t				token_count;
 	size_t				pipe_count;
@@ -250,6 +250,15 @@ int			get_env_list_size(t_var *begin);
 void		print_custom_env(t_var *list);
 t_var		*create_new_env_var(t_minishell *data, \
 						char *raw, char *key, char *value);
+
+/* ================================ BUILTINS ================================ */
+
+/* --------------------------------------------------- minishell_builtin_cd.c */
+
+
+int			get_current_dir(void);
+int			change_dir(char *str);
+void		builtin_cd(t_minishell *data, char *input, t_var *envp);
 
 /* ================================= PIPING ================================= */
 

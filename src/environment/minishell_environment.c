@@ -6,7 +6,7 @@
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:52:15 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/08 16:50:21 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/09 12:12:14 by rhvidste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	env_list_from_envp(t_minishell *data, char **envp)
 		if (current == NULL)
 		{
 			current = create_new_env_var(data, vals[0], vals[1], vals[2]);
-			data->custom_env = current;
+			data->minishell_env = current;
 			continue ;
 		}
 		current->next = create_new_env_var(data, vals[0], vals[1], vals[2]);
