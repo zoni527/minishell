@@ -149,7 +149,7 @@ static bool	contains_unexpanded_variable(t_token *token)
 }
 
 /**
- * Looks through custom_env in data for a variable whose key matches the
+ * Looks through minishell_env in data for a variable whose key matches the
  * argument str.
  *
  * @param data	Pointer to main data struct
@@ -164,7 +164,7 @@ t_var	*find_var(t_minishell *data, const char *str)
 	size_t	len;
 
 	len = var_name_len(str);
-	var = data->custom_env;
+	var = data->minishell_env;
 	while (var)
 	{
 		if (len == ft_strlen(var->key) \

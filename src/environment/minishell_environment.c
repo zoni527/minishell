@@ -38,7 +38,7 @@ void	env_list_from_envp(t_minishell *data, char **envp)
 		if (current == NULL)
 		{
 			current = create_new_env_var(data, vals[0], vals[1], vals[2]);
-			data->custom_env = current;
+			data->minishell_env = current;
 			continue ;
 		}
 		current->next = create_new_env_var(data, vals[0], vals[1], vals[2]);
