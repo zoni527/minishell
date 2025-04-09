@@ -40,6 +40,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/piping/minishell_piping_01.c				\
 	$(SRC_DIR)/piping/minishell_piping_02.c				\
 	$(SRC_DIR)/redirections/minishell_redirections_01.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_input.c		\
 	$(SRC_DIR)/execution/minishell_execution.c			\
 	$(SRC_DIR)/environment/minishell_environment.c			\
 	$(SRC_DIR)/environment/minishell_environment_list.c		\
@@ -54,6 +55,7 @@ TESTS :=	minishell_test_word_lexing_01.out	\
 		minishell_test_quotes_01.out		\
 		minishell_test_signals.out		\
 		minishell_test_pipe.out			\
+		minishell_test_redirect_input.out	\
 		minishell_test_heredoc.out
 #------------------------------------------------------------------------------#
 OBJ :=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
