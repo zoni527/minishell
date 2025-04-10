@@ -1,25 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_var_name_len.c                           :+:      :+:    :+:   */
+/*   minishell_is_token_03.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 17:35:22 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/10 11:24:40 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/10 11:00:26 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/10 11:17:00 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	var_name_len(const char *str)
+/**
+ * Checks if token->type is FILE_NAME.
+ *
+ * @param token	Pointer to token which is checked
+ */
+bool	is_file_name(const t_token *token)
 {
-	size_t	len;
+	if (token && token->type == FILE_NAME)
+		return (true);
+	return (false);
+}
 
-	if (!str)
-		return (0);
-	len = 0;
-	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
-		++len;
-	return (len);
+/**
+ * Checks if token->type is ARGUMENT.
+ *
+ * @param token	Pointer to token which is checked
+ */
+bool	is_argument(const t_token *token)
+{
+	if (token && token->type == ARGUMENT)
+		return (true);
+	return (false);
 }

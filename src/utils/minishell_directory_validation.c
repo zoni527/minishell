@@ -1,25 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_var_name_len.c                           :+:      :+:    :+:   */
+/*   minishell_directory_validation.c                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 17:35:22 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/10 11:24:40 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/10 12:07:40 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/10 15:49:07 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	var_name_len(const char *str)
+bool	is_a_directory(t_minishell *data, const char *str)
 {
-	size_t	len;
+	int	fd;
+
+	fd = open(str, O_DIRECTORY);
+	if (fd != -1)
+	{
+		try_to_close_fd(data, &fd);
+		return (true);
+	}
+	return (false);
+}
+
+bool	pretends_to_be_a_directory(t_minishell *data, const char *str)
+{
+	int	fd;
 
 	if (!str)
-		return (0);
-	len = 0;
-	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
-		++len;
-	return (len);
+		return (false);
+	if (str[ft_strlen(str) - 1] != '/')
+		return (false);
+	if (is_a_directory(data, str))
+		return (false);
+	return (true);
 }

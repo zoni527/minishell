@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:44:04 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/26 18:50:13 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:58:26 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@
  *
  * @param token	Pointer to token which is checked
  */
-bool	is_append(t_token *token)
+bool	is_append(const t_token *token)
 {
-	if (!token)
-		return (false);
-	if (token->type == APPEND)
+	if (token && token->type == APPEND)
 		return (true);
 	return (false);
 }
@@ -31,11 +29,9 @@ bool	is_append(t_token *token)
  *
  * @param token	Pointer to token which is checked
  */
-bool	is_heredoc(t_token *token)
+bool	is_heredoc(const t_token *token)
 {
-	if (!token)
-		return (false);
-	if (token->type == HEREDOC)
+	if (token && token->type == HEREDOC)
 		return (true);
 	return (false);
 }
@@ -46,7 +42,7 @@ bool	is_heredoc(t_token *token)
  *
  * @param token	Pointer to token which is checked
  */
-bool	is_builtin_or_command(t_token *token)
+bool	is_builtin_or_command(const t_token *token)
 {
 	if (!token)
 		return (false);
@@ -55,7 +51,7 @@ bool	is_builtin_or_command(t_token *token)
 	token = token->prev;
 	if (!token || is_pipe(token))
 		return (true);
-	while (token && token->type == FILE_NAME)
+	while (token && is_file_name(token))
 		token = token->prev->prev;
 	if (!token || is_pipe(token))
 		return (true);
@@ -68,8 +64,10 @@ bool	is_builtin_or_command(t_token *token)
  * assigned type.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @see is_builtin_or_command
  */
-bool	is_builtin(t_token *token)
+bool	is_builtin(const t_token *token)
 {
 	if (!token)
 		return (false);
@@ -83,6 +81,27 @@ bool	is_builtin(t_token *token)
 		|| ft_strncmp(token->value, "unset", ft_strlen("unset") + 1) == 0 \
 		|| ft_strncmp(token->value, "env", ft_strlen("env") + 1) == 0 \
 		|| ft_strncmp(token->value, "exit", ft_strlen("exit") + 1) == 0))
+		return (true);
+	return (false);
+}
+
+/**
+ * Checks if token is a command based on its already assigned type or if
+ * it is at the right position in relation to other tokens to be a command,
+ * and that it isn't a builtin.
+ *
+ * @param token	Pointer to token which is checked
+ *
+ * @see is_builtin_or_command
+ * @see is_builtin
+ */
+bool	is_command(const t_token *token)
+{
+	if (!token)
+		return (false);
+	if (token->type == COMMAND)
+		return (true);
+	if (is_builtin_or_command(token) && !is_builtin(token))
 		return (true);
 	return (false);
 }

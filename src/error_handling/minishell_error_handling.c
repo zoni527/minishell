@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_var_name_len.c                           :+:      :+:    :+:   */
+/*   minishell_error_handling.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/24 17:35:22 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/10 11:24:40 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/10 15:52:11 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/10 15:55:24 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	var_name_len(const char *str)
+void	handle_error(t_minishell *data, const char *str, int error)
 {
-	size_t	len;
-
-	if (!str)
-		return (0);
-	len = 0;
-	while (str[len] && (ft_isalnum(str[len]) || str[len] == '_'))
-		++len;
-	return (len);
+	if (errno == ENOMEM)
+		clean_error_exit(data, MSG_ERROR_ENOMEM, ERROR_ENOMEM);
+	close_fds(data);
+	data->error = error;
+	ms_perror(data, str);
 }
