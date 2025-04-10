@@ -6,11 +6,11 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 17:35:22 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/24 17:35:25 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/10 11:24:40 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
 size_t	var_name_len(const char *str)
 {
