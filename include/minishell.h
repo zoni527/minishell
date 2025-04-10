@@ -31,6 +31,7 @@
 # include <dirent.h>
 # include <string.h>
 # include <sys/ioctl.h>
+# include <errno.h>
 # include <term.h>
 
 /* =============================== MACROS =================================== */
@@ -47,6 +48,7 @@
 /* Execution errors */
 # define ERROR_PERMISSION	1
 # define ERROR_NOSUCH		1
+# define ERROR_ISADIRECTORY	1
 # define ERROR_BINPERM		126
 # define ERROR_NOTFOUND		127
 
@@ -66,6 +68,7 @@
 # define ERROR_UNCLOSED		14
 # define ERROR_TCGETATTR	15
 # define ERROR_TCSETATTR	16
+# define ERROR_ENOMEM		17
 
 /* Builtin errors */
 # define ERROR_BLTN_NO_EXIT	1
@@ -87,10 +90,12 @@
 # define MSG_ERROR_FORK			"ERROR: failed to fork"
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
 # define MSG_ERROR_EXECVE		"ERROR: made it past execve"
+# define MSG_ERROR_ENOMEM		"ERROR: system is out of memory"
 # define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
 # define MSG_ERROR_NOSUCH		"No such file or directory"
 # define MSG_ERROR_TOOMANYARGS	"too many arguments"
 # define MSG_ERROR_PERMISSION	"Permission denied"
+# define MSG_ERROR_ISADIRECTORY	"Is a directory"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -210,18 +215,24 @@ void			token_classification(t_minishell *data);
 
 /* -------------------------------------------------- minishell_is_token_01.c */
 
-bool			is_operator(t_token *token);
-bool			is_pipe(t_token *token);
-bool			is_redirection(t_token *token);
-bool			is_input_redirection(t_token *token);
-bool			is_output_redirection(t_token *token);
+bool			is_operator(const t_token *token);
+bool			is_pipe(const t_token *token);
+bool			is_redirection(const t_token *token);
+bool			is_input_redirection(const t_token *token);
+bool			is_output_redirection(const t_token *token);
 
 /* -------------------------------------------------- minishell_is_token_02.c */
 
-bool			is_append(t_token *token);
-bool			is_heredoc(t_token *token);
-bool			is_builtin_or_command(t_token *token);
-bool			is_builtin(t_token *token);
+bool			is_append(const t_token *token);
+bool			is_heredoc(const t_token *token);
+bool			is_builtin_or_command(const t_token *token);
+bool			is_builtin(const t_token *token);
+bool			is_command(const t_token *token);
+
+/* -------------------------------------------------- minishell_is_token_03.c */
+
+bool			is_file_name(const t_token *token);
+bool			is_argument(const t_token *token);
 
 /* ----------------------------------------- minishell_assign_token_indices.c */
 
@@ -327,14 +338,21 @@ void			deactivate_sigquit(t_minishell *data);
 
 /* ---------------------------------------------- minishell_redirections_01.c */
 
-void			handle_redirections(t_minishell *data);
+int				handle_redirections(t_minishell *data);
 
 /* ----------------------------------------------- minishell_redirect_input.c */
 
-void			redirect_input(t_minishell *data, const t_token *token);
+int				redirect_input(t_minishell *data, const t_token *token);
 const t_token	*skip_to_input_redirection(const t_token *list);
 int				validate_infile(t_minishell *data, const char *file_name);
 bool			contains_input_redirection(const t_token *list);
+
+/* ---------------------------------------------- minishell_redirect_output.c */
+
+int				redirect_output(t_minishell *data, const t_token *token);
+const t_token	*skip_to_output_redirection(const t_token *list);
+int				validate_outfile(t_minishell *data, const char *file_name);
+bool			contains_output_redirection(const t_token *list);
 
 /* ------------------------------------------------------ minishell_heredoc.c */
 
@@ -350,9 +368,13 @@ void			cmd_exec(t_minishell *data, char **command, char **envp);
 
 /* ================================= ERRORS ================================= */
 
+/* ----------------------------------------------- minishell_error_handling.c */
+
+void			handle_error(t_minishell *data, const char *str, int error);
+
 /* ------------------------------------------------ minishell_error_logging.c */
 
-void			ms_perror(const char *file, const char *msg);
+void			ms_perror(t_minishell *data, const char *file);
 void			log_syntax_error(t_token *token);
 
 /* ------------------------------------------------- minishell_syntax_error.c */
@@ -379,6 +401,11 @@ void			clean(t_minishell *data);
 void			clean_exit(t_minishell *data, int exit_code);
 void			clean_error_exit(t_minishell *data, const char *msg, \
 						int exit_code);
+
+/* ------------------------------------------ minishell_cleanup_and_exiting.c */
+
+bool			is_a_directory(t_minishell *data, const char *str);
+bool			pretends_to_be_a_directory(t_minishell *data, const char *str);
 
 /* ------------------------------------------- minishell_safe_fd_management.c */
 

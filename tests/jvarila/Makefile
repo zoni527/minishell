@@ -56,7 +56,8 @@ TESTS :=	minishell_test_word_lexing_01.out	\
 		minishell_test_signals.out		\
 		minishell_test_pipe.out			\
 		minishell_test_redirect_input.out	\
-		minishell_test_heredoc.out
+		minishell_test_heredoc.out		\
+		minishell_perror_testing.out		\
 #------------------------------------------------------------------------------#
 OBJ :=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 #------------------------------------------------------------------------------#
