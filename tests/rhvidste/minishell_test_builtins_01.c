@@ -81,10 +81,8 @@ void	loop(t_minishell *data)
 		}
 		tokenization(data);
 //		print_env(data);
-//		print_tokens_type(data);
+		print_tokens_type(data);
 		//implament built in detection.
-//		builtin_cd(data, data->raw_input, data->minishell_env);
-//		piping(data);
 		builtin_handler(data);		
 //		piping(data);
 		printf("last exit value is %d\n", data->last_rval);
