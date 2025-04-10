@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_valid_hex_string.c                              :+:      :+:    :+:   */
+/*   minishell_is_token_03.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 11:20:25 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/20 12:20:47 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/10 11:00:26 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/10 11:17:00 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-bool	ft_valid_hex_string(const char *str)
+/**
+ * Checks if token->type is FILE_NAME.
+ *
+ * @param token	Pointer to token which is checked
+ */
+bool	is_file_name(const t_token *token)
 {
-	int	i;
+	if (token && token->type == FILE_NAME)
+		return (true);
+	return (false);
+}
 
-	if (!str || !*str)
-		return (false);
-	str = ft_skip_whitespace(str);
-	if (*str != '0' || !(*(str + 1) == 'x' || *(str + 1) == 'X')
-		|| *(str + 2) == '\0')
-		return (false);
-	str += 2;
-	i = 0;
-	while (str[i] && (ft_strchr(HEX_BASE_UPPER_CASE, str[i])
-			|| ft_strchr(HEX_BASE_LOWER_CASE, str[i])))
-		i++;
-	str = ft_skip_whitespace(&str[i]);
-	if (!*str)
+/**
+ * Checks if token->type is ARGUMENT.
+ *
+ * @param token	Pointer to token which is checked
+ */
+bool	is_argument(const t_token *token)
+{
+	if (token && token->type == ARGUMENT)
 		return (true);
 	return (false);
 }
