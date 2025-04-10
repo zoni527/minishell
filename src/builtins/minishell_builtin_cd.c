@@ -18,7 +18,7 @@
  *
  * @param void	no input
  */
-int	get_current_dir(void)
+int	get_current_dir(t_minishell *data)
 {
 	char	*buffer;
 
@@ -31,9 +31,11 @@ int	get_current_dir(void)
 	else
 	{
 		perror("getcwd error");
-		return (1);
+		data->last_rval = EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
-	return (0);
+	data->last_rval = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -41,14 +43,18 @@ int	get_current_dir(void)
  *
  * @param str	dir address to change to
  */
-int	change_dir(char *str)
+int	change_dir(t_minishell *data, char *str)
 {
+	char	*error;
 	if (chdir(str) == -1)
 	{
-		perror("chdir() error");
-		return (1);
+		error = ft_ma_strjoin(data->arena, "minishell: cd: ", str);
+		perror(error);
+		data->last_rval = EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
-	return (0);
+	data->last_rval = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -67,7 +73,7 @@ static void	handle_tilde(t_minishell *data, char *path, t_var *envp)
 	new_path = ft_ma_substr(data->arena, path, 1, (ft_strlen(path) - 1));
 	home_path = ms_getenv(data, "HOME", envp);
 	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
-	change_dir(new_home_path);
+	change_dir(data, new_home_path);
 	ms_setenv(data, "PWD", new_home_path, envp);
 }
 
@@ -83,7 +89,7 @@ static	void	handle_cd(t_minishell *data, t_var *envp)
 
 	home_path = ms_getenv(data, "HOME", envp);
 	ms_setenv(data, "PWD", home_path, envp);
-	change_dir(home_path);
+	change_dir(data, home_path);
 }
 
 /**
@@ -92,7 +98,7 @@ static	void	handle_cd(t_minishell *data, t_var *envp)
  * @param input	raw input string
  * @param envp	pointer to first element in envp list
  */
-void	builtin_cd(t_minishell *data, char *input, t_var *envp)
+void	builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp)
 {
 	char	*path;
 	char	*old_path;
@@ -100,15 +106,19 @@ void	builtin_cd(t_minishell *data, char *input, t_var *envp)
 
 	old_path = getcwd(NULL, 0);
 	ms_setenv(data, "OLDPWD", old_path, envp);
-	path = ft_ma_substr(data->arena, input, 3, (ft_strlen(input) - 2));
+	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
+		path = ft_ma_strdup(data->arena, builtin_token->next->value);
+	else
+		path = ft_ma_strdup(data->arena, "");
 	if (path[0] == '~')
 		handle_tilde(data, path, envp);
 	else if (path[0] == '\0')
 		handle_cd(data, envp);
 	else
 	{
-		change_dir(path);
+		change_dir(data, path);
 		new_path = getcwd(NULL, 0);
 		ms_setenv(data, "PWD", new_path, envp);
 	}
+//	data->last_rval = EXIT_SUCCESS;
 }

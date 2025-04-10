@@ -34,7 +34,7 @@ void	env_list_from_envp(t_minishell *data, char **envp)
 		j = ft_char_index(vals[0], '=');
 		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
 		vals[2] = ft_ma_substr(data->arena, vals[0], \
-						(j + i), ft_strlen(vals[0]) - (j + 1));
+						(j + 1), ft_strlen(vals[0]) - (j + 1));
 		if (current == NULL)
 		{
 			current = create_new_env_var(data, vals[0], vals[1], vals[2]);
@@ -105,7 +105,6 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 		if (ft_strncmp(sub_name, current->key, ft_strlen(sub_name)) == 0)
 		{
 			sub_name = ft_ma_strdup(data->arena, current->value);
-			ft_putendl_fd(sub_name, STDOUT_FILENO);
 			return (sub_name);
 		}
 		else

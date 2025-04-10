@@ -24,6 +24,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdio.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <signal.h>
@@ -41,14 +42,10 @@
 
 /* -------------------------------------------------------------- error codes */
 
-/* Execution errors */
 # define ERROR_PERMISSION	1
 # define ERROR_BINPERM		126
 # define ERROR_NOTFOUND		127
 
-/* Function/system resource errors */
-// libft.h: ERROR_ALLOC		2
-// libft.h: ERROR_CAPACITY	3
 # define ERROR_PIPE			4
 # define ERROR_FORK			5
 # define ERROR_DUP2			6
@@ -233,12 +230,12 @@ t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
 
-/* =============================== ENVIRONMENT ============================== */
+/* =============================== ENVIROMENT =============================== */
 
-/* -------------------------------------------------- minishell_environment.c */
+/* --------------------------------------------------- minishell_enviroment.c */
 
 void		env_list_from_envp(t_minishell *data, char **envp);
-char		**create_envp_arr_from_custom_env(t_minishell *data, \
+char		**create_envp_arr_from_custom_env(t_minishell *data , \
 									t_var *envp_list);
 char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
 int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
@@ -247,18 +244,26 @@ int			remove_env(char *key, t_var *envp);
 /* ---------------------------------------------- minishell_enviroment_list.c */
 
 int			get_env_list_size(t_var *begin);
-void		print_custom_env(t_var *list);
+void		print_env_list(t_var *list);
 t_var		*create_new_env_var(t_minishell *data, \
 						char *raw, char *key, char *value);
 
 /* ================================ BUILTINS ================================ */
 
+/* ---------------------------------------------- minishell_builtin_handler.c */
+
+void		builtin_handler(t_minishell *data);
+
+
 /* --------------------------------------------------- minishell_builtin_cd.c */
 
+int			get_current_dir(t_minishell *data);
+int			change_dir(t_minishell *data, char *str);
+void		builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp);
 
-int			get_current_dir(void);
-int			change_dir(char *str);
-void		builtin_cd(t_minishell *data, char *input, t_var *envp);
+/* --------------------------------------------------- minishell_builtin_pwd.c */
+
+void		builtin_pwd(t_minishell * data);
 
 /* ================================= PIPING ================================= */
 
@@ -285,14 +290,9 @@ void		deactivate_sigquit(t_minishell *data);
 
 void		handle_redirections(t_minishell *data);
 
-/* ------------------------------------------------------ minishell_heredoc.c */
-
-void		heredoc(t_minishell *data);
-bool		contains_heredoc(t_token *list);
-
 /* =============================== EXECUTION ================================ */
 
-/* ---------------------------------------------------- minishell_execution.c */
+/* ------------------------------------------------ minishell_execution.c */
 
 char		**create_args_arr(t_minishell *data, t_token *command);
 void		cmd_exec(t_minishell *data, char **command, char **envp);
