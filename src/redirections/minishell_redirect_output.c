@@ -59,11 +59,6 @@ int	validate_outfile(t_minishell *data, const char *file_name)
 		handle_error(data, file_name, ERROR_ISADIRECTORY);
 		return (EXIT_FAILURE);
 	}
-	if (access(file_name, W_OK) < 0)
-	{
-		handle_error(data, file_name, ERROR_PERMISSION);
-		return (EXIT_FAILURE);
-	}
 	return (EXIT_SUCCESS);
 }
 
