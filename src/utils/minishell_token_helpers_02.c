@@ -1,37 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_directory_validation.c                   :+:      :+:    :+:   */
+/*   minishell_token_helpers_02.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 12:07:40 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/10 15:49:07 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/11 11:38:02 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/11 11:50:33 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	is_a_directory(t_minishell *data, const char *str)
+t_token	*skip_to_pipe_by_index(const t_minishell *data)
 {
-	int	fd;
+	size_t	pipe_index;
+	t_token	*token;
 
-	fd = open(str, O_DIRECTORY);
-	if (fd != -1)
+	pipe_index = data->pipe_index;
+	token = data->token_list;
+	while (pipe_index)
 	{
-		try_to_close_fd(data, &fd);
-		return (true);
+		while (!is_pipe(token))
+			token = token->next;
+		token = token->next;
+		--pipe_index;
 	}
-	return (false);
-}
-
-bool	pretends_to_be_a_directory(t_minishell *data, const char *str)
-{
-	if (!str)
-		return (false);
-	if (str[ft_strlen(str) - 1] != '/')
-		return (false);
-	if (is_a_directory(data, str))
-		return (false);
-	return (true);
+	return (token);
 }
