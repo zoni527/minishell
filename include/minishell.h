@@ -145,6 +145,7 @@ typedef struct s_minishell
 	size_t				pipe_index;
 	int					last_rval;
 	int					pipe_fds[2];
+	int					*heredoc_fds;
 	int					final_fd_out;
 	int					final_ft_in;
 	int					error;
@@ -320,7 +321,7 @@ void			piping(t_minishell *data);
 /* ---------------------------------------------------- minishell_piping_02.c */
 
 void			child_process(t_minishell *data);
-bool			pipe_has_redirections(t_minishell *data);
+bool			pipe_has_redirections(const t_minishell *data);
 
 /* ================================= SIGNALS ================================ */
 
@@ -332,7 +333,7 @@ void			deactivate_sigquit(t_minishell *data);
 
 /* ============================== REDIRECTIONS ============================== */
 
-/* ---------------------------------------------- minishell_redirections_01.c */
+/* ------------------------------------------------- minishell_redirections.c */
 
 int				handle_redirections(t_minishell *data);
 
@@ -401,6 +402,9 @@ void			clean_error_exit(t_minishell *data, const char *msg, \
 /* ------------------------------------------ minishell_cleanup_and_exiting.c */
 
 bool			is_a_directory(t_minishell *data, const char *str);
+
+/* ----------------------------------------- minishell_directory_validation.c */
+
 bool			pretends_to_be_a_directory(t_minishell *data, const char *str);
 
 /* ------------------------------------------- minishell_safe_fd_management.c */
@@ -413,6 +417,21 @@ void			redirect_stdin_and_close_fd(t_minishell *data, int *fd);
 /* ----------------------------------------- minishell_safe_pipe_management.c */
 
 void			try_to_pipe(t_minishell *data, int *new_pipe);
+
+/* --------------------------------------------- minishell_token_helpers_01.c */
+
+t_token			*copy_tokens_within_pipe(t_minishell *data, \
+								const t_token *start);
+t_token			*copy_cmd_and_args_within_pipe(t_minishell *data, \
+										const t_token *start);
+t_token			*copy_redirections_within_pipe(t_minishell *data, \
+										const t_token *start);
+t_token			*copy_heredocs_within_pipe(t_minishell *data, \
+									const t_token *start);
+
+/* --------------------------------------------- minishell_token_helpers_02.c */
+
+t_token			*skip_to_pipe_by_index(const t_minishell *data);
 
 /* -------------------------------------------------------------------------- */
 
