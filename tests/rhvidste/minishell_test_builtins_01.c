@@ -52,8 +52,7 @@ void	print_env(t_minishell *data)
 	{
 		ft_putendl_fd(token->value, 1);
 		token = token->next;
-	}
-			
+	}	
 }
 
 void	loop(t_minishell *data)
@@ -81,11 +80,13 @@ void	loop(t_minishell *data)
 		}
 		tokenization(data);
 //		print_env(data);
-		print_tokens_type(data);
+//		print_tokens_type(data);
 		//implament built in detection.
-		builtin_handler(data);		
-//		piping(data);
-		printf("last exit value is %d\n", data->last_rval);
+		if (fetch_builtin(data))
+			builtins(data);		
+		else
+			piping(data);
+//		printf("last exit value is %d\n", data->last_rval);
 		add_history(data->raw_input);
 		data->token_list = NULL;
 		free((void *)data->raw_input);

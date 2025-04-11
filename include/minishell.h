@@ -235,7 +235,7 @@ void		insert_token_left(t_token *current, t_token *new);
 /* --------------------------------------------------- minishell_enviroment.c */
 
 void		env_list_from_envp(t_minishell *data, char **envp);
-char		**create_envp_arr_from_custom_env(t_minishell *data , \
+char		**create_envp_arr_from_custom_env(t_minishell *data, \
 									t_var *envp_list);
 char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
 int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
@@ -252,8 +252,12 @@ t_var		*create_new_env_var(t_minishell *data, \
 
 /* ---------------------------------------------- minishell_builtin_handler.c */
 
-void		builtin_handler(t_minishell *data);
+t_token		*fetch_builtin(t_minishell *data);
+void		builtins(t_minishell *data);
 
+/* ------------------------------------------------- minishell_builtin_echo.c */
+
+void		builtin_echo(t_minishell *data, t_token *builtin_token);
 
 /* --------------------------------------------------- minishell_builtin_cd.c */
 
@@ -261,9 +265,23 @@ int			get_current_dir(t_minishell *data);
 int			change_dir(t_minishell *data, char *str);
 void		builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp);
 
-/* --------------------------------------------------- minishell_builtin_pwd.c */
+/* -------------------------------------------------- minishell_builtin_pwd.c */
 
-void		builtin_pwd(t_minishell * data);
+void		builtin_pwd(t_minishell *data);
+
+/* ----------------------------------------------- minishell_builtin_export.c */
+
+void		builtin_export(t_minishell *data, \
+					t_token *builtin_token, t_var *envp);
+
+/* ------------------------------------------------ minishell_builtin_unset.c */
+
+void		builtin_unset(t_minishell *data, \
+				t_token *builtin_token, t_var *envp);
+
+/* -------------------------------------------------- minishell_builtin_env.c */
+
+void		builtin_env(t_minishell *data);
 
 /* ================================= PIPING ================================= */
 

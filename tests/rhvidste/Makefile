@@ -37,6 +37,9 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c				\
 		$(SRC_DIR)/builtins/minishell_builtin_echo.c					\
 		$(SRC_DIR)/builtins/minishell_builtin_cd.c						\
 		$(SRC_DIR)/builtins/minishell_builtin_pwd.c						\
+		$(SRC_DIR)/builtins/minishell_builtin_export.c					\
+		$(SRC_DIR)/builtins/minishell_builtin_unset.c					\
+		$(SRC_DIR)/builtins/minishell_builtin_env.c						\
 		$(SRC_DIR)/error_handling/minishell_error_logging.c				\
 		$(SRC_DIR)/error_handling/minishell_syntax_error.c				\
 		$(SRC_DIR)/terminal_behaviour/minishell_terminal_behaviour.c	\

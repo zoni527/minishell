@@ -46,6 +46,7 @@ int	get_current_dir(t_minishell *data)
 int	change_dir(t_minishell *data, char *str)
 {
 	char	*error;
+
 	if (chdir(str) == -1)
 	{
 		error = ft_ma_strjoin(data->arena, "minishell: cd: ", str);
@@ -95,8 +96,9 @@ static	void	handle_cd(t_minishell *data, t_var *envp)
 /**
  * Function to call the CD builtin
  *
- * @param input	raw input string
- * @param envp	pointer to first element in envp list
+ * @param data	pointer to the main data struct
+ * @param builtin_token	pointer to root builtin token
+ * @param envp	pointer to fist element in envp array
  */
 void	builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp)
 {
@@ -120,5 +122,4 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp)
 		new_path = getcwd(NULL, 0);
 		ms_setenv(data, "PWD", new_path, envp);
 	}
-//	data->last_rval = EXIT_SUCCESS;
 }
