@@ -91,6 +91,7 @@ static void	wait_for_children(t_minishell *data)
 	size_t	children;
 	pid_t	pid;
 
+	(void)pid;
 	children = data->pipe_index + 1;
 	while (children--)
 		pid = wait(NULL);

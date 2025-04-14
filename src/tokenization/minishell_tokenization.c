@@ -72,7 +72,7 @@ static void	tokenize(t_minishell *data, const char *src, size_t len)
 	t_token	*new;
 
 	word = ft_ma_substr(data->arena, src, 0, len);
-	new = new_token_node(data->arena, word);
+	new = new_token_node(data, word);
 	append_token(&data->token_list, new);
 }
 

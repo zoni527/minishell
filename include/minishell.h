@@ -229,6 +229,7 @@ bool			is_command(const t_token *token);
 
 bool			is_file_name(const t_token *token);
 bool			is_argument(const t_token *token);
+bool			is_word(const t_token *token);
 
 /* ----------------------------------------- minishell_assign_token_indices.c */
 
@@ -249,7 +250,7 @@ size_t			count_pipes(t_token *list);
 
 void			toggle_quote_flag(char *quote_flag, char c);
 void			print_tokens(t_minishell *data);
-t_token			*new_token_node(t_memarena *arena, const char *str);
+t_token			*new_token_node(t_minishell *data, const char *str);
 void			append_token(t_token **list, t_token *token);
 void			insert_token_left(t_token *current, t_token *new);
 
@@ -388,6 +389,7 @@ t_token			*copy_redirections_within_pipe(t_minishell *data, \
 										const t_token *start);
 t_token			*copy_heredocs_within_pipe(t_minishell *data, \
 									const t_token *start);
+t_token			*copy_token(t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
 

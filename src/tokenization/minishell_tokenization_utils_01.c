@@ -57,11 +57,11 @@ void	print_tokens(t_minishell *data)
  * @param str	String is assigned to be the value of the new token node
  * @return		Return newly created token node
  */
-t_token	*new_token_node(t_memarena *arena, const char *str)
+t_token	*new_token_node(t_minishell *data, const char *str)
 {
 	t_token	*new;
 
-	new = ft_ma_calloc(arena, 1, sizeof(t_token));
+	new = ft_ma_calloc(data->arena, 1, sizeof(t_token));
 	new->value = (char *)str;
 	if (*str == '|')
 		new->type = PIPE;

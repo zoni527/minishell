@@ -22,7 +22,7 @@ t_token	*copy_tokens_within_pipe(t_minishell *data, const t_token *start)
 	tokens = NULL;
 	while (start && !is_pipe(start))
 	{
-		new = new_token_node(data->arena, start->value);
+		new = copy_token(data, start);
 		append_token(&tokens, new);
 		start = start->next;
 	}
@@ -41,7 +41,7 @@ t_token	*copy_cmd_and_args_within_pipe(t_minishell *data, const t_token *start)
 	{
 		if (is_builtin_or_command(start) || is_argument(start))
 		{
-			new = new_token_node(data->arena, start->value);
+			new = copy_token(data, start);
 			append_token(&tokens, new);
 		}
 		start = start->next;
@@ -61,9 +61,9 @@ t_token	*copy_redirections_within_pipe(t_minishell *data, const t_token *start)
 	{
 		if (is_redirection(start))
 		{
-			new = new_token_node(data->arena, start->value);
+			new = copy_token(data, start);
 			append_token(&tokens, new);
-			new = new_token_node(data->arena, start->next->value);
+			new = copy_token(data, start->next);
 			append_token(&tokens, new);
 			start = start->next;
 		}
@@ -84,13 +84,24 @@ t_token	*copy_heredocs_within_pipe(t_minishell *data, const t_token *start)
 	{
 		if (is_heredoc(start))
 		{
-			new = new_token_node(data->arena, start->value);
+			new = copy_token(data, start);
 			append_token(&tokens, new);
-			new = new_token_node(data->arena, start->next->value);
+			new = copy_token(data, start->next);
 			append_token(&tokens, new);
 			start = start->next;
 		}
 		start = start->next;
 	}
 	return (tokens);
+}
+
+t_token	*copy_token(t_minishell *data, const t_token *token)
+{
+	t_token	*new;
+
+	new = ft_ma_calloc(data->arena, 1, sizeof(t_token));
+	new->value = ft_ma_strdup(data->arena, token->value);
+	new->index = token->index;
+	new->type = token->type;
+	return (new);
 }

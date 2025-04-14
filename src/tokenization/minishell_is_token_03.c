@@ -35,3 +35,15 @@ bool	is_argument(const t_token *token)
 		return (true);
 	return (false);
 }
+
+/**
+ * Checks if token->type is WORD.
+ *
+ * @param token	Pointer to token which is checked
+ */
+bool	is_word(const t_token *token)
+{
+	if (token && token->type == WORD)
+		return (true);
+	return (false);
+}

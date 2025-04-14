@@ -48,6 +48,8 @@ bool	is_builtin_or_command(const t_token *token)
 		return (false);
 	if (token->type == BUILTIN || token->type == COMMAND)
 		return (true);
+	if (!is_word(token))
+		return (false);
 	token = token->prev;
 	if (!token || is_pipe(token))
 		return (true);
@@ -73,6 +75,8 @@ bool	is_builtin(const t_token *token)
 		return (false);
 	if (token->type == BUILTIN)
 		return (true);
+	if (!is_word(token))
+		return (false);
 	if (is_builtin_or_command(token) \
 		&& (ft_strncmp(token->value, "echo", ft_strlen("echo") + 1) == 0 \
 		|| ft_strncmp(token->value, "cd", ft_strlen("cd") + 1) == 0 \

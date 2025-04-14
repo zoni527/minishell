@@ -84,7 +84,7 @@ static void	handle_token_split(t_minishell *data, t_token *token, \
 	char	*remaining;
 
 	word = ft_ma_substr(data->arena, token->value, 0, len);
-	new = new_token_node(data->arena, word);
+	new = new_token_node(data, word);
 	insert_token_left(token, new);
 	remaining = ft_ma_substr(data->arena, token->value, len, \
 						ft_strlen(token->value + len));
