@@ -230,9 +230,9 @@ t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
 
-/* =============================== ENVIROMENT =============================== */
+/* =============================== ENVIRONMENT =============================== */
 
-/* --------------------------------------------------- minishell_enviroment.c */
+/* --------------------------------------------------- minishell_environment.c */
 
 void		env_list_from_envp(t_minishell *data, char **envp);
 char		**create_envp_arr_from_custom_env(t_minishell *data, \
@@ -241,7 +241,7 @@ char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
 int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
 int			remove_env(char *key, t_var *envp);
 
-/* ---------------------------------------------- minishell_enviroment_list.c */
+/* ---------------------------------------------- minishell_environment_list.c */
 
 int			get_env_list_size(t_var *begin);
 void		print_env_list(t_var *list);
