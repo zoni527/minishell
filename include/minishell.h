@@ -253,7 +253,7 @@ t_var		*create_new_env_var(t_minishell *data, \
 /* ---------------------------------------------- minishell_builtin_handler.c */
 
 t_token		*fetch_builtin(t_minishell *data);
-void		builtins(t_minishell *data);
+int			builtins(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_echo.c */
 
@@ -282,6 +282,10 @@ void		builtin_unset(t_minishell *data, \
 /* -------------------------------------------------- minishell_builtin_env.c */
 
 void		builtin_env(t_minishell *data);
+
+/* ------------------------------------------------- minishell_builtin_exit.c */
+
+void		builtin_exit(t_minishell *data, t_token *builtin_token);
 
 /* ================================= PIPING ================================= */
 

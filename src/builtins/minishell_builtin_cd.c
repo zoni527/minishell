@@ -108,6 +108,7 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp)
 
 	old_path = getcwd(NULL, 0);
 	ms_setenv(data, "OLDPWD", old_path, envp);
+	free(old_path);
 	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, builtin_token->next->value);
 	else
@@ -121,5 +122,6 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp)
 		change_dir(data, path);
 		new_path = getcwd(NULL, 0);
 		ms_setenv(data, "PWD", new_path, envp);
+		free(new_path);
 	}
 }

@@ -57,7 +57,7 @@ void	print_env(t_minishell *data)
 
 void	loop(t_minishell *data)
 {
-	char	*line;
+//	char	*line;
 	char	*buffer;
 	char	*shell_dir;
 
@@ -67,30 +67,25 @@ void	loop(t_minishell *data)
 		shell_dir = ft_ma_strjoin(data->arena, "mini_shell: ", buffer);
 		shell_dir = ft_ma_strjoin(data->arena, shell_dir, "$ ");
 		data->raw_input = readline(shell_dir);
-		if (ft_strncmp(line, "exit", 5) == 0)
-		{
-			free((void *)data->raw_input);
-			break ;
-		}
-		if (has_unclosed_quotes(data->raw_input))
-		{
-			ft_putendl("Input has unclosed quotes");
-			free((void *)data->raw_input);
-			continue ;
-		}
 		tokenization(data);
 //		print_env(data);
 //		print_tokens_type(data);
 		//implament built in detection.
 		if (fetch_builtin(data))
-			builtins(data);		
+		{
+			if (builtins(data) == 0)
+				break;
+		}
 		else
 			piping(data);
 //		printf("last exit value is %d\n", data->last_rval);
 		add_history(data->raw_input);
+		free(buffer);
 		data->token_list = NULL;
 		free((void *)data->raw_input);
 	}
+	free(buffer);
+	free((void *)data->raw_input);
 }
 
 int	main(int argc, char *argv[], char *envp[])
@@ -107,5 +102,5 @@ int	main(int argc, char *argv[], char *envp[])
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
 	loop(&data);
 	ft_free_memarena(data.arena);
-	return (0);
+	return (data.last_rval);
 }

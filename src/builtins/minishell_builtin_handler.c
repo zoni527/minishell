@@ -40,7 +40,7 @@ t_token	*fetch_builtin(t_minishell *data)
  *
  * @param data	main data struct
  */
-void	builtins(t_minishell *data)
+int	builtins(t_minishell *data)
 {
 	t_token	*builtin_token;
 
@@ -61,7 +61,9 @@ void	builtins(t_minishell *data)
 			builtin_env(data);
 		if (ft_strncmp(builtin_token->value, "exit", 4) == 0)
 		{
-			ft_putendl_fd("exit called", 1);
+			builtin_exit(data, builtin_token);
+			return (0);
 		}
 	}
+	return (1);
 }
