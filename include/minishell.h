@@ -24,6 +24,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdio.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <signal.h>
@@ -68,6 +69,10 @@
 # define ERROR_TCGETATTR	15
 # define ERROR_TCSETATTR	16
 # define ERROR_ENOMEM		17
+
+/* Builtin errors */
+# define ERROR_BLTN_NO_EXIT	1
+# define ERROR_BLTN_NAN		2
 
 /* ---------------------------------------------------------- string literals */
 
@@ -142,6 +147,7 @@ typedef struct s_minishell
 	size_t				token_count;
 	size_t				pipe_count;
 	size_t				pipe_index;
+	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
 	int					*heredoc_fds;
@@ -266,12 +272,52 @@ int				ms_setenv(t_minishell *data, char *key, char *value, \
 				t_var *envp);
 int				remove_env(char *key, t_var *envp);
 
-/* ---------------------------------------------- minishell_enviroment_list.c */
+/* --------------------------------------------- minishell_environment_list.c */
 
 int				get_env_list_size(t_var *begin);
 void			print_custom_env(t_var *list);
 t_var			*create_new_env_var(t_minishell *data, \
 						char *raw, char *key, char *value);
+
+/* ================================ BUILTINS ================================ */
+
+/* ---------------------------------------------- minishell_builtin_handler.c */
+
+t_token			*fetch_builtin(t_minishell *data);
+int				builtins(t_minishell *data);
+
+/* ------------------------------------------------- minishell_builtin_echo.c */
+
+void			builtin_echo(t_minishell *data, t_token *builtin_token);
+
+/* --------------------------------------------------- minishell_builtin_cd.c */
+
+int				get_current_dir(t_minishell *data);
+int				change_dir(t_minishell *data, char *str);
+void			builtin_cd(t_minishell *data, t_token *builtin_token, \
+					t_var *envp);
+
+/* -------------------------------------------------- minishell_builtin_pwd.c */
+
+void			builtin_pwd(t_minishell *data);
+
+/* ----------------------------------------------- minishell_builtin_export.c */
+
+void			builtin_export(t_minishell *data, \
+					t_token *builtin_token, t_var *envp);
+
+/* ------------------------------------------------ minishell_builtin_unset.c */
+
+void			builtin_unset(t_minishell *data, \
+					t_token *builtin_token, t_var *envp);
+
+/* -------------------------------------------------- minishell_builtin_env.c */
+
+void			builtin_env(t_minishell *data);
+
+/* ------------------------------------------------- minishell_builtin_exit.c */
+
+int		builtin_exit(t_minishell *data, t_token *builtin_token);
 
 /* ================================= PIPING ================================= */
 
