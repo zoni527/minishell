@@ -31,10 +31,8 @@ void	free_heap_memory(t_minishell *data)
  */
 void	close_fds(t_minishell *data)
 {
-	if (data->pipe_fds[READ] != -1)
-		close(data->pipe_fds[READ]);
-	if (data->pipe_fds[WRITE] != -1)
-		close(data->pipe_fds[WRITE]);
+	try_to_close_fd(data, &data->pipe_fds[READ]);
+	try_to_close_fd(data, &data->pipe_fds[WRITE]);
 }
 
 /**
