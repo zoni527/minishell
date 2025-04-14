@@ -6,7 +6,7 @@
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:52:15 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/08 16:50:21 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/09 12:12:14 by rhvidste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ void	env_list_from_envp(t_minishell *data, char **envp)
 		j = ft_char_index(vals[0], '=');
 		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
 		vals[2] = ft_ma_substr(data->arena, vals[0], \
-						(j + i), ft_strlen(vals[0]) - (j + 1));
+						(j + 1), ft_strlen(vals[0]) - (j + 1));
 		if (current == NULL)
 		{
 			current = create_new_env_var(data, vals[0], vals[1], vals[2]);
-			data->custom_env = current;
+			data->minishell_env = current;
 			continue ;
 		}
 		current->next = create_new_env_var(data, vals[0], vals[1], vals[2]);
@@ -105,7 +105,6 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 		if (ft_strncmp(sub_name, current->key, ft_strlen(sub_name)) == 0)
 		{
 			sub_name = ft_ma_strdup(data->arena, current->value);
-			ft_putendl_fd(sub_name, STDOUT_FILENO);
 			return (sub_name);
 		}
 		else
