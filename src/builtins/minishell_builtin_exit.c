@@ -40,6 +40,11 @@ void	builtin_exit(t_minishell *data, t_token *builtin_token)
 
 	token = builtin_token;
 	token = proccess_token(data, token);
+	if (data->pipe_count > 0)
+	{
+		data->last_rval = EXIT_SUCCESS;
+		exit(0);
+	}
 	if (token == NULL)
 	{
 		data->last_rval = EXIT_SUCCESS;
@@ -48,7 +53,6 @@ void	builtin_exit(t_minishell *data, t_token *builtin_token)
 	else
 	{
 		data->last_rval = ft_atoi(token->value);
-		printf("last rval = %d\n", data->last_rval);
 		return ;
 	}
 }
