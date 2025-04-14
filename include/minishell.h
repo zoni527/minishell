@@ -323,7 +323,7 @@ bool		contains_heredoc(t_token *list);
 
 /* =============================== EXECUTION ================================ */
 
-/* ------------------------------------------------ minishell_execution.c */
+/* ---------------------------------------------------- minishell_execution.c */
 
 char		**create_args_arr(t_minishell *data, t_token *command);
 void		cmd_exec(t_minishell *data, char **command, char **envp);
