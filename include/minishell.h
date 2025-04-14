@@ -42,10 +42,14 @@
 
 /* -------------------------------------------------------------- error codes */
 
+/* Execution errors */
 # define ERROR_PERMISSION	1
 # define ERROR_BINPERM		126
 # define ERROR_NOTFOUND		127
 
+/* Function/system resource errors */
+// libft.h: ERROR_ALLOC		2
+// libft.h: ERROR_CAPACITY	3
 # define ERROR_PIPE			4
 # define ERROR_FORK			5
 # define ERROR_DUP2			6
@@ -230,9 +234,9 @@ t_token		*new_token_node(t_memarena *arena, const char *str);
 void		append_token(t_token **list, t_token *token);
 void		insert_token_left(t_token *current, t_token *new);
 
-/* =============================== ENVIRONMENT =============================== */
+/* =============================== ENVIRONMENT ============================== */
 
-/* --------------------------------------------------- minishell_environment.c */
+/* -------------------------------------------------- minishell_environment.c */
 
 void		env_list_from_envp(t_minishell *data, char **envp);
 char		**create_envp_arr_from_custom_env(t_minishell *data, \
@@ -241,7 +245,7 @@ char		*ms_getenv(t_minishell *data, const char *name, t_var *envp);
 int			ms_setenv(t_minishell *data, char *key, char *value, t_var *envp);
 int			remove_env(char *key, t_var *envp);
 
-/* ---------------------------------------------- minishell_environment_list.c */
+/* --------------------------------------------- minishell_environment_list.c */
 
 int			get_env_list_size(t_var *begin);
 void		print_env_list(t_var *list);
@@ -311,6 +315,11 @@ void		deactivate_sigquit(t_minishell *data);
 /* ---------------------------------------------- minishell_redirections_01.c */
 
 void		handle_redirections(t_minishell *data);
+
+/* ------------------------------------------------------ minishell_heredoc.c */
+
+void		heredoc(t_minishell *data);
+bool		contains_heredoc(t_token *list);
 
 /* =============================== EXECUTION ================================ */
 
