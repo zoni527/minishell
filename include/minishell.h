@@ -143,6 +143,7 @@ typedef struct s_minishell
 	size_t				token_count;
 	size_t				pipe_count;
 	size_t				pipe_index;
+	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
 	int					*heredoc_fds;
