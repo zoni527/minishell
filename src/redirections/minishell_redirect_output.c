@@ -23,7 +23,7 @@ int	redirect_output(t_minishell *data, const t_token *token)
 		file_name = token->next->value;
 		if (validate_outfile(data, file_name) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY);
+		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		if (fd < 0)
 		{
 			handle_error(data, file_name, ERROR_OPEN);
