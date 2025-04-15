@@ -289,7 +289,7 @@ void		builtin_env(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_exit.c */
 
-void		builtin_exit(t_minishell *data, t_token *builtin_token);
+int		builtin_exit(t_minishell *data, t_token *builtin_token);
 
 /* ================================= PIPING ================================= */
 
