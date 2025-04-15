@@ -31,7 +31,6 @@
 # include <dirent.h>
 # include <string.h>
 # include <sys/ioctl.h>
-# include <errno.h>
 # include <term.h>
 
 /* =============================== MACROS =================================== */
