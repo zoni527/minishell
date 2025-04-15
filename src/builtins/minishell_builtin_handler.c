@@ -61,9 +61,10 @@ int	builtins(t_minishell *data)
 			builtin_env(data);
 		if (ft_strncmp(builtin_token->value, "exit", 4) == 0)
 		{
-			builtin_exit(data, builtin_token);
-			return (0);
+			if (builtin_exit(data, builtin_token) == EXIT_FAILURE)
+				return (ERROR_BLTN_NO_EXIT);
+			return (EXIT_SUCCESS);
 		}
 	}
-	return (1);
+	return (EXIT_FAILURE);
 }

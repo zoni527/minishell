@@ -64,6 +64,10 @@
 # define ERROR_TCGETATTR	15
 # define ERROR_TCSETATTR	16
 
+/* Builtin errors */
+# define ERROR_BLTN_NO_EXIT	1
+# define ERROR_BLTN_NAN		2
+
 /* ---------------------------------------------------------- string literals */
 
 # define STR_MINISHELL			"minishell: "
@@ -289,7 +293,7 @@ void		builtin_env(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_exit.c */
 
-void		builtin_exit(t_minishell *data, t_token *builtin_token);
+int		builtin_exit(t_minishell *data, t_token *builtin_token);
 
 /* ================================= PIPING ================================= */
 
