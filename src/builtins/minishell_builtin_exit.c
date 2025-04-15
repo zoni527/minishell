@@ -104,12 +104,6 @@ int	builtin_exit(t_minishell *data, t_token *builtin_token)
 	token = proccess_token(data, token);
 	if (validate_arguments(data, token) == 1)
 		return (1);
-	if (data->pipe_count > 0 && token->prev->type == PIPE)
-	{
-		ft_putendl_fd("exit called from within a pipe", 1);
-		data->last_rval = EXIT_SUCCESS;
-		exit(0);
-	}
 	if (token == NULL)
 	{
 		data->last_rval = EXIT_SUCCESS;
