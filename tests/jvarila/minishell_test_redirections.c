@@ -20,11 +20,6 @@ void	loop(t_minishell *data)
 	{
 		line = readline("minishell redirections test: ");
 		add_history(line);
-		if (ft_strncmp(line, "exit", 5) == 0)
-		{
-			free(line);
-			break ;
-		}
 		if (has_unclosed_quotes(line))
 		{
 			ft_putendl("Input has unclosed quotes");
@@ -33,7 +28,11 @@ void	loop(t_minishell *data)
 		}
 		data->raw_input = line;
 		tokenization(data);
-		piping(data);
+		if (fetch_builtin(data))
+			if (builtins(data) == 0)
+				break ;
+		if (data->pipe_count > 0)
+			piping(data);
 		data->token_list = NULL;
 		free(line);
 	}
@@ -53,5 +52,5 @@ int	main(int argc, char *argv[], char *envp[])
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
 	loop(&data);
 	ft_free_memarena(data.arena);
-	return (0);
+	return (data.last_rval);
 }
