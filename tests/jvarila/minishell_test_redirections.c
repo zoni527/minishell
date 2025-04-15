@@ -31,8 +31,7 @@ void	loop(t_minishell *data)
 		if (fetch_builtin(data))
 			if (builtins(data) == 0)
 				break ;
-		if (data->pipe_count > 0)
-			piping(data);
+		piping(data);
 		data->token_list = NULL;
 		free(line);
 	}
