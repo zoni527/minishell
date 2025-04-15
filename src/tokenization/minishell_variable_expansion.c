@@ -43,6 +43,26 @@ void	variable_expansion(t_minishell *data)
 	}
 }
 
+t_var	*question_mark_variable(t_minishell *data)
+{
+	t_var	*variable;
+	int		str_len;
+	int		last_rval;
+
+	variable = ft_ma_calloc(data->arena, 1, sizeof(t_var));
+	variable->key = "?";
+	last_rval = (unsigned char)data->last_rval;
+	str_len = ft_int_digits(last_rval);
+	variable->value = ft_ma_calloc(data->arena, str_len + 1, sizeof(char));
+	while (--str_len)
+	{
+		variable->value[str_len] = (last_rval % 10) + '0';
+		last_rval /= 10;
+	}
+	variable->value[0] = (last_rval % 10) + '0';
+	return (variable);
+}
+
 /**
  * Function goes throug token and calls expand_variable for ech expandable
  * variable it finds.
@@ -67,7 +87,10 @@ static void	expand_variables(t_minishell *data, t_token *token)
 		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1]) \
 			&& !(quote_flag == '\''))
 		{
-			var = find_var(data, &token->value[++i]);
+			if (token->value[++i] == '?')
+				var = question_mark_variable(data);
+			else
+				var = find_var(data, &token->value[++i]);
 			i = expand_variable(data, token, var, i);
 			continue ;
 		}
@@ -158,7 +181,7 @@ static bool	contains_unexpanded_variable(t_token *token)
  * @return		Returns variable on a match, NULL if no matching variable can
  *				be found in data->custom_env
  */
-t_var	*find_var(t_minishell *data, const char *str)
+static t_var	*find_var(t_minishell *data, const char *str)
 {
 	t_var	*var;
 	size_t	len;

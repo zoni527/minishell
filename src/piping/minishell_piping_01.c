@@ -98,8 +98,13 @@ static void	wait_for_children(t_minishell *data)
 		{
 			if (WIFEXITED(pid))
 				data->last_rval = WEXITSTATUS(pid);
-			else
+			else if (g_signal != 0)
+			{
 				data->last_rval = 128 + g_signal;
+				g_signal = 0;
+			}
+			else
+				data->last_rval = -2;
 		}
 	}
 }
