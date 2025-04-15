@@ -64,6 +64,9 @@
 # define ERROR_TCGETATTR	15
 # define ERROR_TCSETATTR	16
 
+/* Builtin errors */
+# define ERROR_BLTN_NO_EXIT	1
+
 /* ---------------------------------------------------------- string literals */
 
 # define STR_MINISHELL			"minishell: "
