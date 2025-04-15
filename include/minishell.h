@@ -66,6 +66,7 @@
 
 /* Builtin errors */
 # define ERROR_BLTN_NO_EXIT	1
+# define ERROR_BLTN_NAN		2
 
 /* ---------------------------------------------------------- string literals */
 
