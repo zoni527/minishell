@@ -74,17 +74,17 @@ static void	num_handler(t_minishell *data, t_token *token)
 	if (ft_isnumstr(token->value))
 	{
 		data->last_rval = ft_atoi(token->value);
-		ft_putendl_fd("exit", 1);
+		ft_putendl_fd("exit", STDERR_FILENO);
 		return ;
 	}
 	else
 	{
-		ft_putendl_fd("exit", 2);
+		ft_putendl_fd("exit", STDERR_FILENO);
 		error = ft_ma_strjoin(data->arena, "minishell: exit: ", token->value);
 		error = ft_ma_strjoin(data->arena, error, \
 						": numeric argument required");
-		ft_putendl_fd(error, 2);
-		data->last_rval = 2;
+		ft_putendl_fd(error, STDERR_FILENO);
+		data->last_rval = ERROR_BLTN_NAN;
 		return ;
 	}
 }
@@ -101,18 +101,18 @@ int	builtin_exit(t_minishell *data, t_token *builtin_token)
 
 	token = builtin_token;
 	token = proccess_token(data, token);
-	if (validate_arguments(data, token) == 1)
-		return (1);
+	if (validate_arguments(data, token) == EXIT_FAILURE)
+		return (ERROR_BLTN_NO_EXIT);
 	if (token == NULL)
 	{
 		data->last_rval = EXIT_SUCCESS;
-		ft_putendl_fd("exit", 1);
-		return (0);
+		ft_putendl_fd("exit", STDERR_FILENO);
+		return (EXIT_SUCCESS);
 	}
 	else
 	{
 		num_handler(data, token);
-		return (0);
+		return (EXIT_SUCCESS);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
