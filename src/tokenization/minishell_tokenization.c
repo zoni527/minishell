@@ -27,6 +27,7 @@ void	tokenization(t_minishell *data)
 	assign_token_indices(data);
 	data->token_count = count_tokens(data->token_list);
 	data->pipe_count = count_pipes(data->token_list);
+	data->hd_count = count_heredocs(data->token_list);
 }
 
 /**

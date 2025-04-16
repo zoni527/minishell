@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+static void	print_preamble(const char *str)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	if (str)
+		ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd(": ", STDERR_FILENO);
+}
+
 void	handle_error(t_minishell *data, const char *str, int error)
 {
 	if (errno == ENOMEM)
@@ -19,11 +27,15 @@ void	handle_error(t_minishell *data, const char *str, int error)
 	close_fds(data);
 	if (error == ERROR_NOSUCH)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		if (str)
-			ft_putstr_fd(str, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
+		print_preamble(str);
 		ft_putendl_fd(MSG_ERROR_NOSUCH, STDERR_FILENO);
+		data->error = error;
+		return ;
+	}
+	else if (error == ERROR_NODELIM)
+	{
+		print_preamble(str);
+		ft_putendl_fd(MSG_ERROR_NODELIM, STDERR_FILENO);
 		data->error = error;
 		return ;
 	}

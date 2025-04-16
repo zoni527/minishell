@@ -53,7 +53,7 @@ t_token	*copy_redirections_within_pipe(t_minishell *data, const t_token *start)
 {
 	t_token	*tokens;
 	t_token	*new;
-	
+
 	if (is_pipe(start))
 		start = start->next;
 	tokens = NULL;
@@ -76,7 +76,7 @@ t_token	*copy_heredocs_within_pipe(t_minishell *data, const t_token *start)
 {
 	t_token	*tokens;
 	t_token	*new;
-	
+
 	if (is_pipe(start))
 		start = start->next;
 	tokens = NULL;

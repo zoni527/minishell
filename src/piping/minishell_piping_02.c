@@ -36,14 +36,5 @@ void	child_process(t_minishell *data)
 
 bool	pipe_has_redirections(const t_minishell *data)
 {
-	t_token	*token;
-
-	token = skip_to_pipe_by_index(data);
-	while (token && !is_pipe(token))
-	{
-		if (is_redirection(token))
-			return (true);
-		token = token->next;
-	}
-	return (false);
+	return (pipe_has(data, is_redirection));
 }

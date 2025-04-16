@@ -63,11 +63,5 @@ int	validate_infile(t_minishell *data, const char *file_name)
 
 bool	contains_input_redirection(const t_token *list)
 {
-	if (!list)
-		return (false);
-	while (list && !is_input_redirection(list))
-		list = list->next;
-	if (list)
-		return (true);
-	return (false);
+	return (tokens_contain(list, is_input_redirection));
 }
