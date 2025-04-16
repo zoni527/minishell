@@ -28,3 +28,37 @@ t_token	*skip_to_pipe_by_index(const t_minishell *data)
 	}
 	return (token);
 }
+
+bool	tokens_contain(const t_token *list, bool (*f)(const t_token *token))
+{
+	while (list && !f(list))
+		list = list->next;
+	if (list)
+		return (true);
+	return (false);
+}
+
+bool	pipe_has(const t_minishell *data, bool (*f)(const t_token *token))
+{
+	t_token	*token;
+
+	token = skip_to_pipe_by_index(data);
+	while (token && !is_pipe(token))
+	{
+		if (f(token))
+			return (true);
+		token = token->next;
+	}
+	return (false);
+}
+
+t_token	*skip_to_next(const t_token *list, bool (*f)(const t_token *token))
+{
+	if (!list)
+		return (NULL);
+	if (f(list))
+		list = list->next;
+	while (list && !f(list))
+		list = list->next;
+	return ((t_token *)list);
+}

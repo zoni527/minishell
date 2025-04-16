@@ -64,11 +64,5 @@ int	validate_outfile(t_minishell *data, const char *file_name)
 
 bool	contains_output_redirection(const t_token *list)
 {
-	if (!list)
-		return (false);
-	while (list && !is_output_redirection(list))
-		list = list->next;
-	if (list)
-		return (true);
-	return (false);
+	return (tokens_contain(list, is_output_redirection));
 }

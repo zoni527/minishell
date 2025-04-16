@@ -46,9 +46,25 @@ size_t	count_pipes(t_token *list)
 	pipes = 0;
 	while (list)
 	{
-		if (list->type == PIPE)
+		if (is_pipe(list))
 			++pipes;
 		list = list->next;
 	}
 	return (pipes);
+}
+
+size_t	count_heredocs(t_token *list)
+{
+	size_t	heredocs;
+
+	if (!list)
+		return (0);
+	heredocs = 0;
+	while (list)
+	{
+		if (is_heredoc(list))
+			++heredocs;
+		list = list->next;
+	}
+	return (heredocs);
 }

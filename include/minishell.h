@@ -48,6 +48,7 @@
 # define ERROR_PERMISSION	1
 # define ERROR_NOSUCH		1
 # define ERROR_ISADIRECTORY	1
+# define ERROR_LIMITHEREDOC	2
 # define ERROR_BINPERM		126
 # define ERROR_NOTFOUND		127
 
@@ -68,6 +69,9 @@
 # define ERROR_TCGETATTR	15
 # define ERROR_TCSETATTR	16
 # define ERROR_ENOMEM		17
+# define ERROR_HEREDOC		18
+# define ERROR_WRITE		19
+# define ERROR_NODELIM		20
 
 /* Builtin errors */
 # define ERROR_BLTN_NO_EXIT	1
@@ -88,6 +92,7 @@
 # define MSG_ERROR_PIPE			"ERROR: failed to pipe"
 # define MSG_ERROR_FORK			"ERROR: failed to fork"
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
+# define MSG_ERROR_WRITE		"ERROR: failed to write"
 # define MSG_ERROR_EXECVE		"ERROR: made it past execve"
 # define MSG_ERROR_ENOMEM		"ERROR: system is out of memory"
 # define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
@@ -95,6 +100,9 @@
 # define MSG_ERROR_TOOMANYARGS	"too many arguments"
 # define MSG_ERROR_PERMISSION	"Permission denied"
 # define MSG_ERROR_ISADIRECTORY	"Is a directory"
+# define MSG_ERROR_LIMITHEREDOC	"Maximum heredoc count exceeded"
+# define MSG_ERROR_HEREDOC		"Heredoc execution failed"
+# define MSG_ERROR_NODELIM		"EOF received instead of delimiter"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -145,11 +153,12 @@ typedef struct s_minishell
 	t_token				*token_list;
 	size_t				token_count;
 	size_t				pipe_count;
+	size_t				hd_count;
 	size_t				pipe_index;
 	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
-	int					*heredoc_fds;
+	int					hd_fd;
 	int					final_fd_out;
 	int					final_ft_in;
 	int					error;
@@ -159,6 +168,8 @@ typedef struct s_minishell
 	struct sigaction	act_quit_old;
 	const char			*raw_input;
 	const char			**initial_env;
+	const char			**hd_delimiters;
+	const char			**hd_file_names;
 }	t_minishell;
 
 typedef struct s_var
@@ -250,6 +261,7 @@ t_token			*get_token_by_index(t_token *list, int index);
 
 size_t			count_tokens(t_token *list);
 size_t			count_pipes(t_token *list);
+size_t			count_heredocs(t_token *list);
 
 /* ---------------------------------------- minishell_tokenization_utils_01.c */
 
@@ -321,7 +333,7 @@ void			builtin_env(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_exit.c */
 
-int		builtin_exit(t_minishell *data, t_token *builtin_token);
+int				builtin_exit(t_minishell *data, t_token *builtin_token);
 
 /* ================================= PIPING ================================= */
 
@@ -366,6 +378,8 @@ bool			contains_output_redirection(const t_token *list);
 
 void			heredoc(t_minishell *data);
 bool			contains_heredoc(t_token *list);
+t_token			*skip_to_heredoc(const t_token *list);
+size_t			count_heredoc_files(const t_minishell *data);
 
 /* =============================== EXECUTION ================================ */
 
@@ -444,6 +458,12 @@ t_token			*copy_token(t_minishell *data, const t_token *token);
 /* --------------------------------------------- minishell_token_helpers_02.c */
 
 t_token			*skip_to_pipe_by_index(const t_minishell *data);
+bool			tokens_contain(const t_token *list, \
+								bool (*f)(const t_token *token));
+bool			pipe_has(const t_minishell *data, \
+								bool (*f)(const t_token *token));
+t_token			*skip_to_next(const t_token *list, \
+								bool (*f)(const t_token *token));
 
 /* -------------------------------------------------------------------------- */
 
