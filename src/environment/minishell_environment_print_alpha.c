@@ -18,7 +18,6 @@
  *
  * @param envp	pointer to the fist envp element
  */
-
 int	get_envp_len(t_var *envp)
 {
 	if (envp == 0)
