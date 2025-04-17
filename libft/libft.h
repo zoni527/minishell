@@ -166,10 +166,12 @@ int				ft_putendl(const char *s);
 
 /* -------------------------------------------------------- string validation */
 
-int				ft_isnumstr(const char *str);
-int				ft_contains_duplicate_char(const char *str);
-int				ft_valid_multinumberstring(char *str);
-int				ft_valid_hex_string(const char *str);
+bool			ft_isnumstr(const char *str);
+bool			ft_contains_duplicate_char(const char *str);
+bool			ft_valid_multinumberstring(const char *str);
+bool			ft_valid_hex_string(const char *str);
+
+bool			ft_is_empty_string(const char *str);
 
 /* ---------------------------------------------------------- string analysis */
 
@@ -191,6 +193,10 @@ char			*ft_skip_char(const char *str, char c);
 long int		ft_atol(const char *nptr);
 unsigned int	ft_atou_base(const char *str, const char *base);
 unsigned int	ft_atohex(const char *str);
+
+/* -------------------------------------------------------- string comparison */
+
+int				ft_strcmp(const char *s1, const char *s2);
 
 /* ------------------------------- Numbers ---------------------------------- */
 /* ------------------------------------------------------------ number output */

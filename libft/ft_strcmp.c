@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_contains_duplicate_char.c                       :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/20 11:13:30 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/20 12:18:56 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/17 11:15:00 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/17 11:19:17 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-bool	ft_contains_duplicate_char(const char *str)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	if (!str)
-		return (false);
-	while (*str)
+	size_t	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
 	{
-		if (ft_strchr(str + 1, *str))
-			return (true);
-		str++;
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		++i;
 	}
-	return (false);
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

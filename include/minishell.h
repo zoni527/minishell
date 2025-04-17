@@ -240,6 +240,11 @@ void		insert_token_left(t_token *current, t_token *new);
 
 /* =============================== ENVIRONMENT ============================== */
 
+/* -------------------------------------- minishell_environment_print_alpha.c */
+
+int			get_envp_len(t_var *envp);
+void		print_env_alphabetically(t_var *envp);
+
 /* -------------------------------------------------- minishell_environment.c */
 
 void		env_list_from_envp(t_minishell *data, char **envp);
