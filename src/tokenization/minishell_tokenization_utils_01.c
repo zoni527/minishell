@@ -81,7 +81,7 @@ t_token	*new_token_node(t_minishell *data, const char *str)
 /**
  * Adds a given token node to the end of given list of tokens.
  *
- * @param list	Pointer to token pointer that is the first node in the list
+ * @param list	First node in list of tokens
  * @param token	Pointer to token node that will be added to the end of the list
  */
 void	append_token(t_token **list, t_token *token)

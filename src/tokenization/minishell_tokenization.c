@@ -17,6 +17,11 @@ static void	tokenize(t_minishell *data, const char *src, size_t len);
 static char	*skip_over_operator(const char *str);
 static char	*skip_over_word(const char *str);
 
+/**
+ * Calls functions to complete the tokenization process steps.
+ *
+ * @param data	Pointer to main data struct
+ */
 void	tokenization(t_minishell *data)
 {
 	lex_raw_input(data);
@@ -77,6 +82,13 @@ static void	tokenize(t_minishell *data, const char *src, size_t len)
 	append_token(&data->token_list, new);
 }
 
+/**
+ * Helper function to skip over operators in strings. Takes into account
+ * << and >> as special cases as they have two characters instead of one
+ * (vs |<>).
+ *
+ * @param str	String whose first character is part of an operator
+ */
 static char	*skip_over_operator(const char *str)
 {
 	if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
@@ -84,6 +96,12 @@ static char	*skip_over_operator(const char *str)
 	return ((char *)++str);
 }
 
+/**
+ * Helper function to correctly skip over words, taking into account quotes.
+ * Breaks when it finds a metacharacter that is not within quotes.
+ *
+ * @param str	String containing raw input
+ */
 static char	*skip_over_word(const char *str)
 {
 	char	quote_flag;

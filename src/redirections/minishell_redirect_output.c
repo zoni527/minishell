@@ -12,15 +12,25 @@
 
 #include "minishell.h"
 
-int	redirect_output(t_minishell *data, const t_token *token)
+static const t_token	*skip_to_output_redirection(const t_token *list);
+static int				validate_outfile(t_minishell *data, \
+							const char *file_name);
+
+/**
+ * Handles output redirections in list. 
+ *
+ * @param data	Pointer to main data struct
+ * @param token	Token to start redirection operation from
+ */
+int	redirect_output(t_minishell *data, const t_token *list)
 {
 	const char	*file_name;
 	int			fd;
 
-	token = skip_to_output_redirection(token);
-	while (token)
+	list = skip_to_output_redirection(list);
+	while (list)
 	{
-		file_name = token->next->value;
+		file_name = list->next->value;
 		if (validate_outfile(data, file_name) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		fd = open(file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
@@ -30,12 +40,18 @@ int	redirect_output(t_minishell *data, const t_token *token)
 			return (EXIT_FAILURE);
 		}
 		redirect_stdout_and_close_fd(data, &fd);
-		token = skip_to_output_redirection(token->next);
+		list = skip_to_output_redirection(list->next);
 	}
 	return (EXIT_SUCCESS);
 }
 
-const t_token	*skip_to_output_redirection(const t_token *list)
+/**
+ * Returns first token that is an output redirection in list. Won't search in
+ * multiple pipes.
+ *
+ * @param list	First token in a list of tokens to search within
+ */
+static const t_token	*skip_to_output_redirection(const t_token *list)
 {
 	if (!list)
 		return (NULL);
@@ -46,7 +62,14 @@ const t_token	*skip_to_output_redirection(const t_token *list)
 	return (list);
 }
 
-int	validate_outfile(t_minishell *data, const char *file_name)
+/**
+ * Cheks if file_name is an empty string, or if it is or pretends to be a
+ * directory.
+ *
+ * @param data		Pointer to main data struct
+ * @param file_name	String containing a file name
+ */
+static int	validate_outfile(t_minishell *data, const char *file_name)
 {
 	if (ft_is_empty_string(file_name))
 	{
@@ -60,9 +83,4 @@ int	validate_outfile(t_minishell *data, const char *file_name)
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
-}
-
-bool	contains_output_redirection(const t_token *list)
-{
-	return (tokens_contain(list, is_output_redirection));
 }

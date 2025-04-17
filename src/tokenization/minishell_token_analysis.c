@@ -12,12 +12,15 @@
 
 #include "minishell.h"
 
+static size_t	count_type(const t_token *list, \
+						bool (*f)(const t_token *token));
+
 /**
  * Counts tokens in token list.
  *
  * @param list	First node in list of tokens
  */
-size_t	count_tokens(t_token *list)
+size_t	count_tokens(const t_token *list)
 {
 	size_t	count;
 
@@ -37,34 +40,33 @@ size_t	count_tokens(t_token *list)
  *
  * @param list	First node in list of tokens
  */
-size_t	count_pipes(t_token *list)
+size_t	count_pipes(const t_token *list)
 {
-	size_t	pipes;
-
-	if (!list)
-		return (0);
-	pipes = 0;
-	while (list)
-	{
-		if (is_pipe(list))
-			++pipes;
-		list = list->next;
-	}
-	return (pipes);
+	return (count_type(list, is_pipe));
 }
 
-size_t	count_heredocs(t_token *list)
+/**
+ * Counts heredoc tokens in token list.
+ *
+ * @param list	First node in list of tokens
+ */
+size_t	count_heredocs(const t_token *list)
 {
-	size_t	heredocs;
+	return (count_type(list, is_heredoc));
+}
+
+static size_t	count_type(const t_token *list, bool (*f)(const t_token *token))
+{
+	size_t	count;
 
 	if (!list)
 		return (0);
-	heredocs = 0;
+	count = 0;
 	while (list)
 	{
-		if (is_heredoc(list))
-			++heredocs;
+		if (f(list))
+			++count;
 		list = list->next;
 	}
-	return (heredocs);
+	return (count);
 }

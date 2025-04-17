@@ -12,7 +12,11 @@
 
 #include "minishell.h"
 
-void	try_to_pipe(t_minishell *data, int *new_pipe)
+/**
+ * Calls pipe with new_pipe as parameter, in case the pipe fails calls 
+ * clean_error_exit, ending the program.
+ */
+void	safe_pipe(t_minishell *data, int *new_pipe)
 {
 	if (!new_pipe)
 		return ;
