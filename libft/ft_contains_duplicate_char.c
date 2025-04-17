@@ -12,15 +12,15 @@
 
 #include "libft.h"
 
-int	ft_contains_duplicate_char(const char *str)
+bool	ft_contains_duplicate_char(const char *str)
 {
 	if (!str)
-		return (0);
+		return (false);
 	while (*str)
 	{
 		if (ft_strchr(str + 1, *str))
-			return (1);
+			return (true);
 		str++;
 	}
-	return (0);
+	return (false);
 }
