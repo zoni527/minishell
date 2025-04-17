@@ -43,7 +43,14 @@ void	variable_expansion(t_minishell *data)
 	}
 }
 
-t_var	*question_mark_variable(t_minishell *data)
+/**
+ * Creates a t_var node with the correct values to perform expansion for $?.
+ * Basically this function uses a modified version of itoa to assign
+ * data->last_rval to variable->value.
+ *
+ * @param data	Pointer to main data struct
+ */
+static t_var	*question_mark_variable(t_minishell *data)
 {
 	t_var	*variable;
 	int		str_len;

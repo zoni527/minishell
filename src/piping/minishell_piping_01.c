@@ -64,13 +64,13 @@ void	piping(t_minishell *data)
  * @param new_pipe			Pointer to int[2], target for pipe function
  * @param prev_pipe_read_fd	File descriptor value of previously created pipe's
  *							read end, -1 if previous pipe doesn't exist
- * @see   try_to_pipe
+ * @see   safe_pipe
  */
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe, \
 									int prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
-		try_to_pipe(data, new_pipe);
+		safe_pipe(data, new_pipe);
 	if (prev_pipe_read_fd != -1)
 		data->pipe_fds[READ] = prev_pipe_read_fd;
 	if (data->pipe_index != data->pipe_count)
@@ -121,15 +121,15 @@ static void	wait_for_children(t_minishell *data)
  * @param new_pipe			Pointer to int[2], target for pipe function
  * @param prev_pipe_read_fd	Pointer to file descriptor value of previously
  *							created pipe's read end
- * @see   try_to_close_fd
+ * @see   safe_close
  */
 static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
 									int *prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
-		try_to_close_fd(data, &new_pipe[WRITE]);
+		safe_close(data, &new_pipe[WRITE]);
 	if (data->pipe_index != 0)
-		try_to_close_fd(data, prev_pipe_read_fd);
+		safe_close(data, prev_pipe_read_fd);
 }
 
 /**
@@ -146,8 +146,8 @@ static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
 static void	handle_fork_failure(t_minishell *data, int *new_pipe, \
 						int prev_pipe_read_fd)
 {
-	try_to_close_fd(data, &prev_pipe_read_fd);
-	try_to_close_fd(data, &new_pipe[READ]);
+	safe_close(data, &prev_pipe_read_fd);
+	safe_close(data, &new_pipe[READ]);
 	wait_for_children(data);
 	clean_error_exit(data, MSG_ERROR_FORK, ERROR_FORK);
 }

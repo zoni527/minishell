@@ -31,7 +31,6 @@
 # include <dirent.h>
 # include <string.h>
 # include <sys/ioctl.h>
-# include <term.h>
 
 /* =============================== MACROS =================================== */
 
@@ -42,40 +41,19 @@
 
 # define MAX_HEREDOCS	16
 
-/* -------------------------------------------------------------- error codes */
+/* --------------------------------------------------------------- exit codes */
 
-/* Execution errors */
-# define ERROR_PERMISSION	1
-# define ERROR_NOSUCH		1
-# define ERROR_ISADIRECTORY	1
-# define ERROR_LIMITHEREDOC	2
-# define ERROR_BINPERM		126
-# define ERROR_NOTFOUND		127
+/* Execution exit values */
+# define EXIT_PERMISSION	1
+# define EXIT_NOSUCH		1
+# define EXIT_ISADIRECTORY	1
+# define EXIT_LIMITHEREDOC	2
+# define EXIT_BINPERM		126
+# define EXIT_NOTFOUND		127
 
-/* Function/system resource errors */
-// libft.h: ERROR_ALLOC		2
-// libft.h: ERROR_CAPACITY	3
-# define ERROR_PIPE			4
-# define ERROR_FORK			5
-# define ERROR_DUP2			6
-# define ERROR_OPEN			7
-# define ERROR_CLOSE		8
-# define ERROR_EXEC			9
-# define ERROR_ACCESS		10
-# define ERROR_NOPATH		11
-# define ERROR_INPUT		12
-# define ERROR_UNLINK		13
-# define ERROR_UNCLOSED		14
-# define ERROR_TCGETATTR	15
-# define ERROR_TCSETATTR	16
-# define ERROR_ENOMEM		17
-# define ERROR_HEREDOC		18
-# define ERROR_WRITE		19
-# define ERROR_NODELIM		20
-
-/* Builtin errors */
-# define ERROR_BLTN_NO_EXIT	1
-# define ERROR_BLTN_NAN		2
+/* Builtin exit values */
+# define EXIT_BLTN_NO_EXIT	1
+# define EXIT_BLTN_NAN		2
 
 /* ---------------------------------------------------------- string literals */
 
@@ -85,8 +63,6 @@
 
 # define MSG_ERROR_ALLOC		"ERROR: couldn't alloc"
 # define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
-# define MSG_ERROR_TCGETATTR	"ERROR: failed to get terminal attributes"
-# define MSG_ERROR_TCSETATTR	"ERROR: failed to set terminal attributes"
 # define MSG_ERROR_OPEN			"ERROR: failed to open"
 # define MSG_ERROR_CLOSE		"ERROR: failed to close"
 # define MSG_ERROR_PIPE			"ERROR: failed to pipe"
@@ -115,6 +91,34 @@
 # endif
 
 /* ================================ ENUMS =================================== */
+
+/* Function/system resource errors */
+// libft.h: ERROR_ALLOC		2
+// libft.h: ERROR_CAPACITY	3
+
+typedef enum e_error
+{
+	ERROR_PIPE = 4,
+	ERROR_FORK,
+	ERROR_DUP2,
+	ERROR_OPEN,
+	ERROR_CLOSE,
+	ERROR_EXEC,
+	ERROR_ACCESS,
+	ERROR_NOPATH,
+	ERROR_INPUT,
+	ERROR_UNLINK,
+	ERROR_UNCLOSED,
+	ERROR_TCGETATTR,
+	ERROR_TCSETATTR,
+	ERROR_ENOMEM,
+	ERROR_HEREDOC,
+	ERROR_WRITE,
+	ERROR_NODELIM,
+	ERROR_NOSUCH,
+	ERROR_PERMISSION,
+	ERROR_ISADIRECTORY,
+}	t_error;
 
 typedef enum e_token_type
 {
@@ -161,7 +165,7 @@ typedef struct s_minishell
 	int					hd_fd;
 	int					final_fd_out;
 	int					final_ft_in;
-	int					error;
+	t_error				error;
 	struct sigaction	act_int;
 	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
@@ -253,15 +257,14 @@ void			assign_token_indices(t_minishell *data);
 
 /* ------------------------------------------------ minishell_token_getters.c */
 
-t_bltn_type		get_builtin_type(t_token *token);
-const char		*get_token_type_str(t_token *token);
-t_token			*get_token_by_index(t_token *list, int index);
+t_bltn_type		get_builtin_type(const t_token *token);
+const char		*get_token_type_str(const t_token *token);
 
 /* ----------------------------------------------- minishell_token_analysis.c */
 
-size_t			count_tokens(t_token *list);
-size_t			count_pipes(t_token *list);
-size_t			count_heredocs(t_token *list);
+size_t			count_tokens(const t_token *list);
+size_t			count_pipes(const t_token *list);
+size_t			count_heredocs(const t_token *list);
 
 /* ---------------------------------------- minishell_tokenization_utils_01.c */
 
@@ -351,30 +354,26 @@ void			deactivate_sigquit(t_minishell *data);
 
 /* ============================== REDIRECTIONS ============================== */
 
-/* ------------------------------------------------- minishell_redirections.c */
+/* -------------------------------------------- minishell_pipe_redirections.c */
 
 int				handle_redirections(t_minishell *data);
 
 /* ----------------------------------------------- minishell_redirect_input.c */
 
 int				redirect_input(t_minishell *data, const t_token *token);
-const t_token	*skip_to_input_redirection(const t_token *list);
-int				validate_infile(t_minishell *data, const char *file_name);
-bool			contains_input_redirection(const t_token *list);
 
 /* ---------------------------------------------- minishell_redirect_output.c */
 
 int				redirect_output(t_minishell *data, const t_token *token);
-const t_token	*skip_to_output_redirection(const t_token *list);
-int				validate_outfile(t_minishell *data, const char *file_name);
-bool			contains_output_redirection(const t_token *list);
 
-/* ------------------------------------------------------ minishell_heredoc.c */
+/* --------------------------------------------------- minishell_heredoc_01.c */
 
-void			heredoc(t_minishell *data);
-bool			contains_heredoc(t_token *list);
+int				heredoc(t_minishell *data);
+
+/* --------------------------------------------------- minishell_heredoc_02.c */
+
+char			*read_heredoc_input(t_minishell *data, const char *delimiter);
 t_token			*skip_to_heredoc(const t_token *list);
-size_t			count_heredoc_files(const t_minishell *data);
 
 /* =============================== EXECUTION ================================ */
 
@@ -407,8 +406,8 @@ size_t			var_name_len(const char *str);
 
 /* -------------------------------------------------- minishell_print_debug.c */
 
-void			print_debug_tokens(t_token *list);
-void			print_debug(t_minishell *data);
+void			print_debug_tokens(const t_token *list);
+void			print_debug(const t_minishell *data);
 
 /* ------------------------------------------ minishell_cleanup_and_exiting.c */
 
@@ -429,14 +428,14 @@ bool			pretends_to_be_a_directory(t_minishell *data, const char *str);
 
 /* ------------------------------------------- minishell_safe_fd_management.c */
 
-void			try_to_close_fd(t_minishell *data, int *fd);
-void			try_to_dup2(t_minishell *data, int fd1, int fd2);
+void			safe_close(t_minishell *data, int *fd);
+void			safe_dup2(t_minishell *data, int fd1, int fd2);
 void			redirect_stdout_and_close_fd(t_minishell *data, int *fd);
 void			redirect_stdin_and_close_fd(t_minishell *data, int *fd);
 
 /* ----------------------------------------- minishell_safe_pipe_management.c */
 
-void			try_to_pipe(t_minishell *data, int *new_pipe);
+void			safe_pipe(t_minishell *data, int *new_pipe);
 
 /* --------------------------------------------- minishell_token_helpers_01.c */
 
@@ -452,17 +451,18 @@ t_token			*copy_token(t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
 
+t_token			*skip_to(const t_token *list, \
+								bool (*f)(const t_token *token));
+t_token			*skip_to_next(const t_token *list, \
+								bool (*f)(const t_token *token));
 t_token			*skip_to_pipe_by_index(const t_minishell *data);
 bool			tokens_contain(const t_token *list, \
 								bool (*f)(const t_token *token));
 bool			pipe_has(const t_minishell *data, \
 								bool (*f)(const t_token *token));
-t_token			*skip_to_next(const t_token *list, \
-								bool (*f)(const t_token *token));
 
 /* -------------------------------------------------------------------------- */
 
-void			set_terminal(t_minishell *data);
 void			execution(t_minishell *data);
 
 #endif

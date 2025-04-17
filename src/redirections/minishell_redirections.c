@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * Handler function for managing redirections and heredocs within a pipe.
+ *
+ * @param data	Pointer to main data struct
+ */
 int	handle_redirections(t_minishell *data)
 {
 	t_token	*start;

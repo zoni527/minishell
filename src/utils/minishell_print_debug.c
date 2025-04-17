@@ -12,7 +12,12 @@
 
 #include "minishell.h"
 
-void	print_debug_tokens(t_token *list)
+/**
+ * Prints out detailed information about individual tokens.
+ *
+ * @param list	First node in list of tokens
+ */
+void	print_debug_tokens(const t_token *list)
 {
 	const char		*type_str;
 
@@ -26,7 +31,12 @@ void	print_debug_tokens(t_token *list)
 	}
 }
 
-void	print_debug(t_minishell *data)
+/**
+ * Prints out debug information for data.
+ *
+ * @param data	Pointer to main data struct
+ */
+void	print_debug(const t_minishell *data)
 {
 	if (!data)
 	{

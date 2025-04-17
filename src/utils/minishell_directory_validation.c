@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/**
+ * Checks if it is possible to open a file descriptor to a file with name str
+ * using the O_DIRECTORY flag. Returns true on success, false on failure.
+ *
+ * @param data	Pointer to main data struct
+ * @param str	String with file name
+ */
 bool	is_a_directory(t_minishell *data, const char *str)
 {
 	int	fd;
@@ -19,12 +26,19 @@ bool	is_a_directory(t_minishell *data, const char *str)
 	fd = open(str, O_DIRECTORY);
 	if (fd != -1)
 	{
-		try_to_close_fd(data, &fd);
+		safe_close(data, &fd);
 		return (true);
 	}
 	return (false);
 }
 
+/**
+ * Checks if the file that has name str has '/' as its last character and has
+ * type file.
+ *
+ * @param data	Pointer to main data struct
+ * @param str	String with file name
+ */
 bool	pretends_to_be_a_directory(t_minishell *data, const char *str)
 {
 	if (!str)

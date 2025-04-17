@@ -12,6 +12,16 @@
 
 #include "minishell.h"
 
+static const t_token	*skip_to_input_redirection(const t_token *list);
+static int				validate_infile(t_minishell *data, \
+							const char *file_name);
+
+/**
+ * Handles input redirections in list. 
+ *
+ * @param data	Pointer to main data struct
+ * @param token	Token to start redirection operation from
+ */
 int	redirect_input(t_minishell *data, const t_token *token)
 {
 	const char	*file_name;
@@ -35,7 +45,13 @@ int	redirect_input(t_minishell *data, const t_token *token)
 	return (EXIT_SUCCESS);
 }
 
-const t_token	*skip_to_input_redirection(const t_token *list)
+/**
+ * Returns first token that is an input redirection in list. Won't search in
+ * multiple pipes.
+ *
+ * @param list	First token in a list of tokens to search within
+ */
+static const t_token	*skip_to_input_redirection(const t_token *list)
 {
 	if (!list)
 		return (NULL);
@@ -46,7 +62,13 @@ const t_token	*skip_to_input_redirection(const t_token *list)
 	return (list);
 }
 
-int	validate_infile(t_minishell *data, const char *file_name)
+/**
+ * Cheks if file exists and whether it can be written into.
+ *
+ * @param data		Pointer to main data struct
+ * @param file_name	String containing a file name
+ */
+static int	validate_infile(t_minishell *data, const char *file_name)
 {
 	if (access(file_name, F_OK) < 0)
 	{
@@ -59,9 +81,4 @@ int	validate_infile(t_minishell *data, const char *file_name)
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
-}
-
-bool	contains_input_redirection(const t_token *list)
-{
-	return (tokens_contain(list, is_input_redirection));
 }

@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+/**
+ * Creates a new list of tokens from the tokens starting at start, stops when
+ * the list ends or another pipe is found.
+ * 
+ * @param data	Pointer to main data struct
+ * @param start	First token within pipe
+ */
 t_token	*copy_tokens_within_pipe(t_minishell *data, const t_token *start)
 {
 	t_token	*tokens;
@@ -29,6 +36,13 @@ t_token	*copy_tokens_within_pipe(t_minishell *data, const t_token *start)
 	return (tokens);
 }
 
+/**
+ * Creates a new list of tokens from the tokens starting at start, selects only
+ * commands, builtins and arguments, so it skips redirections and heredocs.
+ * 
+ * @param data	Pointer to main data struct
+ * @param start	First token within pipe
+ */
 t_token	*copy_cmd_and_args_within_pipe(t_minishell *data, const t_token *start)
 {
 	t_token	*tokens;
@@ -49,6 +63,13 @@ t_token	*copy_cmd_and_args_within_pipe(t_minishell *data, const t_token *start)
 	return (tokens);
 }
 
+/**
+ * Creates a new list of tokens from the tokens starting at start, selects only
+ * redirections and file names.
+ * 
+ * @param data	Pointer to main data struct
+ * @param start	First token within pipe
+ */
 t_token	*copy_redirections_within_pipe(t_minishell *data, const t_token *start)
 {
 	t_token	*tokens;
@@ -72,6 +93,13 @@ t_token	*copy_redirections_within_pipe(t_minishell *data, const t_token *start)
 	return (tokens);
 }
 
+/**
+ * Creates a new list of tokens from the tokens starting at start, selects only
+ * heredocs and delimiters.
+ * 
+ * @param data	Pointer to main data struct
+ * @param start	First token within pipe
+ */
 t_token	*copy_heredocs_within_pipe(t_minishell *data, const t_token *start)
 {
 	t_token	*tokens;
@@ -95,6 +123,13 @@ t_token	*copy_heredocs_within_pipe(t_minishell *data, const t_token *start)
 	return (tokens);
 }
 
+/**
+ * Creates and returns a deep copy of an existing token. Doesn't assign next
+ * and prev.
+ * 
+ * @param data	Pointer to main data struct
+ * @param start	Token to copy
+ */
 t_token	*copy_token(t_minishell *data, const t_token *token)
 {
 	t_token	*new;

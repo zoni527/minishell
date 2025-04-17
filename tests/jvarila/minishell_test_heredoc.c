@@ -33,8 +33,7 @@ void	loop(t_minishell *data)
 		}
 		data->raw_input = line;
 		tokenization(data);
-		if (contains_heredoc(data->token_list))
-			heredoc(data);
+		heredoc(data);
 		data->token_list = NULL;
 		free(line);
 	}

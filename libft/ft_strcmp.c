@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_safe_pipe_management.c                   :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 10:44:26 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/07 10:50:15 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/17 11:15:00 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/17 11:19:17 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-/**
- * Calls pipe with new_pipe as parameter, in case the pipe fails calls 
- * clean_error_exit, ending the program.
- */
-void	safe_pipe(t_minishell *data, int *new_pipe)
+int	ft_strcmp(const char *s1, const char *s2)
 {
-	if (!new_pipe)
-		return ;
-	if (pipe(new_pipe) < 0)
-		clean_error_exit(data, MSG_ERROR_PIPE, ERROR_PIPE);
+	size_t	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		++i;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
