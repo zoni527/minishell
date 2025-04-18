@@ -42,7 +42,7 @@ char	*read_heredoc_input(t_minishell *data, const char *delimiter)
 		free(line);
 	}
 	if (!received_delim)
-		data->error = ERROR_NODELIM;
+		handle_error(data, "warning", ERROR_NODELIM);
 	return (result);
 }
 

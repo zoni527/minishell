@@ -52,7 +52,7 @@ t_token	*skip_to_next(const t_token *list, bool (*f)(const t_token *token))
  *
  * @see skip_to
  */
-t_token	*skip_to_pipe_by_index(const t_minishell *data)
+t_token	*skip_to_current_pipe(const t_minishell *data)
 {
 	size_t	pipe_index;
 	t_token	*token;
@@ -92,14 +92,14 @@ bool	tokens_contain(const t_token *list, bool (*f)(const t_token *token))
  * @param data	Pointer to main data struct
  * @param f		Pointer to a token classification function
  *
- * @see skip_to_pipe_by_index
+ * @see skip_to_current_pipe
  * @see skip_to
  */
 bool	pipe_has(const t_minishell *data, bool (*f)(const t_token *token))
 {
 	t_token	*token;
 
-	token = skip_to_pipe_by_index(data);
+	token = skip_to_current_pipe(data);
 	while (token && !is_pipe(token))
 	{
 		if (f(token))

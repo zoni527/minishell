@@ -31,9 +31,7 @@ bool	is_operator(const t_token *token)
  */
 bool	is_pipe(const t_token *token)
 {
-	if (!token)
-		return (false);
-	if (token->type == PIPE)
+	if (token && token->type == PIPE)
 		return (true);
 	return (false);
 }
@@ -60,9 +58,7 @@ bool	is_redirection(const t_token *token)
  */
 bool	is_input_redirection(const t_token *token)
 {
-	if (!token)
-		return (false);
-	if (token->type == REDIRECT_INPUT)
+	if (token && token->type == REDIRECT_INPUT)
 		return (true);
 	return (false);
 }
@@ -74,9 +70,7 @@ bool	is_input_redirection(const t_token *token)
  */
 bool	is_output_redirection(const t_token *token)
 {
-	if (!token)
-		return (false);
-	if (token->type == REDIRECT_OUTPUT)
+	if (token && token->type == REDIRECT_OUTPUT)
 		return (true);
 	return (false);
 }

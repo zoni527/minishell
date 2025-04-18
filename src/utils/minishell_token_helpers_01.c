@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 09:56:50 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/11 10:33:01 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:00:30 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,42 +80,14 @@ t_token	*copy_redirections_within_pipe(t_minishell *data, const t_token *start)
 	tokens = NULL;
 	while (start && !is_pipe(start))
 	{
-		if (is_redirection(start))
+		if (is_redirection(start) || is_heredoc(start))
 		{
 			new = copy_token(data, start);
 			append_token(&tokens, new);
+			new->index = start->index;
 			new = copy_token(data, start->next);
 			append_token(&tokens, new);
-			start = start->next;
-		}
-		start = start->next;
-	}
-	return (tokens);
-}
-
-/**
- * Creates a new list of tokens from the tokens starting at start, selects only
- * heredocs and delimiters.
- * 
- * @param data	Pointer to main data struct
- * @param start	First token within pipe
- */
-t_token	*copy_heredocs_within_pipe(t_minishell *data, const t_token *start)
-{
-	t_token	*tokens;
-	t_token	*new;
-
-	if (is_pipe(start))
-		start = start->next;
-	tokens = NULL;
-	while (start && !is_pipe(start))
-	{
-		if (is_heredoc(start))
-		{
-			new = copy_token(data, start);
-			append_token(&tokens, new);
-			new = copy_token(data, start->next);
-			append_token(&tokens, new);
+			new->index = start->next->index;
 			start = start->next;
 		}
 		start = start->next;

@@ -47,3 +47,15 @@ bool	is_word(const t_token *token)
 		return (true);
 	return (false);
 }
+
+/**
+ * Checks if token->type is DELIMITER.
+ *
+ * @param token	Pointer to token which is checked
+ */
+bool	is_delimiter(const t_token *token)
+{
+	if (token && token->type == DELIMITER)
+		return (true);
+	return (false);
+}

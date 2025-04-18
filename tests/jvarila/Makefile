@@ -22,7 +22,8 @@ SRC_DIR	:=	../../src
 OBJ_DIR	:=	./obj
 #------------------------------------------------------------------------------#
 SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
-	$(SRC_DIR)/tokenization/minishell_variable_expansion.c		\
+	$(SRC_DIR)/tokenization/minishell_variable_expansion_01.c	\
+	$(SRC_DIR)/tokenization/minishell_variable_expansion_02.c	\
 	$(SRC_DIR)/tokenization/minishell_word_splitting.c		\
 	$(SRC_DIR)/tokenization/minishell_quote_removal.c		\
 	$(SRC_DIR)/tokenization/minishell_token_classification.c	\
@@ -43,9 +44,12 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/redirections/minishell_redirections.c		\
 	$(SRC_DIR)/redirections/minishell_redirect_input.c		\
 	$(SRC_DIR)/redirections/minishell_redirect_output.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_heredoc.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_append.c		\
 	$(SRC_DIR)/execution/minishell_execution.c			\
 	$(SRC_DIR)/environment/minishell_environment.c			\
 	$(SRC_DIR)/environment/minishell_environment_list.c		\
+	$(SRC_DIR)/environment/minishell_environment_print_alpha.c	\
 	$(SRC_DIR)/builtins/minishell_builtin_cd.c			\
 	$(SRC_DIR)/builtins/minishell_builtin_echo.c			\
 	$(SRC_DIR)/builtins/minishell_builtin_env.c			\
@@ -62,6 +66,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/utils/minishell_safe_pipe_management.c		\
 	$(SRC_DIR)/utils/minishell_token_helpers_01.c			\
 	$(SRC_DIR)/utils/minishell_token_helpers_02.c			\
+	$(SRC_DIR)/utils/minishell_token_helpers_03.c			\
 	$(SRC_DIR)/utils/minishell_directory_validation.c		\
 	$(SRC_DIR)/utils/minishell_print_debug.c
 #------------------------------------------------------------------------------#
@@ -71,7 +76,8 @@ TESTS :=	minishell_test_word_lexing_01.out	\
 		minishell_test_pipe.out			\
 		minishell_test_redirections.out		\
 		minishell_test_heredoc.out		\
-		minishell_perror_testing.out		\
+		minishell_test_heredoc_pipe_redir.out	\
+		minishell_perror_testing.out
 #------------------------------------------------------------------------------#
 OBJ :=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 #------------------------------------------------------------------------------#

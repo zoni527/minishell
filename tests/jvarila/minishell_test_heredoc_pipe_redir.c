@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_test_heredoc.c                           :+:      :+:    :+:   */
+/*   minishell_test_heredoc_pipe_redir.c                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/12 10:49:35 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/09 10:37:42 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:31:51 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ void	loop(t_minishell *data)
 
 	while (1)
 	{
-		line = readline("minishell heredoc test: ");
-		if (!line)
-			break ;
+		line = readline("minishell heredoc pipe redir test: ");
 		add_history(line);
 		if (ft_strncmp(line, "exit", 5) == 0)
 		{
@@ -36,6 +34,7 @@ void	loop(t_minishell *data)
 		data->raw_input = line;
 		tokenization(data);
 		heredoc(data);
+		piping(data);
 		data->token_list = NULL;
 		free(line);
 	}

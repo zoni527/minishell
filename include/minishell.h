@@ -48,6 +48,7 @@
 # define EXIT_NOSUCH		1
 # define EXIT_ISADIRECTORY	1
 # define EXIT_LIMITHEREDOC	2
+# define EXIT_HEREDOC_FILE	3
 # define EXIT_BINPERM		126
 # define EXIT_NOTFOUND		127
 
@@ -78,6 +79,7 @@
 # define MSG_ERROR_ISADIRECTORY	"Is a directory"
 # define MSG_ERROR_LIMITHEREDOC	"Maximum heredoc count exceeded"
 # define MSG_ERROR_HEREDOC		"Heredoc execution failed"
+# define MSG_ERROR_HEREDOC_FILE	"Failed to open heredoc temp file"
 # define MSG_ERROR_NODELIM		"EOF received instead of delimiter"
 
 # define METACHARACTERS			"|<> \t\n"
@@ -127,6 +129,7 @@ typedef enum e_token_type
 	ARGUMENT,
 	BUILTIN,
 	FILE_NAME,
+	DELIMITER,
 	PIPE,
 	REDIRECT_INPUT,
 	REDIRECT_OUTPUT,
@@ -162,9 +165,6 @@ typedef struct s_minishell
 	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
-	int					hd_fd;
-	int					final_fd_out;
-	int					final_ft_in;
 	t_error				error;
 	struct sigaction	act_int;
 	struct sigaction	act_int_old;
@@ -211,9 +211,13 @@ bool			has_unclosed_quotes(const char *str);
 
 void			tokenization(t_minishell *data);
 
-/* ------------------------------------------- minishell_variable_expansion.c */
+/* ---------------------------------------- minishell_variable_expansion_01.c */
 
 void			variable_expansion(t_minishell *data);
+
+/* ---------------------------------------- minishell_variable_expansion_02.c */
+
+t_var			*question_mark_variable(t_minishell *data);
 
 /* ----------------------------------------------- minishell_word_splitting.c */
 
@@ -250,6 +254,7 @@ bool			is_command(const t_token *token);
 bool			is_file_name(const t_token *token);
 bool			is_argument(const t_token *token);
 bool			is_word(const t_token *token);
+bool			is_delimiter(const t_token *token);
 
 /* ----------------------------------------- minishell_assign_token_indices.c */
 
@@ -269,7 +274,6 @@ size_t			count_heredocs(const t_token *list);
 /* ---------------------------------------- minishell_tokenization_utils_01.c */
 
 void			toggle_quote_flag(char *quote_flag, char c);
-void			print_tokens(t_minishell *data);
 t_token			*new_token_node(t_minishell *data, const char *str);
 void			append_token(t_token **list, t_token *token);
 void			insert_token_left(t_token *current, t_token *new);
@@ -278,8 +282,8 @@ void			insert_token_left(t_token *current, t_token *new);
 
 /* -------------------------------------- minishell_environment_print_alpha.c */
 
-int			get_envp_len(t_var *envp);
-void		print_env_alphabetically(t_var *envp);
+int				get_envp_len(t_var *envp);
+void			print_env_alphabetically(t_var *envp);
 
 /* -------------------------------------------------- minishell_environment.c */
 
@@ -296,7 +300,7 @@ int				remove_env(char *key, t_var *envp);
 int				get_env_list_size(t_var *begin);
 void			print_custom_env(t_var *list);
 t_var			*create_new_env_var(t_minishell *data, \
-						char *raw, char *key, char *value);
+							char *raw, char *key, char *value);
 
 /* ================================ BUILTINS ================================ */
 
@@ -314,7 +318,7 @@ void			builtin_echo(t_minishell *data, t_token *builtin_token);
 int				get_current_dir(t_minishell *data);
 int				change_dir(t_minishell *data, char *str);
 void			builtin_cd(t_minishell *data, t_token *builtin_token, \
-					t_var *envp);
+				t_var *envp);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 
@@ -347,7 +351,6 @@ void			piping(t_minishell *data);
 /* ---------------------------------------------------- minishell_piping_02.c */
 
 void			child_process(t_minishell *data);
-bool			pipe_has_redirections(const t_minishell *data);
 
 /* ================================= SIGNALS ================================ */
 
@@ -365,11 +368,20 @@ int				handle_redirections(t_minishell *data);
 
 /* ----------------------------------------------- minishell_redirect_input.c */
 
-int				redirect_input(t_minishell *data, const t_token *token);
+int				redirect_input(t_minishell *data, const t_token *input);
 
 /* ---------------------------------------------- minishell_redirect_output.c */
 
-int				redirect_output(t_minishell *data, const t_token *token);
+int				redirect_output(t_minishell *data, const t_token *output);
+int				validate_outfile(t_minishell *data, const char *file_name);
+
+/* --------------------------------------------- minishell_redirect_heredoc.c */
+
+int				redirect_heredoc(t_minishell *data, const t_token *heredoc);
+
+/* ---------------------------------------------- minishell_redirect_append.c */
+
+int				redirect_append(t_minishell *data, const t_token *append);
 
 /* --------------------------------------------------- minishell_heredoc_01.c */
 
@@ -450,8 +462,6 @@ t_token			*copy_cmd_and_args_within_pipe(t_minishell *data, \
 										const t_token *start);
 t_token			*copy_redirections_within_pipe(t_minishell *data, \
 										const t_token *start);
-t_token			*copy_heredocs_within_pipe(t_minishell *data, \
-									const t_token *start);
 t_token			*copy_token(t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
@@ -460,11 +470,16 @@ t_token			*skip_to(const t_token *list, \
 								bool (*f)(const t_token *token));
 t_token			*skip_to_next(const t_token *list, \
 								bool (*f)(const t_token *token));
-t_token			*skip_to_pipe_by_index(const t_minishell *data);
+t_token			*skip_to_current_pipe(const t_minishell *data);
 bool			tokens_contain(const t_token *list, \
 								bool (*f)(const t_token *token));
 bool			pipe_has(const t_minishell *data, \
 								bool (*f)(const t_token *token));
+
+/* --------------------------------------------- minishell_token_helpers_03.c */
+
+bool			pipe_has_redirections(const t_minishell *data);
+bool			pipe_has_heredoc(const t_minishell *data);
 
 /* -------------------------------------------------------------------------- */
 

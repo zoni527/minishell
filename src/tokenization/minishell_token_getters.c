@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+static const char	*get_token_type_str_2(const t_token *token);
+
 /**
  * Tries to match token value to a builtin name.
  *
@@ -70,6 +72,16 @@ const char	*get_token_type_str(const t_token *token)
 	else if (token->type == APPEND)
 		type_str = "append";
 	else
-		type_str = "unknown";
+		type_str = get_token_type_str_2(token);
+	return (type_str);
+}
+
+static const char	*get_token_type_str_2(const t_token *token)
+{
+	const char	*type_str;
+
+	type_str = "unknown";
+	if (token->type == DELIMITER)
+		type_str = "delimiter";
 	return (type_str);
 }

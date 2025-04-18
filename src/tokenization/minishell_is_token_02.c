@@ -53,7 +53,7 @@ bool	is_builtin_or_command(const t_token *token)
 	token = token->prev;
 	if (!token || is_pipe(token))
 		return (true);
-	while (token && is_file_name(token))
+	while (token && (is_file_name(token) || is_delimiter(token)))
 		token = token->prev->prev;
 	if (!token || is_pipe(token))
 		return (true);

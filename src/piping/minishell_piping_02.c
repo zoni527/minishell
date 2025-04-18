@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 09:51:37 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/09 11:35:04 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/18 13:34:57 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,10 @@ void	child_process(t_minishell *data)
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
 	if (handle_redirections(data) == EXIT_FAILURE)
 		return ;
-	tokens = skip_to_pipe_by_index(data);
+	tokens = skip_to_current_pipe(data);
 	command = copy_cmd_and_args_within_pipe(data, tokens);
 	argv = create_args_arr(data, command);
 	envp = create_envp_arr_from_custom_env(data, data->minishell_env);
 	cmd_exec(data, argv, envp);
 	ft_putendl_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
-}
-
-/**
- * Returns true if there is a redirection token within the pipe specified by
- * data->pipe_index, false if not.
- *
- * @param data	Pointer to main data struct
- */
-bool	pipe_has_redirections(const t_minishell *data)
-{
-	return (pipe_has(data, is_redirection));
 }

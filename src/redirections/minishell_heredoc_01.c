@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:01:54 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/17 12:20:45 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:23:58 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,32 +68,36 @@ static void	create_heredoc_delimiters(t_minishell *data)
 
 /**
  * Creates file names for heredoc files. The format is
- * /tmp/minishell_heredoc_[0-9][0-9].
+ * /tmp/minishell_heredoc_[0-9][0-9]. Uses the token's
+ * index to create a unique matching file name.
  *
  * @param data	Pointer to main data struct
  */
 static void	setup_heredoc_file_names(t_minishell *data)
 {
-	char		*file_name;
-	char		*file_index;
-	const char	*file_name_base;
-	size_t		i;
+	const t_token	*heredoc;
+	const char		*file_name;
+	char			*file_index;
+	const char		*file_name_base;
+	size_t			i;
 
 	data->hd_file_names = ft_ma_calloc(data->arena, \
 										data->hd_count + 1, \
 										sizeof(char *));
 	file_name_base = "/tmp/minishell_heredoc_";
-	i = 0;
+	heredoc = skip_to_heredoc(data->token_list);
 	file_index = ft_ma_calloc(data->arena, 3, sizeof(char));
-	while (i < data->hd_count)
+	i = 0;
+	while (heredoc)
 	{
-		if (i < 10)
+		if (heredoc->index < 10)
 			file_index[0] = '0';
 		else
-			file_index[0] = '0' + i / 10;
-		file_index[1] = '0' + i % 10;
+			file_index[0] = '0' + heredoc->index / 10;
+		file_index[1] = '0' + heredoc->index % 10;
 		file_name = ft_ma_strjoin(data->arena, file_name_base, file_index);
 		data->hd_file_names[i] = file_name;
+		heredoc = skip_to_heredoc(heredoc->next);
 		++i;
 	}
 }
@@ -133,8 +137,6 @@ static int	run_heredoc(t_minishell *data, int index)
 
 	delimiter = data->hd_delimiters[index];
 	input = read_heredoc_input(data, delimiter);
-	if (data->error != 0)
-		return (EXIT_FAILURE);
 	input_len = ft_strlen(input);
 	fd = open(data->hd_file_names[index], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)

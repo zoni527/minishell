@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-static const t_token	*skip_to_input_redirection(const t_token *list);
 static int				validate_infile(t_minishell *data, \
 							const char *file_name);
 
@@ -22,44 +21,22 @@ static int				validate_infile(t_minishell *data, \
  * @param data	Pointer to main data struct
  * @param token	Token to start redirection operation from
  */
-int	redirect_input(t_minishell *data, const t_token *token)
+int	redirect_input(t_minishell *data, const t_token *input)
 {
 	const char	*file_name;
 	int			fd;
 
-	token = skip_to_input_redirection(token);
-	while (token)
+	file_name = input->next->value;
+	if (validate_infile(data, file_name) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	fd = open(file_name, O_RDONLY);
+	if (fd < 0)
 	{
-		file_name = token->next->value;
-		if (validate_infile(data, file_name) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
-		fd = open(file_name, O_RDONLY);
-		if (fd < 0)
-		{
-			handle_error(data, file_name, ERROR_OPEN);
-			return (EXIT_FAILURE);
-		}
-		redirect_stdin_and_close_fd(data, &fd);
-		token = skip_to_input_redirection(token->next);
+		handle_error(data, file_name, ERROR_OPEN);
+		return (EXIT_FAILURE);
 	}
+	redirect_stdin_and_close_fd(data, &fd);
 	return (EXIT_SUCCESS);
-}
-
-/**
- * Returns first token that is an input redirection in list. Won't search in
- * multiple pipes.
- *
- * @param list	First token in a list of tokens to search within
- */
-static const t_token	*skip_to_input_redirection(const t_token *list)
-{
-	if (!list)
-		return (NULL);
-	while (list && !is_input_redirection(list) && !is_pipe(list))
-		list = list->next;
-	if (!list || is_pipe(list))
-		return (NULL);
-	return (list);
 }
 
 /**
