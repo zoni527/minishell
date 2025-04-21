@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_tokenization_utils_01.c                  :+:      :+:    :+:   */
+/*   minishell_tokenization_utils.c                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 17:42:24 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/26 18:40:13 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/21 16:37:00 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,8 @@ void	append_token(t_token **list, t_token *token)
 	while (end->next)
 		end = end->next;
 	end->next = token;
-	if (token)
-	{
-		token->prev = end;
-		token->index = end->index + 1;
-	}
+	token->prev = end;
+	token->index = end->index + 1;
 }
 
 /**

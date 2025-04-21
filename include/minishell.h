@@ -56,6 +56,8 @@
 # define EXIT_BLTN_NO_EXIT	1
 # define EXIT_BLTN_NAN		2
 
+# define EXIT_ENOMEM		42
+
 /* ---------------------------------------------------------- string literals */
 
 # define STR_MINISHELL			"minishell: "
@@ -161,6 +163,7 @@ typedef struct s_minishell
 	size_t				token_count;
 	size_t				pipe_count;
 	size_t				hd_count;
+	size_t				var_count;
 	size_t				pipe_index;
 	pid_t				last_pid;
 	int					last_rval;
@@ -266,8 +269,9 @@ const char		*get_token_type_str(const t_token *token);
 size_t			count_tokens(const t_token *list);
 size_t			count_pipes(const t_token *list);
 size_t			count_heredocs(const t_token *list);
+size_t			count_vars(const t_var *list);
 
-/* ---------------------------------------- minishell_tokenization_utils_01.c */
+/* ------------------------------------------- minishell_tokenization_utils.c */
 
 void			toggle_quote_flag(char *quote_flag, char c);
 t_token			*new_token_node(t_minishell *data, const char *str);
@@ -479,6 +483,15 @@ bool			pipe_has(const t_minishell *data, \
 
 bool			pipe_has_redirections(const t_minishell *data);
 bool			pipe_has_heredoc(const t_minishell *data);
+
+/* ------------------------------------------------ minishell_data_reset_01.c */
+
+int				reset_arena_and_pointers(t_minishell *data);
+
+/* ------------------------------------------------ minishell_data_reset_02.c */
+
+t_var			*copy_env_to_memarena(t_memarena *arena, const t_var *env_list);
+void			append_var(t_var **env_list, t_var *var);
 
 /* -------------------------------------------------------------------------- */
 

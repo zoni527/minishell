@@ -70,3 +70,21 @@ static size_t	count_type(const t_token *list, bool (*f)(const t_token *token))
 	}
 	return (count);
 }
+
+/**
+ * Counts variables in list of variables.
+ *
+ * @param list	First node in list of variables
+ */
+size_t	count_vars(const t_var *list)
+{
+	size_t	count;
+
+	count = 0;
+	while (list)
+	{
+		++count;
+		list = list->next;
+	}
+	return (count);
+}
