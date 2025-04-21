@@ -22,8 +22,7 @@ SRC_DIR	:=	../../src
 OBJ_DIR	:=	./obj
 #------------------------------------------------------------------------------#
 SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
-	$(SRC_DIR)/tokenization/minishell_variable_expansion_01.c	\
-	$(SRC_DIR)/tokenization/minishell_variable_expansion_02.c	\
+	$(SRC_DIR)/tokenization/minishell_variable_expansion.c		\
 	$(SRC_DIR)/tokenization/minishell_word_splitting.c		\
 	$(SRC_DIR)/tokenization/minishell_quote_removal.c		\
 	$(SRC_DIR)/tokenization/minishell_token_classification.c	\

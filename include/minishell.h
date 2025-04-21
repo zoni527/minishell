@@ -211,13 +211,9 @@ bool			has_unclosed_quotes(const char *str);
 
 void			tokenization(t_minishell *data);
 
-/* ---------------------------------------- minishell_variable_expansion_01.c */
+/* ------------------------------------------- minishell_variable_expansion.c */
 
 void			variable_expansion(t_minishell *data);
-
-/* ---------------------------------------- minishell_variable_expansion_02.c */
-
-t_var			*question_mark_variable(t_minishell *data);
 
 /* ----------------------------------------------- minishell_word_splitting.c */
 
