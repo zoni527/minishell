@@ -33,7 +33,7 @@ SRCS	=	src/minishell_main.c \
 			src/tokenization/minishell_assign_token_indices.c \
 			src/tokenization/minishell_token_getters.c \
 			src/tokenization/minishell_token_analysis.c \
-			src/tokenization/minishell_tokenization_utils_01.c \
+			src/tokenization/minishell_tokenization_utils.c \
 			src/environment/minishell_environment.c \
 			src/environment/minishell_list.c \
 			src/builtins/minishell_routing.c \

@@ -32,7 +32,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/tokenization/minishell_assign_token_indices.c	\
 	$(SRC_DIR)/tokenization/minishell_token_getters.c		\
 	$(SRC_DIR)/tokenization/minishell_token_analysis.c		\
-	$(SRC_DIR)/tokenization/minishell_tokenization_utils_01.c	\
+	$(SRC_DIR)/tokenization/minishell_tokenization_utils.c		\
 	$(SRC_DIR)/tokenization/minishell_quote_validation.c		\
 	$(SRC_DIR)/error_handling/minishell_error_handling.c		\
 	$(SRC_DIR)/error_handling/minishell_error_logging.c		\
