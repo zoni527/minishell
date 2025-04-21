@@ -36,6 +36,8 @@ void	token_classification(t_minishell *data)
 		}
 		else if (token->prev && is_redirection(token->prev))
 			token->type = FILE_NAME;
+		else if (token->prev && is_heredoc(token->prev))
+			token->type = DELIMITER;
 		else
 			token->type = ARGUMENT;
 		token = token->next;

@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 13:56:34 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/02 14:43:03 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:21:24 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,17 @@
 
 /**
  * Writes error messages to stderr, always starts with 'minishell: '
- * <p>
- * If file or msg is NULL, omit error for that part
  *
- * @param file	Name of file that msg is targeting, can be NULL
- * @param msg	Error message
+ * @param file	Name of file associated with error
  */
-void	ms_perror(const char *file, const char *msg)
+void	ms_perror(t_minishell *data, const char *file)
 {
-	ft_putstr_fd(STR_MINISHELL, STDERR_FILENO);
+	char	*str;
+
+	str = "minishell";
 	if (file)
-	{
-		ft_putstr_fd(file, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-	}
-	if (msg)
-		ft_putstr_fd(msg, STDERR_FILENO);
-	write(STDERR_FILENO, "\n", 1);
+		str = ft_ma_strjoin(data->arena, "minishell: ", file);
+	perror(str);
 }
 
 /**

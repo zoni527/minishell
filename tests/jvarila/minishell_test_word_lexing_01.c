@@ -44,10 +44,12 @@ int	main(void)
 {
 	static t_minishell	data;
 
-	data.custom_env = &(t_var){.raw = "ARG=|test|", \
+	data.minishell_env = &(t_var){.raw = "ARG=|test|", \
 		.key = "ARG", .value = "|test|"};
-	data.custom_env->next = &(t_var){.raw = "DERP=|derp|", .key = "DERP", \
+	data.minishell_env->next = &(t_var){.raw = "DERP=|derp|", .key = "DERP", \
 		.value = "|derp|"};
+	data.minishell_env->next->next = &(t_var){.raw = "X=\"Hello world\"", \
+		.key = "X", .value = "\"Hello world\""};
 	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));

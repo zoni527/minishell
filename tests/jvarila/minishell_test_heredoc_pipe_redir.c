@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_test_signals.c                           :+:      :+:    :+:   */
+/*   minishell_test_heredoc_pipe_redir.c                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/28 16:30:12 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/28 16:30:13 by jvarila          ###   ########.fr       */
+/*   Created: 2025/03/12 10:49:35 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/18 13:31:51 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,42 @@ void	loop(t_minishell *data)
 {
 	char	*line;
 
-	(void)data;
 	while (1)
 	{
-		line = readline("To exit, write exit and press enter: ");
-		if (!line)
-			;
-		else if (ft_strncmp(line, "activate sigquit", 17) == 0)
-			activate_sigquit(data);
-		else if (ft_strncmp(line, "deactivate sigquit", 19) == 0)
-			deactivate_sigquit(data);
-		else if (ft_strncmp(line, "exit", 5) == 0)
+		line = readline("minishell heredoc pipe redir test: ");
+		add_history(line);
+		if (ft_strncmp(line, "exit", 5) == 0)
 		{
 			free(line);
 			break ;
 		}
-		ft_printf("Signal value is: %d\n", g_signal);
+		if (has_unclosed_quotes(line))
+		{
+			ft_putendl("Input has unclosed quotes");
+			free(line);
+			continue ;
+		}
+		data->raw_input = line;
+		tokenization(data);
+		heredoc(data);
+		piping(data);
+		data->token_list = NULL;
 		free(line);
 	}
 }
 
-int	main(void)
+int	main(int argc, char *argv[], char *envp[])
 {
 	static t_minishell	data;
 
+	(void)argc;
+	(void)argv;
+	(void)envp;
 	data.arena = ft_new_memarena();
+	data.initial_env = (const char **)envp;
+	env_list_from_envp(&data, (char **)data.initial_env);
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
-	set_default_signal_handling(&data);
 	loop(&data);
 	ft_free_memarena(data.arena);
 	return (0);

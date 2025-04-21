@@ -11,7 +11,10 @@
 - Substitution
 - Parsing
 - Splitting
+- Expansion
 - Execution
+- Redirection
+- Piping
 - Processes
 - Files
 - Directories

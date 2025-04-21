@@ -30,23 +30,6 @@ void	toggle_quote_flag(char *quote_flag, char c)
 }
 
 /**
- * Prints token values in data->token_list
- *
- * @param data	Pointer to main data struct
- */
-void	print_tokens(t_minishell *data)
-{
-	t_token	*token;
-
-	token = data->token_list;
-	while (token)
-	{
-		ft_printf("%s\n", token->value);
-		token = token->next;
-	}
-}
-
-/**
  * Creates new token node using str, uses memory arena to request heap memory.
  * <p>
  * Does an initial categorization for operators, everything else will be a word
@@ -57,11 +40,11 @@ void	print_tokens(t_minishell *data)
  * @param str	String is assigned to be the value of the new token node
  * @return		Return newly created token node
  */
-t_token	*new_token_node(t_memarena *arena, const char *str)
+t_token	*new_token_node(t_minishell *data, const char *str)
 {
 	t_token	*new;
 
-	new = ft_ma_calloc(arena, 1, sizeof(t_token));
+	new = ft_ma_calloc(data->arena, 1, sizeof(t_token));
 	new->value = (char *)str;
 	if (*str == '|')
 		new->type = PIPE;
@@ -81,7 +64,7 @@ t_token	*new_token_node(t_memarena *arena, const char *str)
 /**
  * Adds a given token node to the end of given list of tokens.
  *
- * @param list	Pointer to token pointer that is the first node in the list
+ * @param list	First node in list of tokens
  * @param token	Pointer to token node that will be added to the end of the list
  */
 void	append_token(t_token **list, t_token *token)

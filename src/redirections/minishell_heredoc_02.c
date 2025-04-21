@@ -1,47 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_heredoc.c                                :+:      :+:    :+:   */
+/*   minishell_heredoc_02.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 10:01:54 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/09 11:34:53 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/17 12:19:35 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/17 12:30:11 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	contains_heredoc(t_token *list)
+/**
+ * Function uses readline to build heredoc input which is then returned.
+ *
+ * @param data		Pointer to main data struct
+ * @param delimiter	String that delimits the end of heredoc input
+ */
+char	*read_heredoc_input(t_minishell *data, const char *delimiter)
 {
-	if (!list)
-		return (false);
-	while (list && list->type != HEREDOC)
-		list = list->next;
-	if (list && list->next && list->next->type == ARGUMENT)
-		return (true);
-	return (false);
-}
-
-t_token	*skip_to_heredoc(t_token *list)
-{
-	if (!list)
-		return (NULL);
-	while (list && list->type != HEREDOC)
-		list = list->next;
-	return (list);
-}
-
-void	heredoc(t_minishell *data)
-{
-	char	*delimiter;
-	char	*result;
-	t_token	*token;
-	char	*line;
+	char		*line;
+	char		*result;
+	bool		received_delim;
 
 	result = "";
-	token = skip_to_heredoc(data->token_list);
-	delimiter = token->next->value;
+	received_delim = false;
 	while (1)
 	{
 		line = readline("> ");
@@ -49,6 +33,7 @@ void	heredoc(t_minishell *data)
 			break ;
 		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
 		{
+			received_delim = true;
 			free(line);
 			break ;
 		}
@@ -56,5 +41,17 @@ void	heredoc(t_minishell *data)
 		result = ft_ma_strjoin(data->arena, result, "\n");
 		free(line);
 	}
-	ft_putstr(result);
+	if (!received_delim)
+		handle_error(data, "warning", ERROR_NODELIM);
+	return (result);
+}
+
+/**
+ * Skips to first heredoc in list.
+ *
+ * @param list	First node in list of tokens
+ */
+t_token	*skip_to_heredoc(const t_token *list)
+{
+	return (skip_to(list, is_heredoc));
 }

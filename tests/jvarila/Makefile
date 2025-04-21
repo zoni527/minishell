@@ -28,33 +28,55 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/tokenization/minishell_token_classification.c	\
 	$(SRC_DIR)/tokenization/minishell_is_token_01.c			\
 	$(SRC_DIR)/tokenization/minishell_is_token_02.c			\
+	$(SRC_DIR)/tokenization/minishell_is_token_03.c			\
 	$(SRC_DIR)/tokenization/minishell_assign_token_indices.c	\
 	$(SRC_DIR)/tokenization/minishell_token_getters.c		\
 	$(SRC_DIR)/tokenization/minishell_token_analysis.c		\
 	$(SRC_DIR)/tokenization/minishell_tokenization_utils_01.c	\
 	$(SRC_DIR)/tokenization/minishell_quote_validation.c		\
+	$(SRC_DIR)/error_handling/minishell_error_handling.c		\
 	$(SRC_DIR)/error_handling/minishell_error_logging.c		\
 	$(SRC_DIR)/error_handling/minishell_syntax_error.c		\
-	$(SRC_DIR)/terminal_behaviour/minishell_terminal_behaviour.c	\
 	$(SRC_DIR)/signals/minishell_signals.c				\
 	$(SRC_DIR)/piping/minishell_piping_01.c				\
 	$(SRC_DIR)/piping/minishell_piping_02.c				\
-	$(SRC_DIR)/redirections/minishell_redirections_01.c		\
+	$(SRC_DIR)/redirections/minishell_redirections.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_input.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_output.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_heredoc.c		\
+	$(SRC_DIR)/redirections/minishell_redirect_append.c		\
 	$(SRC_DIR)/execution/minishell_execution.c			\
 	$(SRC_DIR)/environment/minishell_environment.c			\
 	$(SRC_DIR)/environment/minishell_environment_list.c		\
-	$(SRC_DIR)/redirections/minishell_heredoc.c			\
+	$(SRC_DIR)/environment/minishell_environment_print_alpha.c	\
+	$(SRC_DIR)/builtins/minishell_builtin_cd.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_echo.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_env.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_exit.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_export.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_pwd.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_unset.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_handler.c			\
+	$(SRC_DIR)/redirections/minishell_heredoc_01.c			\
+	$(SRC_DIR)/redirections/minishell_heredoc_02.c			\
 	$(SRC_DIR)/utils/minishell_var_name_len.c			\
 	$(SRC_DIR)/utils/minishell_cleanup_and_exiting.c		\
 	$(SRC_DIR)/utils/minishell_safe_fd_management.c			\
 	$(SRC_DIR)/utils/minishell_safe_pipe_management.c		\
+	$(SRC_DIR)/utils/minishell_token_helpers_01.c			\
+	$(SRC_DIR)/utils/minishell_token_helpers_02.c			\
+	$(SRC_DIR)/utils/minishell_token_helpers_03.c			\
+	$(SRC_DIR)/utils/minishell_directory_validation.c		\
 	$(SRC_DIR)/utils/minishell_print_debug.c
 #------------------------------------------------------------------------------#
 TESTS :=	minishell_test_word_lexing_01.out	\
 		minishell_test_quotes_01.out		\
 		minishell_test_signals.out		\
 		minishell_test_pipe.out			\
-		minishell_test_heredoc.out
+		minishell_test_redirections.out		\
+		minishell_test_heredoc.out		\
+		minishell_test_heredoc_pipe_redir.out	\
+		minishell_perror_testing.out
 #------------------------------------------------------------------------------#
 OBJ :=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 #------------------------------------------------------------------------------#

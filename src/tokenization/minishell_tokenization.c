@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 17:49:09 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/27 09:53:01 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/18 16:04:54 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ static void	tokenize(t_minishell *data, const char *src, size_t len);
 static char	*skip_over_operator(const char *str);
 static char	*skip_over_word(const char *str);
 
+/**
+ * Calls functions to complete the tokenization process steps.
+ *
+ * @param data	Pointer to main data struct
+ */
 void	tokenization(t_minishell *data)
 {
 	lex_raw_input(data);
@@ -27,6 +32,7 @@ void	tokenization(t_minishell *data)
 	assign_token_indices(data);
 	data->token_count = count_tokens(data->token_list);
 	data->pipe_count = count_pipes(data->token_list);
+	data->hd_count = count_heredocs(data->token_list);
 }
 
 /**
@@ -72,10 +78,17 @@ static void	tokenize(t_minishell *data, const char *src, size_t len)
 	t_token	*new;
 
 	word = ft_ma_substr(data->arena, src, 0, len);
-	new = new_token_node(data->arena, word);
+	new = new_token_node(data, word);
 	append_token(&data->token_list, new);
 }
 
+/**
+ * Helper function to skip over operators in strings. Takes into account
+ * << and >> as special cases as they have two characters instead of one
+ * (vs |<>).
+ *
+ * @param str	String whose first character is part of an operator
+ */
 static char	*skip_over_operator(const char *str)
 {
 	if (!ft_strncmp(str, "<<", 2) || !ft_strncmp(str, ">>", 2))
@@ -83,6 +96,12 @@ static char	*skip_over_operator(const char *str)
 	return ((char *)++str);
 }
 
+/**
+ * Helper function to correctly skip over words, taking into account quotes.
+ * Breaks when it finds a metacharacter that is not within quotes.
+ *
+ * @param str	String containing raw input
+ */
 static char	*skip_over_word(const char *str)
 {
 	char	quote_flag;

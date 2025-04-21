@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:48:53 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/26 18:51:48 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/21 10:03:01 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static void		expand_variables(t_minishell *data, t_token *token);
 static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
 					size_t var_index);
-static bool		contains_unexpanded_variable(t_token *token);
 static t_var	*find_var(t_minishell *data, const char *str);
+static t_var	*question_mark_variable(t_minishell *data);
 
 /**
  * Top level function for starting variable expansion for all tokens in 
@@ -58,16 +58,19 @@ static void	expand_variables(t_minishell *data, t_token *token)
 
 	quote_flag = 0;
 	i = 0;
-	while (contains_unexpanded_variable(token))
+	while (token->value[i])
 	{
 		while (ft_isspace(token->value[i]))
 			++i;
 		if (token->value[i] == '\'' || token->value[i] == '"')
 			toggle_quote_flag(&quote_flag, token->value[i]);
 		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1]) \
-			&& !(quote_flag == '\''))
+			&& !(quote_flag == '\'') && !is_heredoc(token->prev))
 		{
-			var = find_var(data, &token->value[++i]);
+			if (token->value[++i] == '?')
+				var = question_mark_variable(data);
+			else
+				var = find_var(data, &token->value[++i]);
 			i = expand_variable(data, token, var, i);
 			continue ;
 		}
@@ -118,38 +121,7 @@ static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
 }
 
 /**
- * Function for checking if token contains an unexpanded variable.
- *
- * @param token	Token to check
- * @return		true if an unexpanded variable is found, false if not
- */
-static bool	contains_unexpanded_variable(t_token *token)
-{
-	const char	*str;
-	char		quote_flag;
-
-	str = token->value;
-	quote_flag = 0;
-	while (str)
-	{
-		str = ft_skip_whitespace(str);
-		if (!*str)
-			break ;
-		if (*str == '\'' || *str == '"')
-		{
-			toggle_quote_flag(&quote_flag, *(str++));
-			continue ;
-		}
-		if (*str == '$' && *(str + 1) && !ft_isspace(*(str + 1)) \
-			&& !(quote_flag == '\''))
-			return (true);
-		++str;
-	}
-	return (false);
-}
-
-/**
- * Looks through custom_env in data for a variable whose key matches the
+ * Looks through minishell_env in data for a variable whose key matches the
  * argument str.
  *
  * @param data	Pointer to main data struct
@@ -158,7 +130,7 @@ static bool	contains_unexpanded_variable(t_token *token)
  * @return		Returns variable on a match, NULL if no matching variable can
  *				be found in data->custom_env
  */
-t_var	*find_var(t_minishell *data, const char *str)
+static t_var	*find_var(t_minishell *data, const char *str)
 {
 	t_var	*var;
 	size_t	len;
@@ -173,4 +145,31 @@ t_var	*find_var(t_minishell *data, const char *str)
 		var = var->next;
 	}
 	return (NULL);
+}
+
+/**
+ * Creates a t_var node with the correct values to perform expansion for $?.
+ * Basically this function uses a modified version of itoa to assign
+ * data->last_rval to variable->value.
+ *
+ * @param data	Pointer to main data struct
+ */
+static t_var	*question_mark_variable(t_minishell *data)
+{
+	t_var	*variable;
+	int		str_len;
+	int		last_rval;
+
+	variable = ft_ma_calloc(data->arena, 1, sizeof(t_var));
+	variable->key = "?";
+	last_rval = (unsigned char)data->last_rval;
+	str_len = ft_int_digits(last_rval);
+	variable->value = ft_ma_calloc(data->arena, str_len + 1, sizeof(char));
+	while (--str_len)
+	{
+		variable->value[str_len] = (last_rval % 10) + '0';
+		last_rval /= 10;
+	}
+	variable->value[0] = (last_rval % 10) + '0';
+	return (variable);
 }

@@ -20,7 +20,7 @@
  * @param data	Pointer to main data struct
  * @param fd	Pointer to file descriptor to close
  */
-void	try_to_close_fd(t_minishell *data, int *fd)
+void	safe_close(t_minishell *data, int *fd)
 {
 	if (!fd || *fd < 0)
 		return ;
@@ -37,7 +37,7 @@ void	try_to_close_fd(t_minishell *data, int *fd)
  * @param fd1	File descriptor to redirect fd2 to
  * @param fd2	File descriptor to be overwritten
  */
-void	try_to_dup2(t_minishell *data, int fd1, int fd2)
+void	safe_dup2(t_minishell *data, int fd1, int fd2)
 {
 	if (fd1 < 0 || fd2 < 0)
 		return ;
@@ -55,8 +55,8 @@ void	redirect_stdout_and_close_fd(t_minishell *data, int *fd)
 {
 	if (!fd)
 		return ;
-	try_to_dup2(data, *fd, STDOUT_FILENO);
-	try_to_close_fd(data, fd);
+	safe_dup2(data, *fd, STDOUT_FILENO);
+	safe_close(data, fd);
 }
 
 /**
@@ -69,6 +69,6 @@ void	redirect_stdin_and_close_fd(t_minishell *data, int *fd)
 {
 	if (!fd)
 		return ;
-	try_to_dup2(data, *fd, STDIN_FILENO);
-	try_to_close_fd(data, fd);
+	safe_dup2(data, *fd, STDIN_FILENO);
+	safe_close(data, fd);
 }

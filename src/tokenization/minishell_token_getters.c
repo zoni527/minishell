@@ -12,28 +12,42 @@
 
 #include "minishell.h"
 
-t_bltn_type	get_builtin_type(t_token *token)
+static const char	*get_token_type_str_2(const t_token *token);
+
+/**
+ * Tries to match token value to a builtin name.
+ *
+ * @param token	Token to match against
+ *
+ * @return	Builtin enum type if match is found, -1 if not
+ */
+t_bltn_type	get_builtin_type(const t_token *token)
 {
 	if (!token || token->type != BUILTIN)
 		return (-1);
-	if (ft_strncmp(token->value, "echo", ft_strlen("echo") + 1) == 0)
+	if (ft_strcmp(token->value, "echo") == 0)
 		return (BLTN_ECHO);
-	if (ft_strncmp(token->value, "cd", ft_strlen("cd") + 1) == 0)
+	if (ft_strcmp(token->value, "cd") == 0)
 		return (BLTN_CD);
-	if (ft_strncmp(token->value, "pwd", ft_strlen("pwd") + 1) == 0)
+	if (ft_strcmp(token->value, "pwd") == 0)
 		return (BLTN_PWD);
-	if (ft_strncmp(token->value, "export", ft_strlen("export") + 1) == 0)
+	if (ft_strcmp(token->value, "export") == 0)
 		return (BLTN_EXPORT);
-	if (ft_strncmp(token->value, "unset", ft_strlen("unset") + 1) == 0)
+	if (ft_strcmp(token->value, "unset") == 0)
 		return (BLTN_UNSET);
-	if (ft_strncmp(token->value, "env", ft_strlen("env") + 1) == 0)
+	if (ft_strcmp(token->value, "env") == 0)
 		return (BLTN_ENV);
-	if (ft_strncmp(token->value, "exit", ft_strlen("exit") + 1) == 0)
+	if (ft_strcmp(token->value, "exit") == 0)
 		return (BLTN_EXIT);
 	return (-1);
 }
 
-const char	*get_token_type_str(t_token *token)
+/**
+ * Returns string that matches token->type.
+ *
+ * @param token	
+ */
+const char	*get_token_type_str(const t_token *token)
 {
 	const char	*type_str;
 
@@ -58,17 +72,16 @@ const char	*get_token_type_str(t_token *token)
 	else if (token->type == APPEND)
 		type_str = "append";
 	else
-		type_str = "unknown";
+		type_str = get_token_type_str_2(token);
 	return (type_str);
 }
 
-t_token	*get_token_by_index(t_token *list, int index)
+static const char	*get_token_type_str_2(const t_token *token)
 {
-	while (list)
-	{
-		if ((int)list->index == index)
-			return (list);
-		list = list->next;
-	}
-	return (NULL);
+	const char	*type_str;
+
+	type_str = "unknown";
+	if (token->type == DELIMITER)
+		type_str = "delimiter";
+	return (type_str);
 }

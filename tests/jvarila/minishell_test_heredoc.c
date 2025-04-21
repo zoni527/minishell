@@ -19,6 +19,8 @@ void	loop(t_minishell *data)
 	while (1)
 	{
 		line = readline("minishell heredoc test: ");
+		if (!line)
+			break ;
 		add_history(line);
 		if (ft_strncmp(line, "exit", 5) == 0)
 		{
@@ -33,8 +35,7 @@ void	loop(t_minishell *data)
 		}
 		data->raw_input = line;
 		tokenization(data);
-		if (contains_heredoc(data->token_list))
-			heredoc(data);
+		heredoc(data);
 		data->token_list = NULL;
 		free(line);
 	}

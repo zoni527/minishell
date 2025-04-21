@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_safe_pipe_management.c                   :+:      :+:    :+:   */
+/*   minishell_redirect_append.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 10:44:26 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/07 10:50:15 by jvarila          ###   ########.fr       */
+/*   Created: 2025/04/18 12:49:11 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/18 12:52:23 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/**
- * Calls pipe with new_pipe as parameter, in case the pipe fails calls 
- * clean_error_exit, ending the program.
- */
-void	safe_pipe(t_minishell *data, int *new_pipe)
+int	redirect_append(t_minishell *data, const t_token *append)
 {
-	if (!new_pipe)
-		return ;
-	if (pipe(new_pipe) < 0)
-		clean_error_exit(data, MSG_ERROR_PIPE, ERROR_PIPE);
+	const char	*file_name;
+	int			fd;
+
+	file_name = append->next->value;
+	if (validate_outfile(data, file_name) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
+	fd = open(file_name, O_CREAT | O_APPEND | O_WRONLY, 0644);
+	if (fd < 0)
+	{
+		handle_error(data, file_name, ERROR_OPEN);
+		return (EXIT_FAILURE);
+	}
+	redirect_stdout_and_close_fd(data, &fd);
+	return (EXIT_SUCCESS);
 }
