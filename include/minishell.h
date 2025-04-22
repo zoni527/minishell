@@ -64,7 +64,6 @@
 
 /* ----------------------------------------------------------- error messages */
 
-# define MSG_ERROR_ALLOC		"ERROR: couldn't alloc"
 # define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
 # define MSG_ERROR_OPEN			"ERROR: failed to open"
 # define MSG_ERROR_CLOSE		"ERROR: failed to close"
@@ -83,6 +82,7 @@
 # define MSG_ERROR_HEREDOC		"Heredoc execution failed"
 # define MSG_ERROR_HEREDOC_FILE	"Failed to open heredoc temp file"
 # define MSG_ERROR_NODELIM		"EOF received instead of delimiter"
+# define MSG_ERROR_UNCLOSED		"Input has unclosed quotes"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -287,7 +287,7 @@ void			print_env_alphabetically(t_var *envp);
 
 /* -------------------------------------------------- minishell_environment.c */
 
-void			env_list_from_envp(t_minishell *data, char **envp);
+void			env_list_from_envp(t_minishell *data, const char **envp);
 char			**create_envp_arr_from_custom_env(t_minishell *data, \
 										t_var *envp_list);
 char			*ms_getenv(t_minishell *data, const char *name, t_var *envp);
