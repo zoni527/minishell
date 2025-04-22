@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/**
+ * Appends variable var to environment variable list.
+ *
+ * @param env_list	Pointer to first element in environment variable list
+ * @param var		Node to be appended
+ */
 void	append_var(t_var **env_list, t_var *var)
 {
 	t_var	*end;
@@ -30,6 +36,12 @@ void	append_var(t_var **env_list, t_var *var)
 	var->prev = end;
 }
 
+/**
+ * Copies environment variable list into given memarena.
+ *
+ * @param arena		Memarena to copy into
+ * @param env_list	Linked list of environment variables
+ */
 t_var	*copy_env_to_memarena(t_memarena *arena, const t_var *env_list)
 {
 	t_var	*copy;

@@ -24,6 +24,7 @@ static void		free_var_contents(t_var *var);
  * were previously pointing to addresses inside the memarena to NULL.
  *
  * @param data	Pointer to main data struct
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	reset_arena_and_pointers(t_minishell *data)
 {
@@ -47,6 +48,12 @@ int	reset_arena_and_pointers(t_minishell *data)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * Creates a deep copy of a t_var in a new location on the heap.
+ *
+ * @param var	Environment variable to be copied
+ * @return	Deep copy of var, prev and next assigned to NULL
+ */
 static t_var	*copy_var(const t_var *var)
 {
 	t_var	*copy;
@@ -68,6 +75,11 @@ static t_var	*copy_var(const t_var *var)
 	return (copy);
 }
 
+/**
+ * Frees the raw, key and value fields in var and sets the pointers to NULL.
+ *
+ * @param var	Environment variable whose fields to free
+ */
 static void	free_var_contents(t_var *var)
 {
 	if (!var)
@@ -80,6 +92,12 @@ static void	free_var_contents(t_var *var)
 	var->value = NULL;
 }
 
+/**
+ * Frees all nodes in environment variable linked list. Sets the linked list
+ * pointer to NULL after freeing.
+ *
+ * @param env	Pointer to first node in environment list
+ */
 static void	free_env(t_var **env)
 {
 	t_var	*temp;
@@ -98,6 +116,12 @@ static void	free_env(t_var **env)
 	*env = NULL;
 }
 
+/**
+ * Returns a copy of environment variable linked list, placed on the heap but
+ * outside the memarena.
+ *
+ * @param env	First node in environment list
+ */
 static t_var	*copy_env(const t_var *env)
 {
 	t_var	*copy;
