@@ -52,14 +52,17 @@ void	builtin_export(t_minishell *data, t_token *builtin_token, t_var *envp)
 	token = proccess_token(data, token);
 	if (token == NULL)
 	{
-		print_env_alphabetically(envp);
+		print_env_alphabetically(data, envp);
 		data->last_rval = EXIT_SUCCESS;
 		return ;
 	}
 	i = ft_char_index(token->value, '=');
 	key = ft_ma_substr(data->arena, token->value, 0, i);
-	value = ft_ma_substr(data->arena, token->value, \
-					(i + 1), (ft_strlen(token->value) - (i + 1)));
+	if (i == -1)
+		value = "";
+	else
+		value = ft_ma_substr(data->arena, token->value, \
+						(i + 1), (ft_strlen(token->value) - (i + 1)));
 	ms_setenv(data, key, value, envp);
 	data->last_rval = EXIT_SUCCESS;
 }
