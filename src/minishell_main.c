@@ -12,6 +12,9 @@
 
 #include "minishell.h"
 
+static void	loop(t_minishell *data);
+void	execution(t_minishell *data);
+
 void	initialize_data(t_minishell *data, char *envp[])
 {
 	data->arena = ft_new_memarena();
@@ -70,18 +73,20 @@ int	validate_tokens(t_minishell *data)
 	return (EXIT_SUCCESS);
 }
 
-void	execution(t_minishell *data)
+int	main(int argc, char *argv[], char *envp[])
 {
-	if (data->pipe_count == 0 && tokens_contain(data->token_list, is_builtin))
-	{
-		ft_putendl("Functionality missing: need to run builtin "\
-			"without piping");
-		return ;
-	}
-	piping(data);
+	static t_minishell	data;
+
+	(void)argc;
+	(void)argv;
+	initialize_data(&data, envp);
+	set_default_signal_handling(&data);
+	loop(&data);
+	clean(&data);
+	return (data.last_rval);
 }
 
-void	loop(t_minishell *data)
+static void	loop(t_minishell *data)
 {
 	const char	*prompt;
 
@@ -91,6 +96,7 @@ void	loop(t_minishell *data)
 		data->raw_input = readline(prompt);
 		if (!data->raw_input)
 			break ;
+		add_history(data->raw_input);
 		if (validate_raw_input(data) == EXIT_FAILURE)
 			continue ;
 		tokenization(data);
@@ -103,14 +109,24 @@ void	loop(t_minishell *data)
 	}
 }
 
-int	main(int argc, char *argv[], char *envp[])
+void	execution(t_minishell *data)
 {
-	static t_minishell	data;
+	int	stdout;
+	int stdin;
 
-	(void)argc;
-	(void)argv;
-	initialize_data(&data, envp);
-	loop(&data);
-	clean(&data);
-	return (data.last_rval);
+	if (data->pipe_count == 0 && tokens_contain(data->token_list, is_builtin))
+	{
+		stdin = dup(STDIN_FILENO);
+		if (stdin < 0)
+			clean_error_exit(data, MSG_ERROR_DUP, ERROR_DUP);
+		stdout = dup(STDOUT_FILENO);
+		if (stdout < 0)
+			clean_error_exit(data, MSG_ERROR_DUP, ERROR_DUP);
+		handle_redirections(data);
+		builtins(data);
+		safe_dup2(data, stdin, STDIN_FILENO);
+		safe_dup2(data, stdout, STDOUT_FILENO);
+		return ;
+	}
+	piping(data);
 }

@@ -51,10 +51,12 @@
 # define EXIT_HEREDOC_FILE	3
 # define EXIT_BINPERM		126
 # define EXIT_NOTFOUND		127
+# define EXIT_EXECVE		128
 
 /* Builtin exit values */
-# define EXIT_BLTN_NO_EXIT	1
-# define EXIT_BLTN_NAN		2
+# define EXIT_BLTN_NO_EXIT	4
+# define EXIT_BLTN_NAN		5
+# define EXIT_BLTN_NOSUCH	6
 
 # define EXIT_ENOMEM		42
 
@@ -69,6 +71,7 @@
 # define MSG_ERROR_CLOSE		"ERROR: failed to close"
 # define MSG_ERROR_PIPE			"ERROR: failed to pipe"
 # define MSG_ERROR_FORK			"ERROR: failed to fork"
+# define MSG_ERROR_DUP			"ERROR: failed to dup"
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
 # define MSG_ERROR_WRITE		"ERROR: failed to write"
 # define MSG_ERROR_EXECVE		"ERROR: made it past execve"
@@ -83,6 +86,7 @@
 # define MSG_ERROR_HEREDOC_FILE	"Failed to open heredoc temp file"
 # define MSG_ERROR_NODELIM		"EOF received instead of delimiter"
 # define MSG_ERROR_UNCLOSED		"Input has unclosed quotes"
+# define MSG_ERROR_BLTN_NOSUCH	"No matching builtin could be found"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -104,6 +108,7 @@ typedef enum e_error
 {
 	ERROR_PIPE = 4,
 	ERROR_FORK,
+	ERROR_DUP,
 	ERROR_DUP2,
 	ERROR_OPEN,
 	ERROR_CLOSE,
@@ -316,8 +321,7 @@ void			builtin_echo(t_minishell *data, t_token *builtin_token);
 
 int				get_current_dir(t_minishell *data);
 int				change_dir(t_minishell *data, char *str);
-void			builtin_cd(t_minishell *data, t_token *builtin_token, \
-				t_var *envp);
+void			builtin_cd(t_minishell *data, t_token *builtin_token);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 
@@ -325,13 +329,11 @@ void			builtin_pwd(t_minishell *data);
 
 /* ----------------------------------------------- minishell_builtin_export.c */
 
-void			builtin_export(t_minishell *data, \
-					t_token *builtin_token, t_var *envp);
+void			builtin_export(t_minishell *data, t_token *builtin_token);
 
 /* ------------------------------------------------ minishell_builtin_unset.c */
 
-void			builtin_unset(t_minishell *data, \
-					t_token *builtin_token, t_var *envp);
+void			builtin_unset(t_minishell *data, t_token *builtin_token);
 
 /* -------------------------------------------------- minishell_builtin_env.c */
 

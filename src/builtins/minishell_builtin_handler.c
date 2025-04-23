@@ -45,26 +45,25 @@ int	builtins(t_minishell *data)
 	t_token	*builtin_token;
 
 	builtin_token = fetch_builtin(data);
-	if (builtin_token)
+	if (!builtin_token)
+		return (EXIT_FAILURE);
+	if (get_builtin_type(builtin_token) == BLTN_ECHO)
+		builtin_echo(data, builtin_token);
+	else if (get_builtin_type(builtin_token) == BLTN_CD)
+		builtin_cd(data, builtin_token);
+	else if (get_builtin_type(builtin_token) == BLTN_PWD)
+		builtin_pwd(data);
+	else if (get_builtin_type(builtin_token) == BLTN_EXPORT)
+		builtin_export(data, builtin_token);
+	else if (get_builtin_type(builtin_token) == BLTN_UNSET)
+		builtin_unset(data, builtin_token);
+	else if (get_builtin_type(builtin_token) == BLTN_ENV)
+		builtin_env(data);
+	else if (get_builtin_type(builtin_token) == BLTN_EXIT)
 	{
-		if (ft_strncmp(builtin_token->value, "echo", 4) == 0)
-			builtin_echo(data, builtin_token);
-		if (ft_strncmp(builtin_token->value, "cd", 2) == 0)
-			builtin_cd(data, builtin_token, data->minishell_env);
-		if (ft_strncmp(builtin_token->value, "pwd", 3) == 0)
-			builtin_pwd(data);
-		if (ft_strncmp(builtin_token->value, "export", 6) == 0)
-			builtin_export(data, builtin_token, data->minishell_env);
-		if (ft_strncmp(builtin_token->value, "unset", 5) == 0)
-			builtin_unset(data, builtin_token, data->minishell_env);
-		if (ft_strncmp(builtin_token->value, "env", 3) == 0)
-			builtin_env(data);
-		if (ft_strncmp(builtin_token->value, "exit", 4) == 0)
-		{
-			if (builtin_exit(data, builtin_token) == EXIT_FAILURE)
-				return (EXIT_BLTN_NO_EXIT);
-			return (EXIT_SUCCESS);
-		}
+		if (builtin_exit(data, builtin_token) == EXIT_FAILURE)
+			return (EXIT_BLTN_NO_EXIT);
+		return (EXIT_SUCCESS);
 	}
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

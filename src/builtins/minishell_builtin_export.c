@@ -62,7 +62,7 @@ static void	set_key_and_value(t_minishell *data, t_token *token, t_var *envp)
  * @param builtin_token	pointer to the root builtin token
  * @param envp	pinter to the fist envp element
  */
-void	builtin_export(t_minishell *data, t_token *builtin_token, t_var *envp)
+void	builtin_export(t_minishell *data, t_token *builtin_token)
 {
 	t_token	*token;
 

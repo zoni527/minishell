@@ -70,7 +70,7 @@ static void	expand_variables(t_minishell *data, t_token *token)
 			if (token->value[++i] == '?')
 				var = question_mark_variable(data);
 			else
-				var = find_var(data, &token->value[++i]);
+				var = find_var(data, &token->value[i]);
 			i = expand_variable(data, token, var, i);
 			continue ;
 		}
