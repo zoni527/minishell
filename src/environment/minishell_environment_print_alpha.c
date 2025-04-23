@@ -101,7 +101,7 @@ static void	print_next(t_minishell *data, t_var *smallest, \
 	token = data->minishell_env;
 	last_elem = smallest;
 	next_smallest = largest;
-	ft_putendl_fd(smallest->raw, 1);
+	print_env_token_with_quotes(data, smallest);
 	i = -1;
 	while (++i < (len - 1))
 	{
