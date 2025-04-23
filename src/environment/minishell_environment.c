@@ -127,7 +127,8 @@ int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 	t_var	*last;
 
 	raw = ft_ma_strjoin(data->arena, key, "=");
-	raw = ft_ma_strjoin(data->arena, raw, value);
+	if (value != NULL)
+		raw = ft_ma_strjoin(data->arena, raw, value);
 	current = envp;
 	while (current)
 	{

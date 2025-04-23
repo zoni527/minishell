@@ -60,12 +60,19 @@ static t_var	*get_smallest(t_var *envp)
 	return (smallest);
 }
 
+/**
+ * Function to print envp tokens with quotes and 
+ * other needed formatting
+ *
+ * @param data	pointer to teh main data struct
+ * @param token	pointer to the relevent envp token
+ */
 static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
 {
 	char	*res;
 
 	res = ft_ma_strjoin(data->arena, "declare -x ", token->key);
-	if (token->value[0] != '\0')
+	if (token->value != NULL)
 	{
 		res = ft_ma_strjoin(data->arena, res, "=\"");
 		res = ft_ma_strjoin(data->arena, res, token->value);

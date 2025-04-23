@@ -24,7 +24,7 @@ void	builtin_env(t_minishell *data)
 	token = data->minishell_env;
 	while (token)
 	{
-		if (token->value[0] != '\0')
+		if (token->value != NULL)
 		{
 			ft_putendl_fd(token->raw, 1);
 		}
