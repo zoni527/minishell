@@ -45,15 +45,9 @@ static int	print_token(t_token *token)
 {
 	if (token->type == ARGUMENT)
 	{
-		if (!token->next || token->next->type != ARGUMENT)
-		{
-			ft_putstr_fd(token->value, 1);
-		}
-		else
-		{
-			ft_putstr_fd(token->value, 1);
+		ft_putstr_fd(token->value, 1);
+		if (token->next && token->next->type == ARGUMENT)
 			ft_putstr_fd(" ", 1);
-		}
 	}
 	if (token->next == NULL)
 	{
