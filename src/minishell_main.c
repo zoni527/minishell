@@ -52,16 +52,19 @@ int	validate_raw_input(const t_minishell *data)
 		ft_putstr_fd(data->raw_input, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(MSG_ERROR_UNCLOSED, STDERR_FILENO);
+		free((void *)data->raw_input);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	validate_tokens(const t_minishell *data)
+int	validate_tokens(t_minishell *data)
 {
 	if (contains_syntax_error(data->token_list))
 	{
 		log_syntax_error(syntax_error_at_token(data->token_list));
+		free((void *)data->raw_input);
+		reset_arena_and_pointers(data);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
@@ -89,16 +92,10 @@ void	loop(t_minishell *data)
 		if (!data->raw_input)
 			break ;
 		if (validate_raw_input(data) == EXIT_FAILURE)
-		{
-			free((void *)data->raw_input);
 			continue ;
-		}
 		tokenization(data);
 		if (validate_tokens(data) == EXIT_FAILURE)
-		{
-			free((void *)data->raw_input);
 			continue ;
-		}
 		heredoc(data);
 		execution(data);
 		reset_arena_and_pointers(data);

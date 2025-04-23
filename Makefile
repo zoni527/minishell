@@ -109,12 +109,22 @@ clean:
 
 fclean: clean
 	make fclean -C $(LIBFT_DIR)
-	rm -f $(TESTS)
+	rm -f $(NAME)
 
 re: fclean all
 #------------------------------------------------------------------------------#
 debug: CFLAGS += $(DEBUG_FLAGS)
-debug: re
+debug: libftdebug clean_name clean_obj_dir all
+
+libftdebug:
+	make debug -C $(LIBFT_DIR)
+
+clean_name:
+	rm -f $(NAME)
+
+clean_obj_dir:
+	rm -rf $(OBJ_DIR)
 #------------------------------------------------------------------------------#
-.PHONY: all clean fclean re debug libftdebug
+.PHONY: all clean fclean re debug libftdebug clean_and_debug clean_name
+	clean_obj_dir
 #------------------------------------------------------------------------------#
