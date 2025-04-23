@@ -13,12 +13,12 @@
 #include "minishell.h"
 
 static void	loop(t_minishell *data);
-void	execution(t_minishell *data);
+void		execution(t_minishell *data);
 
 void	initialize_data(t_minishell *data, char *envp[])
 {
 	data->arena = ft_new_memarena();
-	if(!data->arena)
+	if (!data->arena)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	data->initial_env = (const char **)envp;
 	env_list_from_envp(data, data->initial_env);
@@ -112,7 +112,7 @@ static void	loop(t_minishell *data)
 void	execution(t_minishell *data)
 {
 	int	stdout;
-	int stdin;
+	int	stdin;
 
 	if (data->pipe_count == 0 && tokens_contain(data->token_list, is_builtin))
 	{
