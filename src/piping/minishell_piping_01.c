@@ -104,6 +104,7 @@ static void	wait_for_children(t_minishell *data)
 				data->last_rval = 0;
 		}
 	}
+	data->pipe_index = 0;
 }
 
 /**
