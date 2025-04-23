@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 14:32:51 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/08 10:21:59 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/22 18:37:38 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,9 @@ static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe, \
  */
 static void	wait_for_children(t_minishell *data)
 {
-	size_t	children;
 	pid_t	pid;
 
-	(void)pid;
-	children = data->pipe_index + 1;
-	while (children--)
+	while (data->pipe_index--)
 	{
 		pid = wait(NULL);
 		if (pid == data->last_pid)
@@ -104,9 +101,10 @@ static void	wait_for_children(t_minishell *data)
 				g_signal = 0;
 			}
 			else
-				data->last_rval = -2;
+				data->last_rval = 0;
 		}
 	}
+	data->pipe_index = 0;
 }
 
 /**

@@ -41,7 +41,7 @@ static t_token	*proccess_token(t_minishell *data, t_token *token)
  * @param builtin_token	pointer to root builtin token
  * @param envp	pointer to fist element in envp array
  */
-void	builtin_unset(t_minishell *data, t_token *builtin_token, t_var *envp)
+void	builtin_unset(t_minishell *data, t_token *builtin_token)
 {
 	t_token	*token;
 
@@ -52,6 +52,6 @@ void	builtin_unset(t_minishell *data, t_token *builtin_token, t_var *envp)
 		data->last_rval = EXIT_SUCCESS;
 		return ;
 	}
-	remove_env(token->value, envp);
+	remove_env(token->value, data->minishell_env);
 	data->last_rval = EXIT_SUCCESS;
 }

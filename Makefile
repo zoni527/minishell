@@ -5,20 +5,27 @@
 #                                                     +:+ +:+         +:+      #
 #    By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/11 17:10:47 by jvarila           #+#    #+#              #
-#    Updated: 2025/03/11 17:17:01 by jvarila          ###   ########.fr        #
+#    Created: 2025/04/22 09:49:19 by jvarila           #+#    #+#              #
+#    Updated: 2025/04/22 10:11:41 by jvarila          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+NAME		:= minishell
+
 CC		:= cc
-CFLAGS		:= -Wall -Wextra -Werror -g
-DEBUGFLAGS	:= -g
-INC		:= -I ../../libft -I ../../include
+CFLAGS		:= -Wall -Wextra -Werror
+DEBUG_FLAGS	:= -g
+EXTRA_FLAGS	:= -lreadline
 #------------------------------------------------------------------------------#
-LIBFT_DIR	:= ../../libft
+LIBFT_DIR	:= ./libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 #------------------------------------------------------------------------------#
-SRC_DIR	:=	../../src
+INC_DIR		:= ./include
+INC_FLAGS	:= -I $(LIBFT_DIR) -I $(INC_DIR)
+#------------------------------------------------------------------------------#
+HEADER		:= $(INC_DIR)/minishell.h
+#------------------------------------------------------------------------------#
+SRC_DIR	:=	./src
 OBJ_DIR	:=	./obj
 #------------------------------------------------------------------------------#
 SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
@@ -78,38 +85,46 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/utils/minishell_directory_validation.c		\
 	$(SRC_DIR)/utils/minishell_print_debug.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_01.c			\
-	$(SRC_DIR)/utils/minishell_data_reset_02.c
-#------------------------------------------------------------------------------#
-TESTS :=	minishell_test_word_lexing_01.out	\
-		minishell_test_quotes_01.out		\
-		minishell_test_signals.out		\
-		minishell_test_pipe.out			\
-		minishell_test_redirections.out		\
-		minishell_test_heredoc.out		\
-		minishell_test_heredoc_pipe_redir.out	\
-		minishell_perror_testing.out
+	$(SRC_DIR)/utils/minishell_data_reset_02.c			\
+	\
+	$(SRC_DIR)/minishell_main.c
 #------------------------------------------------------------------------------#
 OBJ :=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 #------------------------------------------------------------------------------#
-all: $(TESTS)
+all: $(NAME)
 
-$(TESTS): %.out: %.c $(LIBFT) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(INC) $< $(LIBFT) -lreadline -o $@ 
+$(NAME): $(LIBFT) $(OBJ) $(HEADER)
+	$(CC) $(CFLAGS) $(OBJ) $(INC_FLAGS) $< $(LIBFT) $(EXTRA_FLAGS) -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
 	@mkdir -p $(@D)
-	$(CC) $(CFLAGS) -c $< $(INC) -o $@
+	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+
+$(LIBFT):
+	make all -C $(LIBFT_DIR)
 #------------------------------------------------------------------------------#
 clean:
+	make clean -C $(LIBFT_DIR)
 	rm -rf $(OBJ_DIR)
 
 fclean: clean
-	rm -f $(TESTS)
+	make fclean -C $(LIBFT_DIR)
+	rm -f $(NAME)
 
 re: fclean all
 #------------------------------------------------------------------------------#
-debug: CFLAGS += $(DEBUGFLAGS)
-debug: re
+debug: CFLAGS += $(DEBUG_FLAGS)
+debug: libftdebug clean_name clean_obj_dir all
+
+libftdebug:
+	make debug -C $(LIBFT_DIR)
+
+clean_name:
+	rm -f $(NAME)
+
+clean_obj_dir:
+	rm -rf $(OBJ_DIR)
 #------------------------------------------------------------------------------#
-.PHONY: all clean fclean re debug libftdebug
+.PHONY: all clean fclean re debug libftdebug clean_and_debug clean_name
+	clean_obj_dir
 #------------------------------------------------------------------------------#

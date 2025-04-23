@@ -51,10 +51,14 @@
 # define EXIT_HEREDOC_FILE	3
 # define EXIT_BINPERM		126
 # define EXIT_NOTFOUND		127
+# define EXIT_EXECVE		128
 
 /* Builtin exit values */
-# define EXIT_BLTN_NO_EXIT	1
-# define EXIT_BLTN_NAN		2
+# define EXIT_BLTN_NO_EXIT	4
+# define EXIT_BLTN_NAN		5
+# define EXIT_BLTN_NOSUCH	6
+
+# define EXIT_ENOMEM		42
 
 /* ---------------------------------------------------------- string literals */
 
@@ -62,12 +66,12 @@
 
 /* ----------------------------------------------------------- error messages */
 
-# define MSG_ERROR_ALLOC		"ERROR: couldn't alloc"
 # define MSG_ERROR_CAPACITY		"ERROR: requested memory chunk is too large"
 # define MSG_ERROR_OPEN			"ERROR: failed to open"
 # define MSG_ERROR_CLOSE		"ERROR: failed to close"
 # define MSG_ERROR_PIPE			"ERROR: failed to pipe"
 # define MSG_ERROR_FORK			"ERROR: failed to fork"
+# define MSG_ERROR_DUP			"ERROR: failed to dup"
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
 # define MSG_ERROR_WRITE		"ERROR: failed to write"
 # define MSG_ERROR_EXECVE		"ERROR: made it past execve"
@@ -81,6 +85,8 @@
 # define MSG_ERROR_HEREDOC		"Heredoc execution failed"
 # define MSG_ERROR_HEREDOC_FILE	"Failed to open heredoc temp file"
 # define MSG_ERROR_NODELIM		"EOF received instead of delimiter"
+# define MSG_ERROR_UNCLOSED		"Input has unclosed quotes"
+# define MSG_ERROR_BLTN_NOSUCH	"No matching builtin could be found"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -102,6 +108,7 @@ typedef enum e_error
 {
 	ERROR_PIPE = 4,
 	ERROR_FORK,
+	ERROR_DUP,
 	ERROR_DUP2,
 	ERROR_OPEN,
 	ERROR_CLOSE,
@@ -161,6 +168,7 @@ typedef struct s_minishell
 	size_t				token_count;
 	size_t				pipe_count;
 	size_t				hd_count;
+	size_t				var_count;
 	size_t				pipe_index;
 	pid_t				last_pid;
 	int					last_rval;
@@ -266,8 +274,9 @@ const char		*get_token_type_str(const t_token *token);
 size_t			count_tokens(const t_token *list);
 size_t			count_pipes(const t_token *list);
 size_t			count_heredocs(const t_token *list);
+size_t			count_vars(const t_var *list);
 
-/* ---------------------------------------- minishell_tokenization_utils_01.c */
+/* ------------------------------------------- minishell_tokenization_utils.c */
 
 void			toggle_quote_flag(char *quote_flag, char c);
 t_token			*new_token_node(t_minishell *data, const char *str);
@@ -282,7 +291,7 @@ void			print_env_alphabetically(t_minishell *data, t_var *envp);
 
 /* -------------------------------------------------- minishell_environment.c */
 
-void			env_list_from_envp(t_minishell *data, char **envp);
+void			env_list_from_envp(t_minishell *data, const char **envp);
 char			**create_envp_arr_from_custom_env(t_minishell *data, \
 										t_var *envp_list);
 char			*ms_getenv(t_minishell *data, const char *name, t_var *envp);
@@ -312,8 +321,7 @@ void			builtin_echo(t_minishell *data, t_token *builtin_token);
 
 int				get_current_dir(t_minishell *data);
 int				change_dir(t_minishell *data, char *str);
-void			builtin_cd(t_minishell *data, t_token *builtin_token, \
-				t_var *envp);
+void			builtin_cd(t_minishell *data, t_token *builtin_token);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 
@@ -321,13 +329,11 @@ void			builtin_pwd(t_minishell *data);
 
 /* ----------------------------------------------- minishell_builtin_export.c */
 
-void			builtin_export(t_minishell *data, \
-					t_token *builtin_token, t_var *envp);
+void			builtin_export(t_minishell *data, t_token *builtin_token);
 
 /* ------------------------------------------------ minishell_builtin_unset.c */
 
-void			builtin_unset(t_minishell *data, \
-					t_token *builtin_token, t_var *envp);
+void			builtin_unset(t_minishell *data, t_token *builtin_token);
 
 /* -------------------------------------------------- minishell_builtin_env.c */
 
@@ -479,6 +485,15 @@ bool			pipe_has(const t_minishell *data, \
 
 bool			pipe_has_redirections(const t_minishell *data);
 bool			pipe_has_heredoc(const t_minishell *data);
+
+/* ------------------------------------------------ minishell_data_reset_01.c */
+
+int				reset_arena_and_pointers(t_minishell *data);
+
+/* ------------------------------------------------ minishell_data_reset_02.c */
+
+t_var			*copy_env_to_memarena(t_memarena *arena, const t_var *env_list);
+void			append_var(t_var **env_list, t_var *var);
 
 /* -------------------------------------------------------------------------- */
 
