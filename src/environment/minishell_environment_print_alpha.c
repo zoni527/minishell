@@ -13,20 +13,6 @@
 #include "minishell.h"
 
 /**
- * Function to get the length of the
- * envp list
- *
- * @param envp	pointer to the fist envp element
- */
-int	get_envp_len(t_var *envp)
-{
-	if (envp == 0)
-		return (0);
-	else
-		return (1 + get_envp_len(envp->next));
-}
-
-/**
  * Function to get the largest element
  * from the envp list
  *
@@ -75,6 +61,27 @@ static t_var	*get_smallest(t_var *envp)
 }
 
 /**
+ * Function to print envp tokens with quotes and 
+ * other needed formatting
+ *
+ * @param data	pointer to teh main data struct
+ * @param token	pointer to the relevent envp token
+ */
+static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
+{
+	char	*res;
+
+	res = ft_ma_strjoin(data->arena, "declare -x ", token->key);
+	if (token->value != NULL)
+	{
+		res = ft_ma_strjoin(data->arena, res, "=\"");
+		res = ft_ma_strjoin(data->arena, res, token->value);
+		res = ft_ma_strjoin(data->arena, res, "\"");
+	}
+	ft_putendl_fd(res, 1);
+}
+
+/**
  * Function to print next env element 
  * in alphabetical order
  *
@@ -83,17 +90,18 @@ static t_var	*get_smallest(t_var *envp)
  * @param largest	pointer to the largest element in the env
  * @param len	len of the envp list
  */
-static void	print_next(t_var *envp, t_var *smallest, t_var *largest, int len)
+static void	print_next(t_minishell *data, t_var *smallest, \
+				t_var *largest, int len)
 {
 	t_var	*next_smallest;
 	t_var	*last_elem;
 	t_var	*token;
 	int		i;
 
-	token = envp;
+	token = data->minishell_env;
 	last_elem = smallest;
 	next_smallest = largest;
-	ft_putendl_fd(smallest->raw, 1);
+	print_env_token_with_quotes(data, smallest);
 	i = -1;
 	while (++i < (len - 1))
 	{
@@ -104,8 +112,8 @@ static void	print_next(t_var *envp, t_var *smallest, t_var *largest, int len)
 				next_smallest = token;
 			token = token->next;
 		}
-		ft_putendl_fd(next_smallest->raw, 1);
-		token = envp;
+		print_env_token_with_quotes(data, next_smallest);
+		token = data->minishell_env;
 		last_elem = next_smallest;
 		next_smallest = largest;
 	}
@@ -116,7 +124,7 @@ static void	print_next(t_var *envp, t_var *smallest, t_var *largest, int len)
  *
  * @param envp	pinter to the fist envp element
  */
-void	print_env_alphabetically(t_var *envp)
+void	print_env_alphabetically(t_minishell *data, t_var *envp)
 {
 	t_var	*smallest;
 	t_var	*largest;
@@ -125,5 +133,5 @@ void	print_env_alphabetically(t_var *envp)
 	len = get_envp_len(envp);
 	largest = get_largest(envp);
 	smallest = get_smallest(envp);
-	print_next(envp, smallest, largest, len);
+	print_next(data, smallest, largest, len);
 }

@@ -278,8 +278,7 @@ void			insert_token_left(t_token *current, t_token *new);
 
 /* -------------------------------------- minishell_environment_print_alpha.c */
 
-int				get_envp_len(t_var *envp);
-void			print_env_alphabetically(t_var *envp);
+void			print_env_alphabetically(t_minishell *data, t_var *envp);
 
 /* -------------------------------------------------- minishell_environment.c */
 
@@ -412,6 +411,10 @@ bool			contains_syntax_error(t_token *list);
 t_token			*syntax_error_at_token(t_token *list);
 
 /* ================================== UTILS ================================= */
+
+/* -------------------------------------------- minishell_environment_utils.c */
+
+int				get_envp_len(t_var *envp);
 
 /* ------------------------------------------------- minishell_var_name_len.c */
 
