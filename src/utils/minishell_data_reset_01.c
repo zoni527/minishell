@@ -42,7 +42,6 @@ int	reset_arena_and_pointers(t_minishell *data)
 	data->minishell_env = copy_env_to_memarena(data->arena, env_copy);
 	free_env(&env_copy);
 	data->token_list = NULL;
-	data->raw_input = NULL;
 	data->hd_delimiters = NULL;
 	data->hd_file_names = NULL;
 	return (EXIT_SUCCESS);

@@ -52,7 +52,7 @@ t_var	*copy_env_to_memarena(t_memarena *arena, const t_var *env_list)
 	{
 		copy = ft_ma_calloc(arena, 1, sizeof(t_var));
 		copy->raw = ft_ma_strdup(arena, env_list->raw);
-		copy->key = ft_ma_strdup(arena, env_list->raw);
+		copy->key = ft_ma_strdup(arena, env_list->key);
 		copy->value = ft_ma_strdup(arena, env_list->value);
 		append_var(&new_env, copy);
 		env_list = env_list->next;

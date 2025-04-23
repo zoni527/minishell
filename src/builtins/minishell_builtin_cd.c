@@ -100,28 +100,28 @@ static	void	handle_cd(t_minishell *data, t_var *envp)
  * @param builtin_token	pointer to root builtin token
  * @param envp	pointer to fist element in envp array
  */
-void	builtin_cd(t_minishell *data, t_token *builtin_token, t_var *envp)
+void	builtin_cd(t_minishell *data, t_token *builtin_token)
 {
 	char	*path;
 	char	*old_path;
 	char	*new_path;
 
 	old_path = getcwd(NULL, 0);
-	ms_setenv(data, "OLDPWD", old_path, envp);
+	ms_setenv(data, "OLDPWD", old_path, data->minishell_env);
 	free(old_path);
 	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, builtin_token->next->value);
 	else
 		path = ft_ma_strdup(data->arena, "");
 	if (path[0] == '~')
-		handle_tilde(data, path, envp);
+		handle_tilde(data, path, data->minishell_env);
 	else if (path[0] == '\0')
-		handle_cd(data, envp);
+		handle_cd(data, data->minishell_env);
 	else
 	{
 		change_dir(data, path);
 		new_path = getcwd(NULL, 0);
-		ms_setenv(data, "PWD", new_path, envp);
+		ms_setenv(data, "PWD", new_path, data->minishell_env);
 		free(new_path);
 	}
 }

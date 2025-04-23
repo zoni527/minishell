@@ -41,7 +41,7 @@ static t_token	*proccess_token(t_minishell *data, t_token *token)
  * @param builtin_token	pointer to the root builtin token
  * @param envp	pinter to the fist envp element
  */
-void	builtin_export(t_minishell *data, t_token *builtin_token, t_var *envp)
+void	builtin_export(t_minishell *data, t_token *builtin_token)
 {
 	t_token	*token;
 	char	*key;
@@ -52,7 +52,7 @@ void	builtin_export(t_minishell *data, t_token *builtin_token, t_var *envp)
 	token = proccess_token(data, token);
 	if (token == NULL)
 	{
-		print_env_alphabetically(envp);
+		print_env_alphabetically(data->minishell_env);
 		data->last_rval = EXIT_SUCCESS;
 		return ;
 	}
@@ -60,6 +60,6 @@ void	builtin_export(t_minishell *data, t_token *builtin_token, t_var *envp)
 	key = ft_ma_substr(data->arena, token->value, 0, i);
 	value = ft_ma_substr(data->arena, token->value, \
 					(i + 1), (ft_strlen(token->value) - (i + 1)));
-	ms_setenv(data, key, value, envp);
+	ms_setenv(data, key, value, data->minishell_env);
 	data->last_rval = EXIT_SUCCESS;
 }
