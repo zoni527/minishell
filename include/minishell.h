@@ -414,7 +414,7 @@ t_token			*syntax_error_at_token(t_token *list);
 
 /* -------------------------------------------- minishell_environment_utils.c */
 
-int				get_envp_len(t_var *envp);
+int				get_envp_len(const t_var *envp);
 
 /* ------------------------------------------------- minishell_var_name_len.c */
 
