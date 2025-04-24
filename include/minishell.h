@@ -504,7 +504,4 @@ t_var			*copy_env_to_memarena(t_memarena *arena, const t_var *env_list);
 void			append_var(t_var **env_list, t_var *var);
 
 /* -------------------------------------------------------------------------- */
-
-void			execution(t_minishell *data);
-
 #endif
