@@ -70,10 +70,10 @@ void	builtin_export(t_minishell *data, t_token *builtin_token)
 	token = proccess_token(data, token);
 	if (token == NULL)
 	{
-		print_env_alphabetically(data, envp);
+		print_env_alphabetically(data, data->minishell_env);
 		data->last_rval = EXIT_SUCCESS;
 		return ;
 	}
-	set_key_and_value(data, token, envp);
+	set_key_and_value(data, token, data->minishell_env);
 	data->last_rval = EXIT_SUCCESS;
 }
