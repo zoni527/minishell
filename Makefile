@@ -88,6 +88,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/utils/minishell_print_debug.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_01.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_02.c			\
+	$(SRC_DIR)/utils/minishell_environment_utils.c			\
 	\
 	$(SRC_DIR)/minishell_main.c
 #------------------------------------------------------------------------------#
