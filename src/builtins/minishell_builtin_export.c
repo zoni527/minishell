@@ -34,25 +34,48 @@ static t_token	*proccess_token(t_minishell *data, t_token *token)
 	return (NULL);
 }
 
-static void	set_key_and_value(t_minishell *data, t_token *token, t_var *envp)
+static bool	is_valid_key(t_token *token)
+{
+	if (ft_isalpha(token->value[0]) || token->value[0] == '_')
+		return (true);
+	ft_putstr_fd("bash: export: `", 2);
+	ft_putchar_fd(token->value[0], 2);
+	ft_putendl_fd("': not a valid identifier", 2);
+	return (false);
+}
+
+/**
+ * Function to set key and value
+ *
+ * @param data	main data struct
+ * @param token	token reference
+ */
+static void	set_key_and_value(t_minishell *data, t_token *token)
 {
 	char	*key;
 	char	*value;
 	int		i;
 
-	i = ft_char_index(token->value, '=');
-	if (i == -1)
+	while (token && token->type == ARGUMENT)
 	{
-		key = ft_ma_strdup(data->arena, token->value);
-		value = NULL;
+		if (is_valid_key(token))
+		{
+			i = ft_char_index(token->value, '=');
+			if (i == -1)
+			{
+				key = ft_ma_strdup(data->arena, token->value);
+				value = "\0";
+			}
+			else
+			{
+				key = ft_ma_substr(data->arena, token->value, 0, i);
+				value = ft_ma_substr(data->arena, token->value, \
+							(i + 1), (ft_strlen(token->value) - (i + 1)));
+			}
+			ms_setenv_export(data, key, value, token->value);
+		}
+		token = token->next;
 	}
-	else
-	{
-		key = ft_ma_substr(data->arena, token->value, 0, i);
-		value = ft_ma_substr(data->arena, token->value, \
-						(i + 1), (ft_strlen(token->value) - (i + 1)));
-	}
-	ms_setenv(data, key, value, envp);
 }
 
 /**
@@ -70,10 +93,10 @@ void	builtin_export(t_minishell *data, t_token *builtin_token)
 	token = proccess_token(data, token);
 	if (token == NULL)
 	{
-		print_env_alphabetically(data, envp);
+		print_env_alphabetically(data);
 		data->last_rval = EXIT_SUCCESS;
 		return ;
 	}
-	set_key_and_value(data, token, envp);
+	set_key_and_value(data, token);
 	data->last_rval = EXIT_SUCCESS;
 }

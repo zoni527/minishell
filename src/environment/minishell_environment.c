@@ -120,7 +120,7 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
  * @param value	value input
  * @param envp	enviroment pointer
  */
-int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
+int	ms_setenv(t_minishell *data, char *key, char *value)
 {
 	char	*raw;
 	t_var	*current;
@@ -129,10 +129,10 @@ int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 	raw = ft_ma_strjoin(data->arena, key, "=");
 	if (value != NULL)
 		raw = ft_ma_strjoin(data->arena, raw, value);
-	current = envp;
+	current = data->minishell_env;
 	while (current)
 	{
-		if (strncmp(key, current->key, ft_strlen(key)) == 0)
+		if (ft_strcmp(key, current->key) == 0)
 		{
 			current->raw = raw;
 			current->value = value;

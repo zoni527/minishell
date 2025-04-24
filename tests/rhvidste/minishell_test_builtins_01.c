@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_test_builtins.c                          :+:      :+:    :+:   */
+/*   minishell_test_builtins_01.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 12:06:35 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/09 12:07:35 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/04/24 11:35:41 by rhvidste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int argc, char *argv[], char *envp[])
 //	(void)envp;
 	data.arena = ft_new_memarena();
 	data.initial_env = (const char **)envp;
-	env_list_from_envp(&data, (char **)data.initial_env);
+	env_list_from_envp(&data, data.initial_env);
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
 	loop(&data);

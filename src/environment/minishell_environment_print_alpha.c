@@ -72,7 +72,7 @@ static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
 	char	*res;
 
 	res = ft_ma_strjoin(data->arena, "declare -x ", token->key);
-	if (token->value != NULL)
+	if (ft_strchr(token->raw, '=') != NULL)
 	{
 		res = ft_ma_strjoin(data->arena, res, "=\"");
 		res = ft_ma_strjoin(data->arena, res, token->value);
@@ -124,12 +124,14 @@ static void	print_next(t_minishell *data, t_var *smallest, \
  *
  * @param envp	pinter to the fist envp element
  */
-void	print_env_alphabetically(t_minishell *data, t_var *envp)
+void	print_env_alphabetically(t_minishell *data)
 {
 	t_var	*smallest;
 	t_var	*largest;
+	t_var	*envp;
 	int		len;
 
+	envp = data->minishell_env;
 	len = get_envp_len(envp);
 	largest = get_largest(envp);
 	smallest = get_smallest(envp);
