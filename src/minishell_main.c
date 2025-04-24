@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:05:41 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/22 13:52:34 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/04/24 14:29:02 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,32 +16,6 @@ static void			loop(t_minishell *data);
 static void			execution(t_minishell *data);
 static void			initialize_data(t_minishell *data, char *envp[]);
 static const char	*get_prompt(t_minishell *data);
-
-int	validate_raw_input(const t_minishell *data)
-{
-	if (has_unclosed_quotes(data->raw_input))
-	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		ft_putstr_fd(data->raw_input, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putendl_fd(MSG_ERROR_UNCLOSED, STDERR_FILENO);
-		free((void *)data->raw_input);
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
-
-int	validate_tokens(t_minishell *data)
-{
-	if (contains_syntax_error(data->token_list))
-	{
-		log_syntax_error(syntax_error_at_token(data->token_list));
-		free((void *)data->raw_input);
-		reset_arena_and_pointers(data);
-		return (EXIT_FAILURE);
-	}
-	return (EXIT_SUCCESS);
-}
 
 int	main(int argc, char *argv[], char *envp[])
 {

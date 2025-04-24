@@ -401,6 +401,11 @@ t_token			*skip_to_heredoc(const t_token *list);
 char			**create_args_arr(t_minishell *data, t_token *command);
 void			cmd_exec(t_minishell *data, char **command, char **envp);
 
+/* --------------------------------------------- minishell_input_validation.c */
+
+int				validate_raw_input(const t_minishell *data);
+int				validate_tokens(t_minishell *data);
+
 /* ================================= ERRORS ================================= */
 
 /* ----------------------------------------------- minishell_error_handling.c */
