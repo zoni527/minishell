@@ -12,40 +12,10 @@
 
 #include "minishell.h"
 
-static void	loop(t_minishell *data);
-void		execution(t_minishell *data);
-
-void	initialize_data(t_minishell *data, char *envp[])
-{
-	data->arena = ft_new_memarena();
-	if (!data->arena)
-		clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-	data->initial_env = (const char **)envp;
-	env_list_from_envp(data, data->initial_env);
-}
-
-const char	*get_prompt(t_minishell *data)
-{
-	const char	*prompt;
-	char		*current_dir;
-
-	current_dir = getcwd(NULL, 0);
-	if (!current_dir)
-	{
-		if (errno == ENOENT)
-		{
-			current_dir = ft_strdup(".");
-			if (!current_dir)
-				clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-		}
-		else
-			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-	}
-	prompt = ft_ma_strjoin(data->arena, "minishell: ", current_dir);
-	prompt = ft_ma_strjoin(data->arena, prompt, "$ ");
-	free(current_dir);
-	return (prompt);
-}
+static void			loop(t_minishell *data);
+static void			execution(t_minishell *data);
+static void			initialize_data(t_minishell *data, char *envp[]);
+static const char	*get_prompt(t_minishell *data);
 
 int	validate_raw_input(const t_minishell *data)
 {
@@ -109,7 +79,7 @@ static void	loop(t_minishell *data)
 	}
 }
 
-void	execution(t_minishell *data)
+static void	execution(t_minishell *data)
 {
 	int	stdout;
 	int	stdin;
@@ -129,4 +99,36 @@ void	execution(t_minishell *data)
 		return ;
 	}
 	piping(data);
+}
+
+static void	initialize_data(t_minishell *data, char *envp[])
+{
+	data->arena = ft_new_memarena();
+	if (!data->arena)
+		clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
+	data->initial_env = (const char **)envp;
+	env_list_from_envp(data, data->initial_env);
+}
+
+static const char	*get_prompt(t_minishell *data)
+{
+	const char	*prompt;
+	char		*current_dir;
+
+	current_dir = getcwd(NULL, 0);
+	if (!current_dir)
+	{
+		if (errno == ENOENT)
+		{
+			current_dir = ft_strdup(".");
+			if (!current_dir)
+				clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
+		}
+		else
+			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
+	}
+	prompt = ft_ma_strjoin(data->arena, "minishell: ", current_dir);
+	prompt = ft_ma_strjoin(data->arena, prompt, "$ ");
+	free(current_dir);
+	return (prompt);
 }
