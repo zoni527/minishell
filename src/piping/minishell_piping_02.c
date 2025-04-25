@@ -40,7 +40,6 @@ void	child_process(t_minishell *data)
 	argv = create_args_arr(data, command);
 	envp = create_envp_arr_from_custom_env(data, data->minishell_env);
 	cmd_exec(data, argv, envp);
-	ft_putendl_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
 	exit (EXIT_EXECVE);
 }
 

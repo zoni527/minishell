@@ -22,7 +22,7 @@ static void	print_preamble(const char *str)
 	}
 }
 
-static void	print_error_mesage(const char *str, const char *msg)
+static void	print_error_message(const char *str, const char *msg)
 {
 	print_preamble(str);
 	ft_putendl_fd(msg, STDERR_FILENO);
@@ -36,12 +36,17 @@ void	handle_error(t_minishell *data, const char *str, int error)
 	data->error = error;
 	if (error == ERROR_NOSUCH)
 	{
-		print_error_mesage(str, MSG_ERROR_NOSUCH);
+		print_error_message(str, MSG_ERROR_NOSUCH);
 		return ;
 	}
 	else if (error == ERROR_NODELIM)
 	{
-		print_error_mesage(str, MSG_ERROR_NODELIM);
+		print_error_message(str, MSG_ERROR_NODELIM);
+		return ;
+	}
+	else if (error == ERROR_NOCMD)
+	{
+		print_error_message(str, MSG_ERROR_NOCMD);
 		return ;
 	}
 	ms_perror(data, str);

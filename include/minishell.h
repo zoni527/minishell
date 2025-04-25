@@ -87,6 +87,7 @@
 # define MSG_ERROR_NODELIM		"EOF received instead of delimiter"
 # define MSG_ERROR_UNCLOSED		"Input has unclosed quotes"
 # define MSG_ERROR_BLTN_NOSUCH	"No matching builtin could be found"
+# define MSG_ERROR_NOCMD		"command not found"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -112,7 +113,7 @@ typedef enum e_error
 	ERROR_DUP2,
 	ERROR_OPEN,
 	ERROR_CLOSE,
-	ERROR_EXEC,
+	ERROR_EXECVE,
 	ERROR_ACCESS,
 	ERROR_NOPATH,
 	ERROR_INPUT,
@@ -127,6 +128,7 @@ typedef enum e_error
 	ERROR_NOSUCH,
 	ERROR_PERMISSION,
 	ERROR_ISADIRECTORY,
+	ERROR_NOCMD,
 }	t_error;
 
 typedef enum e_token_type
