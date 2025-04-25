@@ -13,8 +13,8 @@
 #include "minishell.h"
 
 static void		remove_quotes_from_token(t_minishell *data, t_token *token);
-static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
-									size_t i);
+static size_t	remove_quotes_at_index(t_minishell *data, t_token *token,
+					size_t i);
 
 /**
  * Loops through tokens and calls remove_quotes_from_token with all of them.
@@ -67,7 +67,7 @@ static void	remove_quotes_from_token(t_minishell *data, t_token *token)
  * @param i		Index of opening quote, which will be removed as well as the
  *				matching closing quote
  */
-static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
+static size_t	remove_quotes_at_index(t_minishell *data, t_token *token,
 									size_t i)
 {
 	char	quote;
@@ -81,8 +81,8 @@ static size_t	remove_quotes_at_index(t_minishell *data, t_token *token, \
 	while (token->value[i] != quote)
 		++i;
 	within_quotes_len = i - opening_quote_index - 1;
-	within_quotes = ft_ma_substr(data->arena, token->value, \
-							opening_quote_index + 1, within_quotes_len);
+	within_quotes = ft_ma_substr(data->arena, token->value,
+			opening_quote_index + 1, within_quotes_len);
 	result = ft_ma_substr(data->arena, token->value, 0, opening_quote_index);
 	result = ft_ma_strjoin(data->arena, result, within_quotes);
 	result = ft_ma_strjoin(data->arena, result, &token->value[i + 1]);

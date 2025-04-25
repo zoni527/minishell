@@ -13,8 +13,8 @@
 #include "minishell.h"
 
 static void	split_token(t_minishell *data, t_token *token);
-static void	handle_token_split(t_minishell *data, t_token *token, \
-					const char **src_ptr, size_t len);
+static void	handle_token_split(t_minishell *data, t_token *token,
+				const char **src_ptr, size_t len);
 static char	*skip_over_expanded_word(const char *str);
 
 /**
@@ -76,7 +76,7 @@ static void	split_token(t_minishell *data, t_token *token)
  * @param src_ptr	Pointer to traversal string
  * @param len		Length of substring
  */
-static void	handle_token_split(t_minishell *data, t_token *token, \
+static void	handle_token_split(t_minishell *data, t_token *token,
 					const char **src_ptr, size_t len)
 {
 	char	*word;
@@ -86,8 +86,8 @@ static void	handle_token_split(t_minishell *data, t_token *token, \
 	word = ft_ma_substr(data->arena, token->value, 0, len);
 	new = new_token_node(data, word);
 	insert_token_left(token, new);
-	remaining = ft_ma_substr(data->arena, token->value, len, \
-						ft_strlen(token->value + len));
+	remaining = ft_ma_substr(data->arena, token->value, len,
+			ft_strlen(token->value + len));
 	token->value = ft_skip_whitespace(remaining);
 	*src_ptr = token->value;
 	if (data->token_list == token)

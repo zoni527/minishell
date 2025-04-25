@@ -53,9 +53,8 @@ static void	create_heredoc_delimiters(t_minishell *data)
 	t_token	*token;
 	size_t	i;
 
-	data->hd_delimiters = ft_ma_calloc(data->arena, \
-										data->hd_count + 1, \
-										sizeof(char *));
+	data->hd_delimiters = ft_ma_calloc(data->arena, data->hd_count + 1,
+			sizeof(char *));
 	token = skip_to_heredoc(data->token_list);
 	i = 0;
 	while (i < data->hd_count)
@@ -81,9 +80,8 @@ static void	setup_heredoc_file_names(t_minishell *data)
 	const char		*file_name_base;
 	size_t			i;
 
-	data->hd_file_names = ft_ma_calloc(data->arena, \
-										data->hd_count + 1, \
-										sizeof(char *));
+	data->hd_file_names = ft_ma_calloc(data->arena, data->hd_count + 1,
+			sizeof(char *));
 	file_name_base = "/tmp/minishell_heredoc_";
 	heredoc = skip_to_heredoc(data->token_list);
 	file_index = ft_ma_calloc(data->arena, 3, sizeof(char));

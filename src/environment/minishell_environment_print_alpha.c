@@ -90,7 +90,7 @@ static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
  * @param largest	pointer to the largest element in the env
  * @param len	len of the envp list
  */
-static void	print_next(t_minishell *data, t_var *smallest, \
+static void	print_next(t_minishell *data, t_var *smallest,
 				t_var *largest, int len)
 {
 	t_var	*next_smallest;
@@ -107,8 +107,8 @@ static void	print_next(t_minishell *data, t_var *smallest, \
 	{
 		while (token)
 		{
-			if (strcmp(token->key, last_elem->key) > 0 && \
-				strcmp(token->key, next_smallest->key) < 0)
+			if (ft_strcmp(token->key, last_elem->key) > 0
+				&& ft_strcmp(token->key, next_smallest->key) < 0)
 				next_smallest = token;
 			token = token->next;
 		}

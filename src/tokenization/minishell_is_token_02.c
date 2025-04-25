@@ -77,14 +77,14 @@ bool	is_builtin(const t_token *token)
 		return (true);
 	if (!is_word(token))
 		return (false);
-	if (is_builtin_or_command(token) \
-		&& (ft_strncmp(token->value, "echo", ft_strlen("echo") + 1) == 0 \
-		|| ft_strncmp(token->value, "cd", ft_strlen("cd") + 1) == 0 \
-		|| ft_strncmp(token->value, "pwd", ft_strlen("pwd") + 1) == 0 \
-		|| ft_strncmp(token->value, "export", ft_strlen("export") + 1) == 0 \
-		|| ft_strncmp(token->value, "unset", ft_strlen("unset") + 1) == 0 \
-		|| ft_strncmp(token->value, "env", ft_strlen("env") + 1) == 0 \
-		|| ft_strncmp(token->value, "exit", ft_strlen("exit") + 1) == 0))
+	if (is_builtin_or_command(token)
+		&& (ft_strncmp(token->value, "echo", ft_strlen("echo") + 1) == 0
+			|| ft_strncmp(token->value, "cd", ft_strlen("cd") + 1) == 0
+			|| ft_strncmp(token->value, "pwd", ft_strlen("pwd") + 1) == 0
+			|| ft_strncmp(token->value, "export", ft_strlen("export") + 1) == 0
+			|| ft_strncmp(token->value, "unset", ft_strlen("unset") + 1) == 0
+			|| ft_strncmp(token->value, "env", ft_strlen("env") + 1) == 0
+			|| ft_strncmp(token->value, "exit", ft_strlen("exit") + 1) == 0))
 		return (true);
 	return (false);
 }

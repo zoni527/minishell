@@ -33,8 +33,8 @@ void	env_list_from_envp(t_minishell *data, const char **envp)
 		vals[0] = ft_ma_strdup(data->arena, envp[i]);
 		j = ft_char_index(vals[0], '=');
 		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
-		vals[2] = ft_ma_substr(data->arena, vals[0], \
-						(j + 1), ft_strlen(vals[0]) - (j + 1));
+		vals[2] = ft_ma_substr(data->arena, vals[0],
+				(j + 1), ft_strlen(vals[0]) - (j + 1));
 		if (current == NULL)
 		{
 			current = create_new_env_var(data, vals[0], vals[1], vals[2]);
