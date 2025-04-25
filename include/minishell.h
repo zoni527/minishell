@@ -282,7 +282,7 @@ void			insert_token_left(t_token *current, t_token *new);
 
 /* =============================== ENVIRONMENT ============================== */
 
-/* ------------------------------------------- minishell_environment_export.c */
+/* -------------------------------------------- minishell_environment_shell.c */
 
 void			set_shell_lvl(t_minishell *data);
 
@@ -319,7 +319,6 @@ t_token			*fetch_builtin(t_minishell *data);
 int				builtins(t_minishell *data);
 
 /* -------------------------------------------------- minishell_builtin_dir.c */
-
 
 int				get_current_dir(t_minishell *data);
 int				change_dir(t_minishell *data, char *str);
