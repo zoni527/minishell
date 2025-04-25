@@ -287,8 +287,8 @@ void			insert_token_left(t_token *current, t_token *new);
 
 /* ------------------------------------------- minishell_environment_export.c */
 
-int				ms_setenv_export(t_minishell *data, char *key, \
-										char *value, char *raw);
+int				ms_setenv_export(t_minishell *data, char *key,
+					char *value, char *raw);
 
 /* -------------------------------------- minishell_environment_print_alpha.c */
 
@@ -297,8 +297,8 @@ void			print_env_alphabetically(t_minishell *data);
 /* -------------------------------------------------- minishell_environment.c */
 
 void			env_list_from_envp(t_minishell *data, const char **envp);
-char			**create_envp_arr_from_custom_env(t_minishell *data, \
-										t_var *envp_list);
+char			**create_envp_arr_from_custom_env(t_minishell *data,
+					t_var *envp_list);
 char			*ms_getenv(t_minishell *data, const char *name, t_var *envp);
 int				ms_setenv(t_minishell *data, char *key, char *value);
 int				remove_env(char *key, t_var *envp);
@@ -307,8 +307,8 @@ int				remove_env(char *key, t_var *envp);
 
 int				get_env_list_size(t_var *begin);
 void			print_custom_env(t_var *list);
-t_var			*create_new_env_var(t_minishell *data, \
-							char *raw, char *key, char *value);
+t_var			*create_new_env_var(t_minishell *data,
+					char *raw, char *key, char *value);
 
 /* ================================ BUILTINS ================================ */
 
@@ -441,8 +441,8 @@ void			free_heap_memory(t_minishell *data);
 void			close_fds(t_minishell *data);
 void			clean(t_minishell *data);
 void			clean_exit(t_minishell *data, int exit_code);
-void			clean_error_exit(t_minishell *data, const char *msg, \
-						int exit_code);
+void			clean_error_exit(t_minishell *data, const char *msg,
+					int exit_code);
 
 /* ------------------------------------------ minishell_cleanup_and_exiting.c */
 
@@ -465,25 +465,25 @@ void			safe_pipe(t_minishell *data, int *new_pipe);
 
 /* --------------------------------------------- minishell_token_helpers_01.c */
 
-t_token			*copy_tokens_within_pipe(t_minishell *data, \
-								const t_token *start);
-t_token			*copy_cmd_and_args_within_pipe(t_minishell *data, \
-										const t_token *start);
-t_token			*copy_redirections_within_pipe(t_minishell *data, \
-										const t_token *start);
+t_token			*copy_tokens_within_pipe(t_minishell *data,
+					const t_token *start);
+t_token			*copy_cmd_and_args_within_pipe(t_minishell *data,
+					const t_token *start);
+t_token			*copy_redirections_within_pipe(t_minishell *data,
+					const t_token *start);
 t_token			*copy_token(t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
 
-t_token			*skip_to(const t_token *list, \
-								bool (*f)(const t_token *token));
-t_token			*skip_to_next(const t_token *list, \
-								bool (*f)(const t_token *token));
+t_token			*skip_to(const t_token *list,
+					bool (*f)(const t_token *token));
+t_token			*skip_to_next(const t_token *list,
+					bool (*f)(const t_token *token));
 t_token			*skip_to_current_pipe(const t_minishell *data);
-bool			tokens_contain(const t_token *list, \
-								bool (*f)(const t_token *token));
-bool			pipe_has(const t_minishell *data, \
-								bool (*f)(const t_token *token));
+bool			tokens_contain(const t_token *list,
+					bool (*f)(const t_token *token));
+bool			pipe_has(const t_minishell *data,
+					bool (*f)(const t_token *token));
 
 /* --------------------------------------------- minishell_token_helpers_03.c */
 

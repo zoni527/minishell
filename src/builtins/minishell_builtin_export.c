@@ -69,8 +69,8 @@ static void	set_key_and_value(t_minishell *data, t_token *token)
 			else
 			{
 				key = ft_ma_substr(data->arena, token->value, 0, i);
-				value = ft_ma_substr(data->arena, token->value, \
-							(i + 1), (ft_strlen(token->value) - (i + 1)));
+				value = ft_ma_substr(data->arena, token->value,
+						(i + 1), (ft_strlen(token->value) - (i + 1)));
 			}
 			ms_setenv_export(data, key, value, token->value);
 		}
