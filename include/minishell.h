@@ -406,6 +406,10 @@ void			cmd_exec(t_minishell *data, char **command, char **envp);
 int				validate_raw_input(const t_minishell *data);
 int				validate_tokens(t_minishell *data);
 
+/* ----------------------------------------------- minishell_single_builtin.c */
+
+void			run_single_builtin(t_minishell *data);
+
 /* ================================= ERRORS ================================= */
 
 /* ----------------------------------------------- minishell_error_handling.c */
@@ -458,6 +462,7 @@ bool			pretends_to_be_a_directory(t_minishell *data, const char *str);
 
 void			safe_close(t_minishell *data, int *fd);
 void			safe_dup2(t_minishell *data, int fd1, int fd2);
+int				safe_dup(t_minishell *data, int fd);
 void			redirect_stdout_and_close_fd(t_minishell *data, int *fd);
 void			redirect_stdin_and_close_fd(t_minishell *data, int *fd);
 
@@ -491,6 +496,9 @@ bool			pipe_has(const t_minishell *data,
 
 bool			pipe_has_redirections(const t_minishell *data);
 bool			pipe_has_heredoc(const t_minishell *data);
+bool			pipe_has_input_redirection(const t_minishell *data);
+bool			pipe_has_output_redirection(const t_minishell *data);
+bool			pipe_has_append(const t_minishell *data);
 
 /* ------------------------------------------------ minishell_data_reset_01.c */
 

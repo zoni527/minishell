@@ -13,17 +13,46 @@
 #include "minishell.h"
 
 /**
- * Returns true if there is a redirection token within the pipe specified by
- * data->pipe_index, false if not.
- *
  * @param data	Pointer to main data struct
+ * @see	pipe_has
  */
 bool	pipe_has_redirections(const t_minishell *data)
 {
 	return (pipe_has(data, is_redirection));
 }
 
+/**
+ * @param data	Pointer to main data struct
+ * @see	pipe_has
+ */
 bool	pipe_has_heredoc(const t_minishell *data)
 {
 	return (pipe_has(data, is_heredoc));
+}
+
+/**
+ * @param data	Pointer to main data struct
+ * @see	pipe_has
+ */
+bool	pipe_has_input_redirection(const t_minishell *data)
+{
+	return (pipe_has(data, is_input_redirection));
+}
+
+/**
+ * @param data	Pointer to main data struct
+ * @see	pipe_has
+ */
+bool	pipe_has_output_redirection(const t_minishell *data)
+{
+	return (pipe_has(data, is_output_redirection));
+}
+
+/**
+ * @param data	Pointer to main data struct
+ * @see	pipe_has
+ */
+bool	pipe_has_append(const t_minishell *data)
+{
+	return (pipe_has(data, is_append));
 }
