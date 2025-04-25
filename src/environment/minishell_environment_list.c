@@ -52,8 +52,8 @@ void	print_custom_env(t_var *list)
  * @param key	Key input
  * @param value	Value input
  */
-t_var	*create_new_env_var(t_minishell *data, \
-						char *raw, char *key, char *value)
+t_var	*create_new_env_var(t_minishell *data,
+		char *raw, char *key, char *value)
 {
 	t_var	*new_node;
 

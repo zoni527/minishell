@@ -75,7 +75,7 @@ static void	handle_tilde(t_minishell *data, char *path, t_var *envp)
 	home_path = ms_getenv(data, "HOME", envp);
 	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
 	change_dir(data, new_home_path);
-	ms_setenv(data, "PWD", new_home_path, envp);
+	ms_setenv(data, "PWD", new_home_path);
 }
 
 /**
@@ -89,7 +89,7 @@ static	void	handle_cd(t_minishell *data, t_var *envp)
 	char	*home_path;
 
 	home_path = ms_getenv(data, "HOME", envp);
-	ms_setenv(data, "PWD", home_path, envp);
+	ms_setenv(data, "PWD", home_path);
 	change_dir(data, home_path);
 }
 
@@ -107,7 +107,7 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token)
 	char	*new_path;
 
 	old_path = getcwd(NULL, 0);
-	ms_setenv(data, "OLDPWD", old_path, data->minishell_env);
+	ms_setenv(data, "OLDPWD", old_path);
 	free(old_path);
 	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, builtin_token->next->value);
@@ -121,7 +121,7 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token)
 	{
 		change_dir(data, path);
 		new_path = getcwd(NULL, 0);
-		ms_setenv(data, "PWD", new_path, data->minishell_env);
+		ms_setenv(data, "PWD", new_path);
 		free(new_path);
 	}
 }

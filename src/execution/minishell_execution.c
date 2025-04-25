@@ -111,10 +111,24 @@ void	cmd_exec(t_minishell *data, char **command, char **envp)
 	path = path_parsing(data, command[0], envp);
 	if (!path)
 	{
-		ft_putstr_fd("Failed to assign execution path\n", STDERR_FILENO);
+		handle_error(data, command[0], ERROR_NOSUCH);
+		return ;
 	}
-	if (execve(path, command, envp) == -1)
+	execve(path, command, envp);
+	if (errno == ENOENT)
 	{
-		ft_putstr_fd(MSG_ERROR_EXECVE, STDERR_FILENO);
+		data->last_rval = EXIT_NOSUCH;
+		data->error = ERROR_NOCMD;
 	}
+	else if (errno == EACCES)
+	{
+		data->last_rval = EXIT_PERMISSION;
+		data->error = ERROR_PERMISSION;
+	}
+	else
+	{
+		data->last_rval = EXIT_FAILURE;
+		data->error = 1;
+	}
+	handle_error(data, command[0], ERROR_EXECVE);
 }

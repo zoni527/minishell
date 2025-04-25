@@ -33,8 +33,8 @@ void	env_list_from_envp(t_minishell *data, const char **envp)
 		vals[0] = ft_ma_strdup(data->arena, envp[i]);
 		j = ft_char_index(vals[0], '=');
 		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
-		vals[2] = ft_ma_substr(data->arena, vals[0], \
-						(j + 1), ft_strlen(vals[0]) - (j + 1));
+		vals[2] = ft_ma_substr(data->arena, vals[0],
+				(j + 1), ft_strlen(vals[0]) - (j + 1));
 		if (current == NULL)
 		{
 			current = create_new_env_var(data, vals[0], vals[1], vals[2]);
@@ -93,16 +93,13 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 	if (!name || !envp)
 		return (NULL);
 	current = NULL;
-	if (ft_strncmp(name, "getenv", 6) == 0)
-		sub_name = ft_ma_substr(data->arena, name, 7, ft_strlen(name) - 6);
-	else
-		sub_name = ft_ma_strdup(data->arena, name);
+	sub_name = ft_ma_strdup(data->arena, name);
 	if (!sub_name)
 		return (NULL);
 	current = envp;
 	while (current)
 	{
-		if (ft_strncmp(sub_name, current->key, ft_strlen(sub_name)) == 0)
+		if (ft_strcmp(sub_name, current->key) == 0)
 		{
 			sub_name = ft_ma_strdup(data->arena, current->value);
 			return (sub_name);
@@ -120,7 +117,7 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
  * @param value	value input
  * @param envp	enviroment pointer
  */
-int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
+int	ms_setenv(t_minishell *data, char *key, char *value)
 {
 	char	*raw;
 	t_var	*current;
@@ -129,10 +126,10 @@ int	ms_setenv(t_minishell *data, char *key, char *value, t_var *envp)
 	raw = ft_ma_strjoin(data->arena, key, "=");
 	if (value != NULL)
 		raw = ft_ma_strjoin(data->arena, raw, value);
-	current = envp;
+	current = data->minishell_env;
 	while (current)
 	{
-		if (strncmp(key, current->key, ft_strlen(key)) == 0)
+		if (ft_strcmp(key, current->key) == 0)
 		{
 			current->raw = raw;
 			current->value = value;
@@ -163,7 +160,7 @@ int	remove_env(char *key, t_var *envp)
 	current = envp;
 	while (current)
 	{
-		if (ft_strncmp(key, current->key, ft_strlen(key)) == 0)
+		if (ft_strcmp(key, current->key) == 0)
 		{
 			if (current->next == NULL)
 			{

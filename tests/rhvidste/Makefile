@@ -1,4 +1,4 @@
-# **************************************************************************** #
+#t**************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -32,7 +32,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 		$(SRC_DIR)/tokenization/minishell_assign_token_indices.c	\
 		$(SRC_DIR)/tokenization/minishell_token_getters.c		\
 		$(SRC_DIR)/tokenization/minishell_token_analysis.c		\
-		$(SRC_DIR)/tokenization/minishell_tokenization_utils_01.c	\
+		$(SRC_DIR)/tokenization/minishell_tokenization_utils.c	\
 		$(SRC_DIR)/tokenization/minishell_quote_validation.c		\
 		$(SRC_DIR)/error_handling/minishell_error_handling.c		\
 		$(SRC_DIR)/error_handling/minishell_error_logging.c		\
@@ -49,6 +49,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 		$(SRC_DIR)/environment/minishell_environment.c			\
 		$(SRC_DIR)/environment/minishell_environment_list.c		\
 		$(SRC_DIR)/environment/minishell_environment_print_alpha.c	\
+		$(SRC_DIR)/environment/minishell_environment_export.c	\
 		$(SRC_DIR)/builtins/minishell_builtin_cd.c			\
 		$(SRC_DIR)/builtins/minishell_builtin_echo.c			\
 		$(SRC_DIR)/builtins/minishell_builtin_env.c			\

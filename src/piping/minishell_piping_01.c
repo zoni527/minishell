@@ -20,6 +20,8 @@ static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
 									int *prev_pipe_read_fd);
 static void	wait_for_children(t_minishell *data);
 
+extern volatile int g_signal;
+
 /**
  * Creates pipes, forks, and waits for child processes.
  * <p>

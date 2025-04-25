@@ -31,7 +31,7 @@ char	*read_heredoc_input(t_minishell *data, const char *delimiter)
 		line = readline("> ");
 		if (!line)
 			break ;
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter) + 1) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 		{
 			received_delim = true;
 			free(line);

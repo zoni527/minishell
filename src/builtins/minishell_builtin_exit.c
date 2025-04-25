@@ -81,8 +81,8 @@ static void	num_handler(t_minishell *data, t_token *token)
 	{
 		ft_putendl_fd("exit", STDERR_FILENO);
 		error = ft_ma_strjoin(data->arena, "minishell: exit: ", token->value);
-		error = ft_ma_strjoin(data->arena, error, \
-						": numeric argument required");
+		error = ft_ma_strjoin(data->arena, error,
+				": numeric argument required");
 		ft_putendl_fd(error, STDERR_FILENO);
 		data->last_rval = EXIT_BLTN_NAN;
 		return ;
