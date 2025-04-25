@@ -12,8 +12,8 @@
 
 #include "minishell.h"
 
-static size_t	count_type(const t_token *list, \
-						bool (*f)(const t_token *token));
+static size_t	count_type(const t_token *list,
+					bool (*f)(const t_token *token));
 
 /**
  * Counts tokens in token list.

@@ -12,8 +12,7 @@
 
 #include "minishell.h"
 
-static int				validate_infile(t_minishell *data, \
-							const char *file_name);
+static int	validate_infile(t_minishell *data, const char *file_name);
 
 /**
  * Handles input redirections in list. 
