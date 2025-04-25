@@ -14,12 +14,11 @@
 
 void	print_tokens_type(t_minishell *data)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = data->token_list;
 	while (token)
 	{
-//		ft_printf("%d\n", token->type);
 		if (token->type == WORD)
 			ft_printf("WORD\n");
 		if (token->type == COMMAND)

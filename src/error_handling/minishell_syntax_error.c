@@ -22,8 +22,8 @@ bool	contains_syntax_error(t_token *list)
 	{
 		if (is_pipe(list) && is_pipe(list->next))
 			return (true);
-		else if ((is_redirection(list) || is_heredoc(list)) \
-				&& is_operator(list->next))
+		else if ((is_redirection(list) || is_heredoc(list))
+			&& is_operator(list->next))
 			return (true);
 		list = list->next;
 	}
@@ -40,8 +40,8 @@ t_token	*syntax_error_at_token(t_token *list)
 	{
 		if (is_pipe(list) && is_pipe(list->next))
 			return (list->next);
-		else if ((is_redirection(list) || is_heredoc(list)) \
-				&& is_operator(list->next))
+		else if ((is_redirection(list) || is_heredoc(list))
+			&& is_operator(list->next))
 			return (list->next);
 		list = list->next;
 	}

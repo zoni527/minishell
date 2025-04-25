@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 static void		expand_variables(t_minishell *data, t_token *token);
-static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
+static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 					size_t var_index);
 static t_var	*find_var(t_minishell *data, const char *str);
 static t_var	*question_mark_variable(t_minishell *data);
@@ -64,7 +64,7 @@ static void	expand_variables(t_minishell *data, t_token *token)
 			++i;
 		if (token->value[i] == '\'' || token->value[i] == '"')
 			toggle_quote_flag(&quote_flag, token->value[i]);
-		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1]) \
+		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1])
 			&& !(quote_flag == '\'') && !is_heredoc(token->prev))
 		{
 			if (token->value[++i] == '?')
@@ -90,7 +90,7 @@ static void	expand_variables(t_minishell *data, t_token *token)
  * @return			Returns index for updated token->value so that expansion
  *					can continue at the right spot
  */
-static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var, \
+static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 					size_t var_index)
 {
 	char	*new;
@@ -139,7 +139,7 @@ static t_var	*find_var(t_minishell *data, const char *str)
 	var = data->minishell_env;
 	while (var)
 	{
-		if (len == ft_strlen(var->key) \
+		if (len == ft_strlen(var->key)
 			&& ft_strncmp(var->key, str, len) == 0)
 			return (var);
 		var = var->next;

@@ -45,7 +45,7 @@ bool	is_redirection(const t_token *token)
 {
 	if (!token)
 		return (false);
-	if (token->type == REDIRECT_OUTPUT || token->type == REDIRECT_INPUT \
+	if (token->type == REDIRECT_OUTPUT || token->type == REDIRECT_INPUT
 		|| token->type == APPEND)
 		return (true);
 	return (false);
