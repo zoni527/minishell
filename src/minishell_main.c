@@ -17,6 +17,11 @@ static void			execution(t_minishell *data);
 static void			initialize_data(t_minishell *data, char *envp[]);
 static const char	*get_prompt(t_minishell *data);
 
+/**
+ * @param argc	Argument count from shell
+ * @param argv	NULL terminated array of argument strings
+ * @param envp	NULL terminated array of environment variables
+ */
 int	main(int argc, char *argv[], char *envp[])
 {
 	static t_minishell	data;
@@ -27,9 +32,18 @@ int	main(int argc, char *argv[], char *envp[])
 	set_default_signal_handling(&data);
 	loop(&data);
 	clean(&data);
+	ft_putendl_fd("exit", STDERR_FILENO);
 	return (data.last_rval);
 }
 
+/**
+ * Loop actions consist of reading user input, validating it, running through
+ * and calling the actions requested by the input, resetting the data structure
+ * after the action/execution stage, and freeing the raw user input before
+ * starting again.
+ *
+ * @param data	Pointer to main data struct
+ */
 static void	loop(t_minishell *data)
 {
 	const char	*prompt;
@@ -53,37 +67,36 @@ static void	loop(t_minishell *data)
 	}
 }
 
+/**
+ * @param data	Pointer to main data struct
+ */
 static void	execution(t_minishell *data)
 {
-	int	stdout;
-	int	stdin;
-
 	if (data->pipe_count == 0 && tokens_contain(data->token_list, is_builtin))
-	{
-		stdin = dup(STDIN_FILENO);
-		if (stdin < 0)
-			clean_error_exit(data, MSG_ERROR_DUP, ERROR_DUP);
-		stdout = dup(STDOUT_FILENO);
-		if (stdout < 0)
-			clean_error_exit(data, MSG_ERROR_DUP, ERROR_DUP);
-		handle_redirections(data);
-		builtins(data);
-		safe_dup2(data, stdin, STDIN_FILENO);
-		safe_dup2(data, stdout, STDOUT_FILENO);
-		return ;
-	}
-	piping(data);
+		run_single_builtin(data);
+	else
+		piping(data);
 }
 
+/**
+ * @param data	Pointer to main data struct
+ * @param envp	NULL terminated array of environment variables
+ */
 static void	initialize_data(t_minishell *data, char *envp[])
 {
 	data->arena = ft_new_memarena();
 	if (!data->arena)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	data->initial_env = (const char **)envp;
+	data->pipe_fds[READ] = -1;
+	data->pipe_fds[WRITE] = -1;
 	env_list_from_envp(data, data->initial_env);
 }
 
+/**
+ * @param data	Pointer to main data struct
+ * @param envp	NULL terminated array of environment variables
+ */
 static const char	*get_prompt(t_minishell *data)
 {
 	const char	*prompt;

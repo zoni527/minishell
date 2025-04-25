@@ -44,6 +44,7 @@ int	reset_arena_and_pointers(t_minishell *data)
 	data->token_list = NULL;
 	data->hd_delimiters = NULL;
 	data->hd_file_names = NULL;
+	data->pipe_index = 0;
 	return (EXIT_SUCCESS);
 }
 
