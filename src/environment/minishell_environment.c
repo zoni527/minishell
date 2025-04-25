@@ -45,6 +45,7 @@ void	env_list_from_envp(t_minishell *data, const char **envp)
 		current->next->prev = current;
 		current = current->next;
 	}
+	set_shell_lvl(data);
 }
 
 /**
@@ -82,27 +83,23 @@ char	**create_envp_arr_from_custom_env(t_minishell *data, t_var *envp_list)
  * Function to get specific envp variable from the list
  * and return it in a variable
  *
- * @param name	name of target envp variable
+ * @param key	key name of target envp variable
  * @param envp	pointer to first envp element
  */
-char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
+char	*ms_getenv(t_minishell *data, char *key)
 {
 	t_var	*current;
-	char	*sub_name;
+	char	*value;
 
-	if (!name || !envp)
+	if (!key || !data->minishell_env)
 		return (NULL);
-	current = NULL;
-	sub_name = ft_ma_strdup(data->arena, name);
-	if (!sub_name)
-		return (NULL);
-	current = envp;
+	current = data->minishell_env;
 	while (current)
 	{
-		if (ft_strcmp(sub_name, current->key) == 0)
+		if (ft_strcmp(key, current->key) == 0)
 		{
-			sub_name = ft_ma_strdup(data->arena, current->value);
-			return (sub_name);
+			value = ft_ma_strdup(data->arena, current->value);
+			return (value);
 		}
 		else
 			current = current->next;
@@ -132,7 +129,7 @@ int	ms_setenv(t_minishell *data, char *key, char *value)
 		if (ft_strcmp(key, current->key) == 0)
 		{
 			current->raw = raw;
-			current->value = value;
+			current->value = ft_ma_strdup(data->arena, value);
 			return (0);
 		}
 		last = current;
