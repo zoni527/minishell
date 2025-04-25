@@ -13,66 +13,20 @@
 #include "minishell.h"
 
 /**
- * Function to print the current directory path
- * PWD
- *
- * @param void	no input
- */
-int	get_current_dir(t_minishell *data)
-{
-	char	*buffer;
-
-	buffer = getcwd(NULL, 0);
-	if (buffer != NULL)
-	{
-		ft_putendl_fd(buffer, 1);
-		free (buffer);
-	}
-	else
-	{
-		perror("getcwd error");
-		data->last_rval = EXIT_FAILURE;
-		return (EXIT_FAILURE);
-	}
-	data->last_rval = EXIT_SUCCESS;
-	return (EXIT_SUCCESS);
-}
-
-/**
- * Function to switch dir
- *
- * @param str	dir address to change to
- */
-int	change_dir(t_minishell *data, char *str)
-{
-	char	*error;
-
-	if (chdir(str) == -1)
-	{
-		error = ft_ma_strjoin(data->arena, "minishell: cd: ", str);
-		perror(error);
-		data->last_rval = EXIT_FAILURE;
-		return (EXIT_FAILURE);
-	}
-	data->last_rval = EXIT_SUCCESS;
-	return (EXIT_SUCCESS);
-}
-
-/**
  * Function to handle the tilde key case for CD builtin
  *
  * @param data	minishell data struct
  * @param path	path to change dir too.
  * @param envp	pointer to the first element in envp list
  */
-static void	handle_tilde(t_minishell *data, char *path, t_var *envp)
+static void	handle_tilde(t_minishell *data, char *path)
 {
 	char	*new_path;
 	char	*home_path;
 	char	*new_home_path;
 
 	new_path = ft_ma_substr(data->arena, path, 1, (ft_strlen(path) - 1));
-	home_path = ms_getenv(data, "HOME", envp);
+	home_path = ms_getenv(data, "HOME");
 	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
 	change_dir(data, new_home_path);
 	ms_setenv(data, "PWD", new_home_path);
@@ -84,13 +38,27 @@ static void	handle_tilde(t_minishell *data, char *path, t_var *envp)
  * @param data	main data struct
  * @param envp	pointer to first element in envp list
  */
-static	void	handle_cd(t_minishell *data, t_var *envp)
+static void	handle_cd(t_minishell *data)
 {
 	char	*home_path;
 
-	home_path = ms_getenv(data, "HOME", envp);
+	home_path = ms_getenv(data, "HOME");
 	ms_setenv(data, "PWD", home_path);
 	change_dir(data, home_path);
+}
+
+/**
+ * Function to handle the DASH case for CD builtini
+ *
+ * @param data	main data struct
+ */
+static void	handle_dash(t_minishell *data)
+{
+	char	*path;
+
+	path = ms_getenv(data, "OLDPWD");
+	change_dir(data, path);
+	ms_setenv(data, "PWD", path);
 }
 
 /**
@@ -107,16 +75,19 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token)
 	char	*new_path;
 
 	old_path = getcwd(NULL, 0);
-	ms_setenv(data, "OLDPWD", old_path);
-	free(old_path);
 	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, builtin_token->next->value);
 	else
 		path = ft_ma_strdup(data->arena, "");
+	if (!(path[0] == '-' && path[1] == '\0'))
+		ms_setenv(data, "OLDPWD", old_path);
+	free(old_path);
 	if (path[0] == '~')
-		handle_tilde(data, path, data->minishell_env);
+		handle_tilde(data, path);
 	else if (path[0] == '\0')
-		handle_cd(data, data->minishell_env);
+		handle_cd(data);
+	else if (path[0] == '-' && path[1] == '\0')
+		handle_dash(data);
 	else
 	{
 		change_dir(data, path);

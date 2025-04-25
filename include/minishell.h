@@ -282,6 +282,10 @@ void			insert_token_left(t_token *current, t_token *new);
 
 /* =============================== ENVIRONMENT ============================== */
 
+/* -------------------------------------------- minishell_environment_shell.c */
+
+void			set_shell_lvl(t_minishell *data);
+
 /* ------------------------------------------- minishell_environment_export.c */
 
 int				ms_setenv_export(t_minishell *data, char *key,
@@ -296,7 +300,7 @@ void			print_env_alphabetically(t_minishell *data);
 void			env_list_from_envp(t_minishell *data, const char **envp);
 char			**create_envp_arr_from_custom_env(t_minishell *data,
 					t_var *envp_list);
-char			*ms_getenv(t_minishell *data, const char *name, t_var *envp);
+char			*ms_getenv(t_minishell *data, char *key);
 int				ms_setenv(t_minishell *data, char *key, char *value);
 int				remove_env(char *key, t_var *envp);
 
@@ -314,14 +318,17 @@ t_var			*create_new_env_var(t_minishell *data,
 t_token			*fetch_builtin(t_minishell *data);
 int				builtins(t_minishell *data);
 
+/* -------------------------------------------------- minishell_builtin_dir.c */
+
+int				get_current_dir(t_minishell *data);
+int				change_dir(t_minishell *data, char *str);
+
 /* ------------------------------------------------- minishell_builtin_echo.c */
 
 void			builtin_echo(t_minishell *data, t_token *builtin_token);
 
 /* --------------------------------------------------- minishell_builtin_cd.c */
 
-int				get_current_dir(t_minishell *data);
-int				change_dir(t_minishell *data, char *str);
 void			builtin_cd(t_minishell *data, t_token *builtin_token);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
