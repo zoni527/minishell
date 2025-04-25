@@ -204,11 +204,6 @@ typedef struct s_token
 	char			*value;
 }	t_token;
 
-/* =========================== EXTERNAL VARIABLES =========================== */
-
-extern volatile int\
-		g_signal;
-
 /* ============================ INPUT VALIDATION ============================ */
 
 /* --------------------------------------------- minishell_quote_validation.c */

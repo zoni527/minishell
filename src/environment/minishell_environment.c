@@ -93,16 +93,13 @@ char	*ms_getenv(t_minishell *data, const char *name, t_var *envp)
 	if (!name || !envp)
 		return (NULL);
 	current = NULL;
-	if (ft_strncmp(name, "getenv", 6) == 0)
-		sub_name = ft_ma_substr(data->arena, name, 7, ft_strlen(name) - 6);
-	else
-		sub_name = ft_ma_strdup(data->arena, name);
+	sub_name = ft_ma_strdup(data->arena, name);
 	if (!sub_name)
 		return (NULL);
 	current = envp;
 	while (current)
 	{
-		if (ft_strncmp(sub_name, current->key, ft_strlen(sub_name)) == 0)
+		if (ft_strcmp(sub_name, current->key) == 0)
 		{
 			sub_name = ft_ma_strdup(data->arena, current->value);
 			return (sub_name);
@@ -163,7 +160,7 @@ int	remove_env(char *key, t_var *envp)
 	current = envp;
 	while (current)
 	{
-		if (ft_strncmp(key, current->key, ft_strlen(key)) == 0)
+		if (ft_strcmp(key, current->key) == 0)
 		{
 			if (current->next == NULL)
 			{

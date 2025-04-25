@@ -65,5 +65,5 @@ int	builtins(t_minishell *data)
 			return (EXIT_BLTN_NO_EXIT);
 		return (EXIT_SUCCESS);
 	}
-	return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }

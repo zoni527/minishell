@@ -38,8 +38,8 @@ static bool	is_valid_key(t_token *token)
 {
 	if (ft_isalpha(token->value[0]) || token->value[0] == '_')
 		return (true);
-	ft_putstr_fd("bash: export: `", 2);
-	ft_putchar_fd(token->value[0], 2);
+	ft_putstr_fd("minishell: export: `", 2);
+	ft_putstr_fd(token->value, 2);
 	ft_putendl_fd("': not a valid identifier", 2);
 	return (false);
 }

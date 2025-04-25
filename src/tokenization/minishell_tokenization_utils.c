@@ -48,13 +48,13 @@ t_token	*new_token_node(t_minishell *data, const char *str)
 	new->value = (char *)str;
 	if (*str == '|')
 		new->type = PIPE;
-	else if (ft_strncmp(str, "<", 2) == 0)
+	else if (ft_strcmp(str, "<") == 0)
 		new->type = REDIRECT_INPUT;
-	else if (ft_strncmp(str, ">", 2) == 0)
+	else if (ft_strcmp(str, ">") == 0)
 		new->type = REDIRECT_OUTPUT;
-	else if (ft_strncmp(str, "<<", 3) == 0)
+	else if (ft_strcmp(str, "<<") == 0)
 		new->type = HEREDOC;
-	else if (ft_strncmp(str, ">>", 3) == 0)
+	else if (ft_strcmp(str, ">>") == 0)
 		new->type = APPEND;
 	else
 		new->type = WORD;

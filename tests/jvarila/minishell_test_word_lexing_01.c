@@ -19,7 +19,7 @@ void	loop(t_minishell *data)
 	while (1)
 	{
 		line = readline("minishell lexing test: ");
-		if (ft_strncmp(line, "exit", 5) == 0)
+		if (ft_strcmp(line, "exit") == 0)
 		{
 			free(line);
 			break ;
