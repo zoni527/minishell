@@ -12,15 +12,15 @@
 
 #include "minishell.h"
 
-static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe, \
-									int prev_pipe_read_fd);
-static void	handle_fork_failure(t_minishell *data, int *new_pipe, \
-						int prev_pipe_read_fd);
-static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
-									int *prev_pipe_read_fd);
+static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
+				int prev_pipe_read_fd);
+static void	handle_fork_failure(t_minishell *data, int *new_pipe,
+				int prev_pipe_read_fd);
+static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe,
+				int *prev_pipe_read_fd);
 static void	wait_for_children(t_minishell *data);
 
-extern volatile int g_signal;
+extern volatile int	g_signal;
 
 /**
  * Creates pipes, forks, and waits for child processes.
@@ -68,7 +68,7 @@ void	piping(t_minishell *data)
  *							read end, -1 if previous pipe doesn't exist
  * @see   safe_pipe
  */
-static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe, \
+static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
 									int prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
@@ -123,8 +123,8 @@ static void	wait_for_children(t_minishell *data)
  *							created pipe's read end
  * @see   safe_close
  */
-static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
-									int *prev_pipe_read_fd)
+static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe,
+						int *prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
 		safe_close(data, &new_pipe[WRITE]);
@@ -143,7 +143,7 @@ static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe, \
  * @see wait_for_children
  * @see clean_error_exit
  */
-static void	handle_fork_failure(t_minishell *data, int *new_pipe, \
+static void	handle_fork_failure(t_minishell *data, int *new_pipe,
 						int prev_pipe_read_fd)
 {
 	safe_close(data, &prev_pipe_read_fd);

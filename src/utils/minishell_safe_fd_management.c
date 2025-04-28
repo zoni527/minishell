@@ -46,6 +46,24 @@ void	safe_dup2(t_minishell *data, int fd1, int fd2)
 }
 
 /**
+ * Attempts to call dup on fd, performs cleanup and exits program on failure.
+ *
+ * @param data	Pointer to main data struct
+ * @param fd	File descriptor to dup
+ */
+int	safe_dup(t_minishell *data, int fd)
+{
+	int	copy;
+
+	if (fd < 0)
+		return (fd);
+	copy = dup(fd);
+	if (copy < 0)
+		clean_error_exit(data, MSG_ERROR_DUP2, ERROR_DUP2);
+	return (copy);
+}
+
+/**
  * Calls safe functions for redirecting input and closing file descriptors.
  *
  * @param data	Pointer to main data struct

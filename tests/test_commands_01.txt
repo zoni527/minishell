@@ -1,0 +1,4 @@
+echo Hello
+sleep 1
+cat README.md
+sleep 1 | sleep 2 | sleep 3

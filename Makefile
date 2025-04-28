@@ -6,7 +6,7 @@
 #    By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 09:49:19 by jvarila           #+#    #+#              #
-#    Updated: 2025/04/22 10:11:41 by jvarila          ###   ########.fr        #
+#    Updated: 2025/04/25 19:35:45 by jvarila          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,8 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/redirections/minishell_redirect_append.c		\
 	\
 	$(SRC_DIR)/execution/minishell_execution.c			\
+	$(SRC_DIR)/execution/minishell_input_validation.c		\
+	$(SRC_DIR)/execution/minishell_single_builtin.c			\
 	\
 	$(SRC_DIR)/environment/minishell_environment.c			\
 	$(SRC_DIR)/environment/minishell_environment_list.c		\
@@ -111,8 +113,9 @@ clean:
 	make clean -C $(LIBFT_DIR)
 	rm -rf $(OBJ_DIR)
 
-fclean: clean
+fclean:
 	make fclean -C $(LIBFT_DIR)
+	rm -rf $(OBJ_DIR)
 	rm -f $(NAME)
 
 re: fclean all
