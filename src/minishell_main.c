@@ -107,7 +107,7 @@ static const char	*get_prompt(t_minishell *data)
 	{
 		if (errno == ENOENT)
 		{
-			current_dir = ft_strdup(".");
+			current_dir = ft_strdup("./");
 			if (!current_dir)
 				clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 		}

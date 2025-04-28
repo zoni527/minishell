@@ -199,9 +199,9 @@ typedef struct s_token
 {
 	t_token_type	type;
 	size_t			index;
+	char			*value;
 	t_token			*next;
 	t_token			*prev;
-	char			*value;
 }	t_token;
 
 /* ============================ INPUT VALIDATION ============================ */
