@@ -329,6 +329,7 @@ void			builtin_echo(t_minishell *data, t_token *builtin_token);
 
 /* --------------------------------------------------- minishell_builtin_cd.c */
 
+char			*safe_getcwd(t_minishell *data);
 void			builtin_cd(t_minishell *data, t_token *builtin_token);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */

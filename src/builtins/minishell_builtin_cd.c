@@ -62,6 +62,26 @@ static void	handle_dash(t_minishell *data)
 }
 
 /**
+ * Safe Function to call getcwd amd handle case
+ * where it returns NULL
+ *
+ * @param data	pointer to the main data struct
+ */
+char	*safe_getcwd(t_minishell *data)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+	{
+		cwd = ft_calloc(1, sizeof(char));
+		if (!cwd)
+			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
+	}
+	return (cwd);
+}
+
+/**
  * Function to call the CD builtin
  *
  * @param data	pointer to the main data struct
@@ -74,7 +94,7 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token)
 	char	*old_path;
 	char	*new_path;
 
-	old_path = getcwd(NULL, 0);
+	old_path = safe_getcwd(data);
 	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, builtin_token->next->value);
 	else
@@ -91,7 +111,7 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token)
 	else
 	{
 		change_dir(data, path);
-		new_path = getcwd(NULL, 0);
+		new_path = safe_getcwd(data);
 		ms_setenv(data, "PWD", new_path);
 		free(new_path);
 	}
