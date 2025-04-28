@@ -102,7 +102,7 @@ static const char	*get_prompt(t_minishell *data)
 	const char	*prompt;
 	char		*current_dir;
 
-	current_dir = getcwd(NULL, 0);
+	current_dir = safe_getcwd(data);
 	if (!current_dir)
 	{
 		if (errno == ENOENT)
