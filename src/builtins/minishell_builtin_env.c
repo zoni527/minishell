@@ -30,5 +30,4 @@ void	builtin_env(t_minishell *data)
 		}
 		token = token->next;
 	}
-	data->last_rval = EXIT_SUCCESS;
 }

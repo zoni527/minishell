@@ -19,12 +19,11 @@
  * @param data	main data struct
  * @param builtin_token	token reference
  */
-static t_token	*proccess_token(t_minishell *data, t_token *token)
+static t_token	*proccess_token(t_token *token)
 {
 	if (token->next == NULL)
 	{
-		ft_putendl_fd(" ", 1);
-		data->last_rval = EXIT_SUCCESS;
+		ft_putendl(" ");
 		return (NULL);
 	}
 	else
@@ -36,25 +35,25 @@ static t_token	*proccess_token(t_minishell *data, t_token *token)
 }
 
 /**
- * Helper function to print token to fd
+ * Helper function to print token to stdout
  * or add a new line if at the last argument
  *
- * @param builtin_token	root builtin token reference
+ * @param token	root builtin token reference
  */
 static int	print_token(t_token *token)
 {
 	if (token->type == ARGUMENT)
 	{
-		ft_putstr_fd(token->value, 1);
+		ft_putstr(token->value);
 		if (token->next && token->next->type == ARGUMENT)
-			ft_putstr_fd(" ", 1);
+			ft_putstr(" ");
 	}
 	if (token->next == NULL)
 	{
-		ft_putstr_fd("\n", 1);
-		return (0);
+		ft_putstr("\n");
+		return (EXIT_SUCCESS);
 	}
-	return (1);
+	return (EXIT_FAILURE);
 }
 
 /**
@@ -64,22 +63,18 @@ static int	print_token(t_token *token)
  * @param data	main data struct
  * @param builtin_token	root builtin token reference
  */
-void	builtin_echo(t_minishell *data, t_token *builtin_token)
+void	builtin_echo(t_token *builtin_token)
 {
 	t_token	*token;
 
 	token = builtin_token;
-	token = proccess_token(data, token);
+	token = proccess_token(token);
 	if (token == NULL)
-	{
-		data->last_rval = EXIT_SUCCESS;
 		return ;
-	}
 	while (token)
 	{
 		if (print_token(token) == 0)
 			break ;
 		token = token->next;
 	}
-	data->last_rval = EXIT_SUCCESS;
 }

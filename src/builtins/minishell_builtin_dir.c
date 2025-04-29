@@ -23,18 +23,13 @@ int	get_current_dir(t_minishell *data)
 	char	*buffer;
 
 	buffer = getcwd(NULL, 0);
-	if (buffer != NULL)
+	if (!buffer)
 	{
-		ft_putendl_fd(buffer, 1);
-		free (buffer);
-	}
-	else
-	{
-		perror("getcwd error");
-		data->last_rval = EXIT_FAILURE;
+		handle_error(data, NULL, ERROR_GETCWD);
 		return (EXIT_FAILURE);
 	}
-	data->last_rval = EXIT_SUCCESS;
+	ft_putendl(buffer);
+	free (buffer);
 	return (EXIT_SUCCESS);
 }
 
@@ -45,15 +40,10 @@ int	get_current_dir(t_minishell *data)
  */
 int	change_dir(t_minishell *data, char *str)
 {
-	char	*error;
-
 	if (chdir(str) == -1)
 	{
-		error = ft_ma_strjoin(data->arena, "minishell: cd: ", str);
-		perror(error);
-		data->last_rval = EXIT_FAILURE;
+		handle_error(data, str, ERROR_CHDIR);
 		return (EXIT_FAILURE);
 	}
-	data->last_rval = EXIT_SUCCESS;
 	return (EXIT_SUCCESS);
 }

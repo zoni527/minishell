@@ -12,28 +12,6 @@
 
 #include "minishell.h"
 
-/**
- * Helper Function to prepare root token
- * before handing to the main function.
- *
- * @param data	main data struct
- * @param builtin_token	token reference
- */
-static t_token	*proccess_token(t_minishell *data, t_token *token)
-{
-	if (token->next == NULL)
-	{
-		data->last_rval = EXIT_SUCCESS;
-		return (NULL);
-	}
-	else
-	{
-		token = token->next;
-		return (token);
-	}
-	return (NULL);
-}
-
 static bool	is_valid_key(t_token *token)
 {
 	if (ft_isalpha(token->value[0]) || token->value[0] == '_')
@@ -85,18 +63,14 @@ static void	set_key_and_value(t_minishell *data, t_token *token)
  * @param builtin_token	pointer to the root builtin token
  * @param envp	pinter to the fist envp element
  */
-void	builtin_export(t_minishell *data, t_token *builtin_token)
+void	builtin_export(t_minishell *data, t_token *token)
 {
-	t_token	*token;
-
-	token = builtin_token;
-	token = proccess_token(data, token);
+	if (token)
+		token = token->next;
 	if (token == NULL)
 	{
 		print_env_alphabetically(data);
-		data->last_rval = EXIT_SUCCESS;
 		return ;
 	}
 	set_key_and_value(data, token);
-	data->last_rval = EXIT_SUCCESS;
 }

@@ -6,7 +6,7 @@
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:30:03 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/08 11:51:49 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:58:46 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,28 +107,23 @@ static char	*path_parsing(t_minishell *data, const char *command, char **envp)
 void	cmd_exec(t_minishell *data, char **command, char **envp)
 {
 	char	*path;
+	int		error;
 
+	error = 0;
 	path = path_parsing(data, command[0], envp);
 	if (!path)
+		error = ERROR_NOCMD;
+	else if (pretends_to_be_a_directory(data, path))
+		error = ERROR_BINNOTADIR;
+	else if (access(path, X_OK) < 0)
+		error = ERROR_BINPERM;
+	else if (is_a_directory(data, path))
+		error = ERROR_BINISADIR;
+	if (error)
 	{
-		handle_error(data, command[0], ERROR_NOSUCH);
+		handle_error(data, command[0], error);
 		return ;
 	}
 	execve(path, command, envp);
-	if (errno == ENOENT)
-	{
-		data->last_rval = EXIT_NOSUCH;
-		data->error = ERROR_NOCMD;
-	}
-	else if (errno == EACCES)
-	{
-		data->last_rval = EXIT_PERMISSION;
-		data->error = ERROR_PERMISSION;
-	}
-	else
-	{
-		data->last_rval = EXIT_FAILURE;
-		data->error = 1;
-	}
 	handle_error(data, command[0], ERROR_EXECVE);
 }
