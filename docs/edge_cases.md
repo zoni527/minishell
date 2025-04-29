@@ -5,3 +5,4 @@ cat file.txt | cat < another_file.txt | cat ->  what is happening vs what shuold
 awk                                         ->  handle white space within quotes
 cd ""                                       ->  goes nowhere
 cd $asdlfsdf                                ->  invalid variable expansion goes to home
+cd < .gitignore ""                          ->  returns nothing / goes nowhere

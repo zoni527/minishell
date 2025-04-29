@@ -62,23 +62,19 @@ static void	handle_dash(t_minishell *data)
 }
 
 /**
- * Safe Function to call getcwd amd handle case
- * where it returns NULL
+ * Function to handle the change_dir case for CD builtin
  *
- * @param data	pointer to the main data struct
+ * @param data	main data struct
+ * @param path	pointer to path
  */
-char	*safe_getcwd(t_minishell *data)
+static void	handle_change_dir(t_minishell *data, char *path)
 {
-	char	*cwd;
+	char	*new_path;
 
-	cwd = getcwd(NULL, 0);
-	if (cwd == NULL)
-	{
-		cwd = ft_calloc(1, sizeof(char));
-		if (!cwd)
-			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-	}
-	return (cwd);
+	change_dir(data, path);
+	new_path = safe_getcwd(data);
+	ms_setenv(data, "PWD", new_path);
+	free(new_path);
 }
 
 /**
@@ -92,27 +88,25 @@ void	builtin_cd(t_minishell *data, t_token *builtin_token)
 {
 	char	*path;
 	char	*old_path;
-	char	*new_path;
 
+	path = NULL;
 	old_path = safe_getcwd(data);
 	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, builtin_token->next->value);
-	else
-		path = ft_ma_strdup(data->arena, "");
-	if (!(path[0] == '-' && path[1] == '\0'))
+	if (path != NULL && !(path[0] == '-' && path[1] == '\0'))
 		ms_setenv(data, "OLDPWD", old_path);
 	free(old_path);
-	if (path[0] == '~')
+	if (builtin_token && builtin_token->next && builtin_token->next->next)
+		ft_putendl_fd("minishell: cd: too many arguments", 2);
+	else if (ft_strncmp(data->raw_input, "cd \"\"", 5) == 0
+		&& (data->raw_input[6] == ' ' || data->raw_input[6] == '\0'))
+		return ;
+	else if (path != NULL && path[0] == '~')
 		handle_tilde(data, path);
-	else if (path[0] == '\0')
+	else if (builtin_token->next == NULL || path[0] == '\0')
 		handle_cd(data);
-	else if (path[0] == '-' && path[1] == '\0')
+	else if (path != NULL && path[0] == '-' && path[1] == '\0')
 		handle_dash(data);
 	else
-	{
-		change_dir(data, path);
-		new_path = safe_getcwd(data);
-		ms_setenv(data, "PWD", new_path);
-		free(new_path);
-	}
+		handle_change_dir(data, path);
 }

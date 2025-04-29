@@ -57,3 +57,23 @@ int	change_dir(t_minishell *data, char *str)
 	data->last_rval = EXIT_SUCCESS;
 	return (EXIT_SUCCESS);
 }
+
+/**
+ * Safe Function to call getcwd amd handle case
+ * where it returns NULL
+ *
+ * @param data	pointer to the main data struct
+ */
+char	*safe_getcwd(t_minishell *data)
+{
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+	{
+		cwd = ft_calloc(1, sizeof(char));
+		if (!cwd)
+			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
+	}
+	return (cwd);
+}
