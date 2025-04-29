@@ -68,6 +68,7 @@ static void	loop(t_minishell *data)
 }
 
 /**
+ * Funtion to handle execution of builtins and pipes
  * @param data	Pointer to main data struct
  */
 static void	execution(t_minishell *data)
