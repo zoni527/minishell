@@ -45,6 +45,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/error_handling/minishell_error_handling.c		\
 	$(SRC_DIR)/error_handling/minishell_error_logging.c		\
 	$(SRC_DIR)/error_handling/minishell_syntax_error.c		\
+	$(SRC_DIR)/error_handling/minishell_exit_value_handling.c	\
 	\
 	$(SRC_DIR)/signals/minishell_signals.c				\
 	\
@@ -121,15 +122,13 @@ fclean:
 re: fclean all
 #------------------------------------------------------------------------------#
 debug: CFLAGS += $(DEBUG_FLAGS)
-debug: libftdebug clean_name clean_obj_dir all
+debug: libftdebug clean_debug all
 
 libftdebug:
 	make debug -C $(LIBFT_DIR)
 
-clean_name:
+clean_debug:
 	rm -f $(NAME)
-
-clean_obj_dir:
 	rm -rf $(OBJ_DIR)
 #------------------------------------------------------------------------------#
 .PHONY: all clean fclean re debug libftdebug clean_and_debug clean_name

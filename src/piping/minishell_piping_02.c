@@ -48,7 +48,7 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 	if (get_builtin_type(builtin) == BLTN_CD)
 		builtin_cd(data, builtin);
 	else if (get_builtin_type(builtin) == BLTN_ECHO)
-		builtin_echo(data, builtin);
+		builtin_echo(builtin);
 	else if (get_builtin_type(builtin) == BLTN_ENV)
 		builtin_env(data);
 	else if (get_builtin_type(builtin) == BLTN_EXIT)

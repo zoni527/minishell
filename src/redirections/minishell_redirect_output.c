@@ -53,7 +53,7 @@ int	validate_outfile(t_minishell *data, const char *file_name)
 	if (is_a_directory(data, file_name)
 		|| pretends_to_be_a_directory(data, file_name))
 	{
-		handle_error(data, file_name, ERROR_ISADIRECTORY);
+		handle_error(data, file_name, ERROR_ISADIR);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);
