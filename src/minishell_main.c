@@ -68,6 +68,7 @@ static void	loop(t_minishell *data)
 }
 
 /**
+ * Funtion to handle execution of builtins and pipes
  * @param data	Pointer to main data struct
  */
 static void	execution(t_minishell *data)
@@ -102,16 +103,12 @@ static const char	*get_prompt(t_minishell *data)
 	const char	*prompt;
 	char		*current_dir;
 
-	current_dir = getcwd(NULL, 0);
-	if (!current_dir)
+	current_dir = safe_getcwd(data);
+	if (!current_dir[0])
 	{
-		if (errno == ENOENT)
-		{
-			current_dir = ft_strdup(".");
-			if (!current_dir)
-				clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-		}
-		else
+		free(current_dir);
+		current_dir = ft_strdup("./");
+		if (!current_dir)
 			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	}
 	prompt = ft_ma_strjoin(data->arena, "minishell: ", current_dir);

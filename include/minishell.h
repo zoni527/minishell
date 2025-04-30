@@ -322,6 +322,7 @@ int				builtins(t_minishell *data);
 
 int				get_current_dir(t_minishell *data);
 int				change_dir(t_minishell *data, char *str);
+char			*safe_getcwd(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_echo.c */
 

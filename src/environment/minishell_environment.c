@@ -135,11 +135,9 @@ int	ms_setenv(t_minishell *data, char *key, char *value)
 		last = current;
 		current = current->next;
 	}
-	if (last)
-	{
-		last->next = create_new_env_var(data, raw, key, value);
-		last->next->prev = last;
-	}
+	last->next = create_new_env_var(data, ft_ma_strdup(data->arena, raw),
+			ft_ma_strdup(data->arena, key), ft_ma_strdup(data->arena, value));
+	last->next->prev = last;
 	return (0);
 }
 
