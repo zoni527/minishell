@@ -104,15 +104,11 @@ static const char	*get_prompt(t_minishell *data)
 	char		*current_dir;
 
 	current_dir = safe_getcwd(data);
-	if (!current_dir)
+	if (!current_dir[0])
 	{
-		if (errno == ENOENT)
-		{
-			current_dir = ft_strdup(".");
-			if (!current_dir)
-				clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-		}
-		else
+		free(current_dir);
+		current_dir = ft_strdup("./");
+		if (!current_dir)
 			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	}
 	prompt = ft_ma_strjoin(data->arena, "minishell: ", current_dir);
