@@ -25,7 +25,7 @@ volatile int	g_signal = 0;
  *
  * @param signal_type	Received signal's int code, should always be SIGINT
  */
-void	signal_handler(int signal_type)
+static void	main_process_default_handler(int signal_type)
 {
 	g_signal = signal_type;
 	write(STDOUT_FILENO, "\n", 1);
@@ -35,17 +35,28 @@ void	signal_handler(int signal_type)
 }
 
 /**
+ * @param signal_type	Received signal's int code, should always be SIGINT
+ */
+static void	main_process_second_handler(int signal_type)
+{
+	g_signal = signal_type;
+	if (signal_type == SIGQUIT)
+		ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
+	ft_putendl_fd("", STDERR_FILENO);
+}
+
+/**
  * Initializes signal handling for SIGINT and SIGQUIT. SIGINT activates
  * signal_handler and SIGQUIT is ignored. Saves the previous actions in
  * variables act_<signal name>_old.
  *
  * @param data	Pointer to main data struct
  */
-void	set_default_signal_handling(t_minishell *data)
+void	set_and_activate_primary_signal_handler(t_minishell *data)
 {
 	sigemptyset(&data->act_int.sa_mask);
 	sigaddset(&data->act_int.sa_mask, SIGINT);
-	data->act_int.sa_handler = &signal_handler;
+	data->act_int.sa_handler = &main_process_default_handler;
 	sigaction(SIGINT, &data->act_int, &data->act_int_old);
 	sigemptyset(&data->act_quit.sa_mask);
 	sigaddset(&data->act_quit.sa_mask, SIGQUIT);
@@ -53,23 +64,18 @@ void	set_default_signal_handling(t_minishell *data)
 	sigaction(SIGQUIT, &data->act_quit, &data->act_quit_old);
 }
 
-/**
- * Changes the signal handler for SIGQUIT to the original one, reactivating
- * the signal (can cause core dumps again).
- *
- * @param data	Pointer to main data struct
- */
-void	activate_sigquit(t_minishell *data)
+void	activate_primary_signal_handler(t_minishell *data)
 {
-	sigaction(SIGQUIT, &data->act_quit_old, NULL);
+	data->act_int.sa_handler = &main_process_default_handler;
+	sigaction(SIGINT, &data->act_int, NULL);
+	data->act_quit.sa_handler = &main_process_default_handler;
+	sigaction(SIGQUIT, &data->act_quit, NULL);
 }
 
-/**
- * Deactivates the signal handler for SIGQUIT, replaces it with SIG_IGN.
- *
- * @param data	Pointer to main data struct
- */
-void	deactivate_sigquit(t_minishell *data)
+void	activate_secondary_signal_handler(t_minishell *data)
 {
+	data->act_int.sa_handler = &main_process_second_handler;
+	sigaction(SIGINT, &data->act_int, NULL);
+	data->act_quit.sa_handler = &main_process_second_handler;
 	sigaction(SIGQUIT, &data->act_quit, NULL);
 }

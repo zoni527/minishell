@@ -30,7 +30,8 @@ int	handle_redirections(t_minishell *data)
 	redirection_tokens = copy_redirections_within_pipe(data, start);
 	while (redirection_tokens)
 	{
-		redirect(data, redirection_tokens);
+		if (redirect(data, redirection_tokens) == EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		redirection_tokens = redirection_tokens->next->next;
 	}
 	return (EXIT_SUCCESS);

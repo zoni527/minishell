@@ -41,14 +41,14 @@ int	builtin_exit(t_minishell *data, t_token *token)
 	if (data->pipe_count == 0)
 		ft_putendl_fd("exit", STDERR_FILENO);
 	if (!token || !token->next)
-		exit(EXIT_SUCCESS);
+		clean_exit(data, EXIT_SUCCESS);
 	token = token->next;
 	if (validate_arguments(token) == EXIT_BLTN_NAN)
 	{
 		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
 		ft_putstr_fd(token->value, STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
-		exit (EXIT_BLTN_NAN);
+		clean_exit(data, EXIT_BLTN_NAN);
 	}
 	else if (validate_arguments(token) == EXIT_BLTN_TOOMANY)
 	{
@@ -59,6 +59,6 @@ int	builtin_exit(t_minishell *data, t_token *token)
 		return (EXIT_FAILURE);
 	}
 	if (ft_isnumstr(token->value))
-		exit (ft_atoi(token->value));
+		clean_exit(data, ft_atoi(token->value));
 	return (EXIT_SUCCESS);
 }

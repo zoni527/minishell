@@ -57,6 +57,7 @@ int	change_dir(t_minishell *data, char *str)
 char	*safe_getcwd(t_minishell *data)
 {
 	char	*cwd;
+	char	*temp;
 
 	cwd = getcwd(NULL, 0);
 	if (cwd == NULL)
@@ -65,5 +66,8 @@ char	*safe_getcwd(t_minishell *data)
 		if (!cwd)
 			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	}
+	temp = cwd;
+	cwd = ft_ma_strdup(data->arena, cwd);
+	free(temp);
 	return (cwd);
 }

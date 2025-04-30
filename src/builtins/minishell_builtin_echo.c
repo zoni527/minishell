@@ -23,7 +23,7 @@ static t_token	*proccess_token(t_token *token)
 {
 	if (token->next == NULL)
 	{
-		ft_putendl(" ");
+		ft_putendl("");
 		return (NULL);
 	}
 	else
@@ -63,11 +63,12 @@ static int	print_token(t_token *token)
  * @param data	main data struct
  * @param builtin_token	root builtin token reference
  */
-void	builtin_echo(t_token *builtin_token)
+void	builtin_echo(t_minishell *data)
 {
 	t_token	*token;
 
-	token = builtin_token;
+	token = skip_to_current_pipe(data);
+	token = copy_cmd_and_args_within_pipe(data, token);
 	token = proccess_token(token);
 	if (token == NULL)
 		return ;
@@ -77,4 +78,5 @@ void	builtin_echo(t_token *builtin_token)
 			break ;
 		token = token->next;
 	}
+	data->last_rval = 0;
 }

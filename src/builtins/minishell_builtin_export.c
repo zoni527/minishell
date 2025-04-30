@@ -73,4 +73,5 @@ void	builtin_export(t_minishell *data, t_token *token)
 		return ;
 	}
 	set_key_and_value(data, token);
+	data->last_rval = 0;
 }

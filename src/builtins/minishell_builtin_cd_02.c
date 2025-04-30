@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_builtin_cd.c                             :+:      :+:    :+:   */
+/*   minishell_builtin_cd_02.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
+/*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:11:23 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/08 17:10:17 by rhvidste         ###   ########.fr       */
+/*   Created: 2025/04/30 13:23:32 by jvarila           #+#    #+#             */
+/*   Updated: 2025/04/30 13:24:07 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	handle_tilde(t_minishell *data, char *path)
  * @param data	main data struct
  * @param envp	pointer to first element in envp list
  */
-static void	handle_cd(t_minishell *data)
+static void	handle_no_arg(t_minishell *data)
 {
 	char	*home_path;
 
@@ -74,37 +74,19 @@ static void	handle_change_dir(t_minishell *data, char *path)
 	change_dir(data, path);
 	new_path = safe_getcwd(data);
 	ms_setenv(data, "PWD", new_path);
-	free(new_path);
 }
 
-/**
- * Function to call the CD builtin
- *
- * @param data	pointer to the main data struct
- * @param builtin_token	pointer to root builtin token
- * @param envp	pointer to fist element in envp array
- */
-void	builtin_cd(t_minishell *data, t_token *builtin_token)
+void	handle_cd(t_minishell *data, t_token *cd_tokens, char *path)
 {
-	char	*path;
-	char	*old_path;
-
-	path = NULL;
-	old_path = safe_getcwd(data);
-	if (builtin_token->next && builtin_token->next->type == ARGUMENT)
-		path = ft_ma_strdup(data->arena, builtin_token->next->value);
-	if (path != NULL && !(path[0] == '-' && path[1] == '\0'))
-		ms_setenv(data, "OLDPWD", old_path);
-	free(old_path);
-	if (builtin_token && builtin_token->next && builtin_token->next->next)
-		ft_putendl_fd("minishell: cd: too many arguments", 2);
-	else if (ft_strncmp(data->raw_input, "cd \"\"", 5) == 0
+	if (ft_strncmp(data->raw_input, "cd \"\"", 5) == 0
 		&& (data->raw_input[6] == ' ' || data->raw_input[6] == '\0'))
+		return ;
+	else if (path != NULL && path[0] == '\0')
 		return ;
 	else if (path != NULL && path[0] == '~')
 		handle_tilde(data, path);
-	else if (builtin_token->next == NULL || path[0] == '\0')
-		handle_cd(data);
+	else if (cd_tokens->next == NULL || path[0] == '\0')
+		handle_no_arg(data);
 	else if (path != NULL && path[0] == '-' && path[1] == '\0')
 		handle_dash(data);
 	else

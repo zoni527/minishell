@@ -15,4 +15,5 @@
 void	builtin_pwd(t_minishell *data)
 {
 	get_current_dir(data);
+	data->last_rval = 0;
 }

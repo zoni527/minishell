@@ -329,11 +329,15 @@ char			*safe_getcwd(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_echo.c */
 
-void			builtin_echo(t_token *builtin_token);
+void			builtin_echo(t_minishell *data);
 
-/* --------------------------------------------------- minishell_builtin_cd.c */
+/* ------------------------------------------------ minishell_builtin_cd_01.c */
 
-void			builtin_cd(t_minishell *data, t_token *builtin_token);
+void			builtin_cd(t_minishell *data);
+
+/* ------------------------------------------------ minishell_builtin_cd_02.c */
+
+void			handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 
@@ -369,9 +373,9 @@ void			child_process(t_minishell *data);
 
 /* ------------------------------------------------------ minishell_signals.c */
 
-void			set_default_signal_handling(t_minishell *data);
-void			activate_sigquit(t_minishell *data);
-void			deactivate_sigquit(t_minishell *data);
+void			set_and_activate_primary_signal_handler(t_minishell *data);
+void			activate_primary_signal_handler(t_minishell *data);
+void			activate_secondary_signal_handler(t_minishell *data);
 
 /* ============================== REDIRECTIONS ============================== */
 

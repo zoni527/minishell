@@ -48,9 +48,9 @@ int	builtins(t_minishell *data)
 	if (!builtin_token)
 		return (EXIT_FAILURE);
 	if (get_builtin_type(builtin_token) == BLTN_ECHO)
-		builtin_echo(builtin_token);
+		builtin_echo(data, builtin_token);
 	else if (get_builtin_type(builtin_token) == BLTN_CD)
-		builtin_cd(data, builtin_token);
+		builtin_cd(data);
 	else if (get_builtin_type(builtin_token) == BLTN_PWD)
 		builtin_pwd(data);
 	else if (get_builtin_type(builtin_token) == BLTN_EXPORT)

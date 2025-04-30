@@ -30,7 +30,8 @@ void	run_single_builtin(t_minishell *data)
 		std_in = safe_dup(data, STDIN_FILENO);
 	if (pipe_has_output_redirection(data) || pipe_has_append(data))
 		std_out = safe_dup(data, STDOUT_FILENO);
-	handle_redirections(data);
+	if (handle_redirections(data) == EXIT_FAILURE)
+		return ;
 	builtins(data);
 	safe_dup2(data, std_in, STDIN_FILENO);
 	safe_dup2(data, std_out, STDOUT_FILENO);

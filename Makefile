@@ -68,7 +68,8 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/environment/minishell_environment_export.c		\
 	$(SRC_DIR)/environment/minishell_environment_shell.c		\
 	\
-	$(SRC_DIR)/builtins/minishell_builtin_cd.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_cd_01.c			\
+	$(SRC_DIR)/builtins/minishell_builtin_cd_02.c			\
 	$(SRC_DIR)/builtins/minishell_builtin_echo.c			\
 	$(SRC_DIR)/builtins/minishell_builtin_env.c			\
 	$(SRC_DIR)/builtins/minishell_builtin_exit.c			\

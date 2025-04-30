@@ -91,6 +91,7 @@ static void	wait_for_children(t_minishell *data)
 	pid_t	pid;
 	int		status;
 
+	activate_secondary_signal_handler(data);
 	while (data->pipe_index--)
 	{
 		pid = wait(&status);
@@ -107,6 +108,7 @@ static void	wait_for_children(t_minishell *data)
 				data->last_rval = status;
 		}
 	}
+	activate_primary_signal_handler(data);
 	data->pipe_index = 0;
 }
 
