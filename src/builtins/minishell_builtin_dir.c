@@ -40,9 +40,22 @@ int	get_current_dir(t_minishell *data)
  */
 int	change_dir(t_minishell *data, char *str)
 {
+	if (access(str, F_OK) < 0)
+	{
+		handle_error(data, ft_ma_strjoin(data->arena, "cd: ", str),
+			ERROR_NOSUCH);
+		return (EXIT_FAILURE);
+	}
+	else if (access(str, X_OK) < 0)
+	{
+		handle_error(data, ft_ma_strjoin(data->arena, "cd: ", str),
+			ERROR_PERMISSION);
+		return (EXIT_FAILURE);
+	}
 	if (chdir(str) == -1)
 	{
-		handle_error(data, str, ERROR_CHDIR);
+		handle_error(data, ft_ma_strjoin(data->arena, "cd: ", str),
+			ERROR_CHDIR);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

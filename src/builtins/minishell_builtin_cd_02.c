@@ -19,7 +19,7 @@
  * @param path	path to change dir too.
  * @param envp	pointer to the first element in envp list
  */
-static void	handle_tilde(t_minishell *data, char *path)
+static int	handle_tilde(t_minishell *data, char *path)
 {
 	char	*new_path;
 	char	*home_path;
@@ -28,8 +28,10 @@ static void	handle_tilde(t_minishell *data, char *path)
 	new_path = ft_ma_substr(data->arena, path, 1, (ft_strlen(path) - 1));
 	home_path = ms_getenv(data, "HOME");
 	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
-	change_dir(data, new_home_path);
+	if (change_dir(data, new_home_path) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	ms_setenv(data, "PWD", new_home_path);
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -38,27 +40,31 @@ static void	handle_tilde(t_minishell *data, char *path)
  * @param data	main data struct
  * @param envp	pointer to first element in envp list
  */
-static void	handle_no_arg(t_minishell *data)
+static int	handle_no_arg(t_minishell *data)
 {
 	char	*home_path;
 
 	home_path = ms_getenv(data, "HOME");
+	if (change_dir(data, home_path) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	ms_setenv(data, "PWD", home_path);
-	change_dir(data, home_path);
+	return (EXIT_SUCCESS);
 }
 
 /**
- * Function to handle the DASH case for CD builtini
+ * Function to handle the DASH case for CD builtin
  *
  * @param data	main data struct
  */
-static void	handle_dash(t_minishell *data)
+static int	handle_dash(t_minishell *data)
 {
 	char	*path;
 
 	path = ms_getenv(data, "OLDPWD");
-	change_dir(data, path);
+	if (change_dir(data, path) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	ms_setenv(data, "PWD", path);
+	return (EXIT_SUCCESS);
 }
 
 /**
@@ -67,28 +73,31 @@ static void	handle_dash(t_minishell *data)
  * @param data	main data struct
  * @param path	pointer to path
  */
-static void	handle_change_dir(t_minishell *data, char *path)
+static int	handle_change_dir(t_minishell *data, char *path)
 {
 	char	*new_path;
 
-	change_dir(data, path);
+	if (change_dir(data, path) == EXIT_FAILURE)
+		return (EXIT_FAILURE);
 	new_path = safe_getcwd(data);
 	ms_setenv(data, "PWD", new_path);
+	return (EXIT_SUCCESS);
 }
 
-void	handle_cd(t_minishell *data, t_token *cd_tokens, char *path)
+int	handle_cd(t_minishell *data, t_token *cd_tokens, char *path)
 {
 	if (ft_strncmp(data->raw_input, "cd \"\"", 5) == 0
 		&& (data->raw_input[6] == ' ' || data->raw_input[6] == '\0'))
-		return ;
+		return (EXIT_SUCCESS);
 	else if (path != NULL && path[0] == '\0')
-		return ;
+		return (EXIT_SUCCESS);
 	else if (path != NULL && path[0] == '~')
-		handle_tilde(data, path);
+		return (handle_tilde(data, path));
 	else if (cd_tokens->next == NULL || path[0] == '\0')
-		handle_no_arg(data);
+		return (handle_no_arg(data));
 	else if (path != NULL && path[0] == '-' && path[1] == '\0')
-		handle_dash(data);
+		return (handle_dash(data));
 	else
-		handle_change_dir(data, path);
+		return (handle_change_dir(data, path));
+	return (EXIT_SUCCESS);
 }

@@ -337,7 +337,7 @@ void			builtin_cd(t_minishell *data);
 
 /* ------------------------------------------------ minishell_builtin_cd_02.c */
 
-void			handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
+int				handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 

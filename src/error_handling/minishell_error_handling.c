@@ -20,10 +20,10 @@ void	handle_error(t_minishell *data, const char *str, t_error error)
 {
 	if (errno == ENOMEM)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, ERROR_ENOMEM);
-	close_fds(data);
 	if (match_minishell_error(str, error) == EXIT_FAILURE)
 		ms_perror(data, str);
 	match_exit_value_to_error(data, error);
+	close_fds(data);
 }
 
 static int	match_minishell_error(const char *str, t_error error)
