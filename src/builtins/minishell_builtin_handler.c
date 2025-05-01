@@ -48,22 +48,18 @@ int	builtins(t_minishell *data)
 	if (!builtin_token)
 		return (EXIT_FAILURE);
 	if (get_builtin_type(builtin_token) == BLTN_ECHO)
-		builtin_echo(data, builtin_token);
+		builtin_echo(data);
 	else if (get_builtin_type(builtin_token) == BLTN_CD)
-		builtin_cd(data, builtin_token);
+		builtin_cd(data);
 	else if (get_builtin_type(builtin_token) == BLTN_PWD)
 		builtin_pwd(data);
 	else if (get_builtin_type(builtin_token) == BLTN_EXPORT)
-		builtin_export(data, builtin_token);
+		builtin_export(data);
 	else if (get_builtin_type(builtin_token) == BLTN_UNSET)
-		builtin_unset(data, builtin_token);
+		builtin_unset(data);
 	else if (get_builtin_type(builtin_token) == BLTN_ENV)
 		builtin_env(data);
 	else if (get_builtin_type(builtin_token) == BLTN_EXIT)
-	{
-		if (builtin_exit(data, builtin_token) == EXIT_FAILURE)
-			return (EXIT_BLTN_NO_EXIT);
-		return (EXIT_SUCCESS);
-	}
+		builtin_exit(data);
 	return (EXIT_SUCCESS);
 }

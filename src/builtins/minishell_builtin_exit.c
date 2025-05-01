@@ -6,87 +6,28 @@
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 10:57:46 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/14 11:51:44 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:20:20 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * Helper Function to prepare root token
- * before handing to the main function.
- *
- * @param data	main data struct
- * @param builtin_token	token reference
- */
-static t_token	*proccess_token(t_minishell *data, t_token *token)
-{
-	if (token->next == NULL)
-	{
-		data->last_rval = EXIT_SUCCESS;
-		return (NULL);
-	}
-	else
-	{
-		token = token->next;
-		return (token);
-	}
-	return (NULL);
-}
-
-/**
  * Helper Function to validate arguments
- * returns error if too many arguments
+ * returns error if too many arguments or non numeric arguments
  *
  * @param data	main data struct
  * @param token	token reference
  */
-static int	validate_arguments(t_minishell *data, t_token *token)
+static int	validate_arguments(t_token *token)
 {
-	if (data->pipe_count == 0)
-	{
-		if (!token)
-		{
-			data->last_rval = 0;
-			return (EXIT_SUCCESS);
-		}
-		if (token->next)
-		{
-			ft_putendl_fd("minishell: exit: too many arguments", 2);
-			data->last_rval = 1;
-			return (EXIT_FAILURE);
-		}
-	}
+	if (!token)
+		return (EXIT_SUCCESS);
+	if (!ft_isnumstr(token->value))
+		return (EXIT_BLTN_NAN);
+	else if (is_argument(token->next))
+		return (EXIT_BLTN_TOOMANY);
 	return (EXIT_SUCCESS);
-}
-
-/**
- * Helper Function to handle if there are
- * non numerical characters
- *
- * @param data	main data struct
- * @param token	token reference
- */
-static void	num_handler(t_minishell *data, t_token *token)
-{
-	char	*error;
-
-	if (ft_isnumstr(token->value))
-	{
-		data->last_rval = ft_atoi(token->value);
-		ft_putendl_fd("exit", STDERR_FILENO);
-		return ;
-	}
-	else
-	{
-		ft_putendl_fd("exit", STDERR_FILENO);
-		error = ft_ma_strjoin(data->arena, "minishell: exit: ", token->value);
-		error = ft_ma_strjoin(data->arena, error,
-				": numeric argument required");
-		ft_putendl_fd(error, STDERR_FILENO);
-		data->last_rval = EXIT_BLTN_NAN;
-		return ;
-	}
 }
 
 /**
@@ -95,24 +36,29 @@ static void	num_handler(t_minishell *data, t_token *token)
  * @param data	main data struct
  * @param builtin_token	builtin_token reference
  */
-int	builtin_exit(t_minishell *data, t_token *builtin_token)
+int	builtin_exit(t_minishell *data)
 {
 	t_token	*token;
 
-	token = builtin_token;
-	token = proccess_token(data, token);
-	if (validate_arguments(data, token) == EXIT_FAILURE)
-		return (EXIT_BLTN_NO_EXIT);
-	if (token == NULL)
-	{
-		data->last_rval = EXIT_SUCCESS;
+	token = copy_cmd_and_args_within_pipe(data);
+	if (data->pipe_count == 0)
 		ft_putendl_fd("exit", STDERR_FILENO);
-		return (EXIT_SUCCESS);
-	}
-	else
+	if (!token->next)
+		clean_exit(data, EXIT_SUCCESS);
+	if (validate_arguments(token->next) == EXIT_BLTN_NAN)
 	{
-		num_handler(data, token);
-		return (EXIT_SUCCESS);
+		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(token->next->value, STDERR_FILENO);
+		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
+		clean_exit(data, EXIT_BLTN_NAN);
 	}
+	else if (validate_arguments(token->next) == EXIT_BLTN_TOOMANY)
+	{
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+		data->last_rval = EXIT_FAILURE;
+		return (EXIT_FAILURE);
+	}
+	if (ft_isnumstr(token->next->value))
+		clean_exit(data, ft_atoi(token->value));
 	return (EXIT_SUCCESS);
 }

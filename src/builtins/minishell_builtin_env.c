@@ -15,20 +15,20 @@
 /**
  * Function to call the ENV builtin
  *
- * @param data	pointer to teh main data struct
+ * @param data	pointer to the main data struct
  */
 void	builtin_env(t_minishell *data)
 {
-	t_var	*token;
+	t_var	*var;
 
-	token = data->minishell_env;
-	while (token)
+	var = data->minishell_env;
+	while (var)
 	{
-		if (ft_strchr(token->raw, '='))
+		if (ft_strchr(var->raw, '='))
 		{
-			ft_putendl_fd(token->raw, 1);
+			ft_putendl_fd(var->raw, 1);
 		}
-		token = token->next;
+		var = var->next;
 	}
-	data->last_rval = EXIT_SUCCESS;
+	data->last_rval = 0;
 }

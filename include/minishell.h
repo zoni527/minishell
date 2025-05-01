@@ -44,19 +44,16 @@
 /* --------------------------------------------------------------- exit codes */
 
 /* Execution exit values */
-# define EXIT_PERMISSION	1
-# define EXIT_NOSUCH		1
-# define EXIT_ISADIRECTORY	1
 # define EXIT_LIMITHEREDOC	2
 # define EXIT_HEREDOC_FILE	3
 # define EXIT_BINPERM		126
-# define EXIT_NOTFOUND		127
+# define EXIT_NOCMD			127
 # define EXIT_EXECVE		128
 
 /* Builtin exit values */
-# define EXIT_BLTN_NO_EXIT	4
-# define EXIT_BLTN_NAN		5
-# define EXIT_BLTN_NOSUCH	6
+# define EXIT_BLTN_NAN		2
+# define EXIT_BLTN_NOSUCH	5
+# define EXIT_BLTN_TOOMANY	6
 
 # define EXIT_ENOMEM		42
 
@@ -80,7 +77,8 @@
 # define MSG_ERROR_NOSUCH		"No such file or directory"
 # define MSG_ERROR_TOOMANYARGS	"too many arguments"
 # define MSG_ERROR_PERMISSION	"Permission denied"
-# define MSG_ERROR_ISADIRECTORY	"Is a directory"
+# define MSG_ERROR_ISADIR		"Is a directory"
+# define MSG_ERROR_NOTADIR		"Not a directory"
 # define MSG_ERROR_LIMITHEREDOC	"Maximum heredoc count exceeded"
 # define MSG_ERROR_HEREDOC		"Heredoc execution failed"
 # define MSG_ERROR_HEREDOC_FILE	"Failed to open heredoc temp file"
@@ -101,7 +99,6 @@
 
 /* ================================ ENUMS =================================== */
 
-/* Function/system resource errors */
 // libft.h: ERROR_ALLOC		2
 // libft.h: ERROR_CAPACITY	3
 
@@ -115,6 +112,8 @@ typedef enum e_error
 	ERROR_CLOSE,
 	ERROR_EXECVE,
 	ERROR_ACCESS,
+	ERROR_GETCWD,
+	ERROR_CHDIR,
 	ERROR_NOPATH,
 	ERROR_INPUT,
 	ERROR_UNLINK,
@@ -127,8 +126,13 @@ typedef enum e_error
 	ERROR_NODELIM,
 	ERROR_NOSUCH,
 	ERROR_PERMISSION,
-	ERROR_ISADIRECTORY,
+	ERROR_ISADIR,
+	ERROR_NOTADIR,
 	ERROR_NOCMD,
+	ERROR_BINPERM,
+	ERROR_BINISADIR,
+	ERROR_BINNOTADIR,
+	ERROR_LIMITHEREDOC,
 }	t_error;
 
 typedef enum e_token_type
@@ -175,7 +179,6 @@ typedef struct s_minishell
 	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
-	t_error				error;
 	struct sigaction	act_int;
 	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
@@ -199,9 +202,9 @@ typedef struct s_token
 {
 	t_token_type	type;
 	size_t			index;
+	char			*value;
 	t_token			*next;
 	t_token			*prev;
-	char			*value;
 }	t_token;
 
 /* ============================ INPUT VALIDATION ============================ */
@@ -326,11 +329,15 @@ char			*safe_getcwd(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_echo.c */
 
-void			builtin_echo(t_minishell *data, t_token *builtin_token);
+void			builtin_echo(t_minishell *data);
 
-/* --------------------------------------------------- minishell_builtin_cd.c */
+/* ------------------------------------------------ minishell_builtin_cd_01.c */
 
-void			builtin_cd(t_minishell *data, t_token *builtin_token);
+void			builtin_cd(t_minishell *data);
+
+/* ------------------------------------------------ minishell_builtin_cd_02.c */
+
+void			handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 
@@ -338,11 +345,11 @@ void			builtin_pwd(t_minishell *data);
 
 /* ----------------------------------------------- minishell_builtin_export.c */
 
-void			builtin_export(t_minishell *data, t_token *builtin_token);
+void			builtin_export(t_minishell *data);
 
 /* ------------------------------------------------ minishell_builtin_unset.c */
 
-void			builtin_unset(t_minishell *data, t_token *builtin_token);
+void			builtin_unset(t_minishell *data);
 
 /* -------------------------------------------------- minishell_builtin_env.c */
 
@@ -350,7 +357,7 @@ void			builtin_env(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_exit.c */
 
-int				builtin_exit(t_minishell *data, t_token *builtin_token);
+int				builtin_exit(t_minishell *data);
 
 /* ================================= PIPING ================================= */
 
@@ -366,9 +373,9 @@ void			child_process(t_minishell *data);
 
 /* ------------------------------------------------------ minishell_signals.c */
 
-void			set_default_signal_handling(t_minishell *data);
-void			activate_sigquit(t_minishell *data);
-void			deactivate_sigquit(t_minishell *data);
+void			set_and_activate_primary_signal_handler(t_minishell *data);
+void			activate_primary_signal_handler(t_minishell *data);
+void			activate_secondary_signal_handler(t_minishell *data);
 
 /* ============================== REDIRECTIONS ============================== */
 
@@ -422,7 +429,7 @@ void			run_single_builtin(t_minishell *data);
 
 /* ----------------------------------------------- minishell_error_handling.c */
 
-void			handle_error(t_minishell *data, const char *str, int error);
+void			handle_error(t_minishell *data, const char *str, t_error error);
 
 /* ------------------------------------------------ minishell_error_logging.c */
 
@@ -433,6 +440,10 @@ void			log_syntax_error(t_token *token);
 
 bool			contains_syntax_error(t_token *list);
 t_token			*syntax_error_at_token(t_token *list);
+
+/* ------------------------------------------ minishell_exit_value_handling.c */
+
+void			match_exit_value_to_error(t_minishell *data, t_error error);
 
 /* ================================== UTILS ================================= */
 
@@ -480,13 +491,10 @@ void			safe_pipe(t_minishell *data, int *new_pipe);
 
 /* --------------------------------------------- minishell_token_helpers_01.c */
 
-t_token			*copy_tokens_within_pipe(t_minishell *data,
-					const t_token *start);
-t_token			*copy_cmd_and_args_within_pipe(t_minishell *data,
-					const t_token *start);
-t_token			*copy_redirections_within_pipe(t_minishell *data,
-					const t_token *start);
-t_token			*copy_token(t_minishell *data, const t_token *token);
+t_token			*copy_tokens_within_pipe(const t_minishell *data);
+t_token			*copy_cmd_and_args_within_pipe(const t_minishell *data);
+t_token			*copy_redirections_within_pipe(const t_minishell *data);
+t_token			*copy_token(const t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
 

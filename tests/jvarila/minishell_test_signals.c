@@ -24,10 +24,10 @@ void	loop(t_minishell *data)
 		line = readline("To exit, write exit and press enter: ");
 		if (!line)
 			;
-		else if (ft_strcmp(line, "activate sigquit") == 0)
-			activate_sigquit(data);
-		else if (ft_strcmp(line, "deactivate sigquit") == 0)
-			deactivate_sigquit(data);
+		else if (ft_strcmp(line, "default signals") == 0)
+			restore_default_signals(data);
+		else if (ft_strcmp(line, "custom signals") == 0)
+			set_custom_signal_handling(data);
 		else if (ft_strcmp(line, "exit") == 0)
 		{
 			free(line);
@@ -45,7 +45,7 @@ int	main(void)
 	data.arena = ft_new_memarena();
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
-	set_default_signal_handling(&data);
+	set_custom_signal_handling(&data);
 	loop(&data);
 	ft_free_memarena(data.arena);
 	return (0);

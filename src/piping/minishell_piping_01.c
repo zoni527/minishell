@@ -89,23 +89,26 @@ static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
 static void	wait_for_children(t_minishell *data)
 {
 	pid_t	pid;
+	int		status;
 
+	activate_secondary_signal_handler(data);
 	while (data->pipe_index--)
 	{
-		pid = wait(NULL);
+		pid = wait(&status);
 		if (pid == data->last_pid)
 		{
-			if (WIFEXITED(pid))
-				data->last_rval = WEXITSTATUS(pid);
+			if (WIFEXITED(status))
+				data->last_rval = WEXITSTATUS(status);
 			else if (g_signal != 0)
 			{
 				data->last_rval = 128 + g_signal;
 				g_signal = 0;
 			}
 			else
-				data->last_rval = 0;
+				data->last_rval = status;
 		}
 	}
+	activate_primary_signal_handler(data);
 	data->pipe_index = 0;
 }
 

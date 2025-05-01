@@ -29,7 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	initialize_data(&data, envp);
-	set_default_signal_handling(&data);
+	set_and_activate_primary_signal_handler(&data);
 	loop(&data);
 	clean(&data);
 	ft_putendl_fd("exit", STDERR_FILENO);
@@ -105,14 +105,8 @@ static const char	*get_prompt(t_minishell *data)
 
 	current_dir = safe_getcwd(data);
 	if (!current_dir[0])
-	{
-		free(current_dir);
-		current_dir = ft_strdup("./");
-		if (!current_dir)
-			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
-	}
+		current_dir = ft_ma_strdup(data->arena, "./");
 	prompt = ft_ma_strjoin(data->arena, "minishell: ", current_dir);
 	prompt = ft_ma_strjoin(data->arena, prompt, "$ ");
-	free(current_dir);
 	return (prompt);
 }

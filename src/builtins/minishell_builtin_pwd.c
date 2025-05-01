@@ -14,10 +14,6 @@
 
 void	builtin_pwd(t_minishell *data)
 {
-	if (get_current_dir(data) == EXIT_FAILURE)
-	{
-		data->last_rval = EXIT_FAILURE;
-		return ;
-	}
-	data->last_rval = EXIT_SUCCESS;
+	get_current_dir(data);
+	data->last_rval = 0;
 }
