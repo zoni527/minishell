@@ -36,7 +36,8 @@ void	builtin_cd(t_minishell *data)
 	}
 	if (cd_tokens->next && cd_tokens->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, cd_tokens->next->value);
-	handle_cd(data, cd_tokens, path);
+	if (handle_cd(data, cd_tokens, path) == EXIT_FAILURE)
+		return ;
 	ms_setenv(data, "OLDPWD", old_path);
 	data->last_rval = 0;
 }
