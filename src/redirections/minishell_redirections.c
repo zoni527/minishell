@@ -21,13 +21,11 @@ static int	redirect(t_minishell *data, const t_token *token);
  */
 int	handle_redirections(t_minishell *data)
 {
-	t_token	*start;
 	t_token	*redirection_tokens;
 
 	if (!pipe_has_redirections(data) && !pipe_has_heredoc(data))
 		return (EXIT_SUCCESS);
-	start = skip_to_current_pipe(data);
-	redirection_tokens = copy_redirections_within_pipe(data, start);
+	redirection_tokens = copy_redirections_within_pipe(data);
 	while (redirection_tokens)
 	{
 		if (redirect(data, redirection_tokens) == EXIT_FAILURE)

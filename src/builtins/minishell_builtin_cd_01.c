@@ -25,8 +25,7 @@ void	builtin_cd(t_minishell *data)
 	char	*old_path;
 	t_token	*cd_tokens;
 
-	cd_tokens = skip_to_current_pipe(data);
-	cd_tokens = copy_cmd_and_args_within_pipe(data, cd_tokens);
+	cd_tokens = copy_cmd_and_args_within_pipe(data);
 	old_path = safe_getcwd(data);
 	path = NULL;
 	if (cd_tokens->next && cd_tokens->next->next)

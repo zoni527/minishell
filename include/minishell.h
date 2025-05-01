@@ -345,11 +345,11 @@ void			builtin_pwd(t_minishell *data);
 
 /* ----------------------------------------------- minishell_builtin_export.c */
 
-void			builtin_export(t_minishell *data, t_token *builtin_token);
+void			builtin_export(t_minishell *data);
 
 /* ------------------------------------------------ minishell_builtin_unset.c */
 
-void			builtin_unset(t_minishell *data, t_token *builtin_token);
+void			builtin_unset(t_minishell *data);
 
 /* -------------------------------------------------- minishell_builtin_env.c */
 
@@ -357,7 +357,7 @@ void			builtin_env(t_minishell *data);
 
 /* ------------------------------------------------- minishell_builtin_exit.c */
 
-int				builtin_exit(t_minishell *data, t_token *builtin_token);
+int				builtin_exit(t_minishell *data);
 
 /* ================================= PIPING ================================= */
 
@@ -491,13 +491,10 @@ void			safe_pipe(t_minishell *data, int *new_pipe);
 
 /* --------------------------------------------- minishell_token_helpers_01.c */
 
-t_token			*copy_tokens_within_pipe(t_minishell *data,
-					const t_token *start);
-t_token			*copy_cmd_and_args_within_pipe(t_minishell *data,
-					const t_token *start);
-t_token			*copy_redirections_within_pipe(t_minishell *data,
-					const t_token *start);
-t_token			*copy_token(t_minishell *data, const t_token *token);
+t_token			*copy_tokens_within_pipe(const t_minishell *data);
+t_token			*copy_cmd_and_args_within_pipe(const t_minishell *data);
+t_token			*copy_redirections_within_pipe(const t_minishell *data);
+t_token			*copy_token(const t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
 

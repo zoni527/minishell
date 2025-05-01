@@ -25,7 +25,6 @@ void	child_process(t_minishell *data)
 {
 	char	**argv;
 	char	**envp;
-	t_token	*tokens;
 	t_token	*command;
 
 	restore_default_signals(data);
@@ -35,8 +34,7 @@ void	child_process(t_minishell *data)
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
 	if (handle_redirections(data) == EXIT_FAILURE)
 		exit(EXIT_FAILURE);
-	tokens = skip_to_current_pipe(data);
-	command = copy_cmd_and_args_within_pipe(data, tokens);
+	command = copy_cmd_and_args_within_pipe(data);
 	if (is_builtin(command))
 		run_builtin_within_pipe(data, command);
 	argv = create_args_arr(data, command);
@@ -50,17 +48,17 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 	if (get_builtin_type(builtin) == BLTN_CD)
 		builtin_cd(data);
 	else if (get_builtin_type(builtin) == BLTN_ECHO)
-		builtin_echo(data, builtin);
+		builtin_echo(data);
 	else if (get_builtin_type(builtin) == BLTN_ENV)
 		builtin_env(data);
 	else if (get_builtin_type(builtin) == BLTN_EXIT)
-		builtin_exit(data, builtin);
+		builtin_exit(data);
 	else if (get_builtin_type(builtin) == BLTN_EXPORT)
-		builtin_export(data, builtin);
+		builtin_export(data);
 	else if (get_builtin_type(builtin) == BLTN_PWD)
 		builtin_pwd(data);
 	else if (get_builtin_type(builtin) == BLTN_UNSET)
-		builtin_unset(data, builtin);
+		builtin_unset(data);
 	else
 		clean_error_exit(data, MSG_ERROR_BLTN_NOSUCH, EXIT_BLTN_NOSUCH);
 	exit(data->last_rval);

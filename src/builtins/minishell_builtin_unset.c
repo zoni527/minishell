@@ -16,15 +16,17 @@
  * Function to call the UNSET builtin
  *
  * @param data	pointer to the main data struct
- * @param builtin_token	pointer to root builtin token
- * @param envp	pointer to fist element in envp array
  */
-void	builtin_unset(t_minishell *data, t_token *token)
+void	builtin_unset(t_minishell *data)
 {
-	if (token)
-		token = token->next;
-	if (token == NULL)
-		return ;
-	remove_env(token->value, data->minishell_env);
+	t_token	*tokens;
+
+	tokens = copy_cmd_and_args_within_pipe(data);
+	tokens = tokens->next;
+	while (tokens)
+	{
+		remove_env(tokens->value, data->minishell_env);
+		tokens = tokens->next;
+	}
 	data->last_rval = 0;
 }

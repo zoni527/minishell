@@ -16,7 +16,6 @@
  * Helper Function to prepare root token
  * before handing to the main function.
  *
- * @param data	main data struct
  * @param builtin_token	token reference
  */
 static t_token	*proccess_token(t_token *token)
@@ -61,14 +60,12 @@ static int	print_token(t_token *token)
  * builtin function
  *
  * @param data	main data struct
- * @param builtin_token	root builtin token reference
  */
 void	builtin_echo(t_minishell *data)
 {
 	t_token	*token;
 
-	token = skip_to_current_pipe(data);
-	token = copy_cmd_and_args_within_pipe(data, token);
+	token = copy_cmd_and_args_within_pipe(data);
 	token = proccess_token(token);
 	if (token == NULL)
 		return ;
