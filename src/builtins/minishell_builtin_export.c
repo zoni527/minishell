@@ -34,25 +34,21 @@ static void	set_key_and_value(t_minishell *data, t_token *token)
 	char	*value;
 	int		i;
 
-	while (token && token->type == ARGUMENT)
+	if (is_valid_key(token))
 	{
-		if (is_valid_key(token))
+		i = ft_char_index(token->value, '=');
+		if (i == -1)
 		{
-			i = ft_char_index(token->value, '=');
-			if (i == -1)
-			{
-				key = ft_ma_strdup(data->arena, token->value);
-				value = "\0";
-			}
-			else
-			{
-				key = ft_ma_substr(data->arena, token->value, 0, i);
-				value = ft_ma_substr(data->arena, token->value,
-						(i + 1), (ft_strlen(token->value) - (i + 1)));
-			}
-			ms_setenv_export(data, key, value, token->value);
+			key = ft_ma_strdup(data->arena, token->value);
+			value = "\0";
 		}
-		token = token->next;
+		else
+		{
+			key = ft_ma_substr(data->arena, token->value, 0, i);
+			value = ft_ma_substr(data->arena, token->value,
+					(i + 1), (ft_strlen(token->value) - (i + 1)));
+		}
+		ms_setenv_export(data, key, value, token->value);
 	}
 }
 

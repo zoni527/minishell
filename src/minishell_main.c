@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/22 13:05:41 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/24 14:29:02 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/01 15:33:06 by rhvidste         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
+//	envp[0] = NULL;
 	initialize_data(&data, envp);
 	set_and_activate_primary_signal_handler(&data);
 	loop(&data);

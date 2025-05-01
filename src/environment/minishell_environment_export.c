@@ -26,6 +26,7 @@ int	ms_setenv_export(t_minishell *data, char *key, char *value, char *raw)
 	t_var	*current;
 	t_var	*last;
 
+	last = NULL;
 	current = data->minishell_env;
 	while (current)
 	{
@@ -43,5 +44,7 @@ int	ms_setenv_export(t_minishell *data, char *key, char *value, char *raw)
 		last->next = create_new_env_var(data, raw, key, value);
 		last->next->prev = last;
 	}
+	else
+		data->minishell_env = create_new_env_var(data, raw, key, value);
 	return (0);
 }

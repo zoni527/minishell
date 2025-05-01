@@ -23,7 +23,9 @@ void	set_shell_lvl(t_minishell *data)
 	int		shell_lvl_int;
 
 	shell_lvl_str = ms_getenv(data, "SHLVL");
-	shell_lvl_int = ft_atoi(shell_lvl_str);
+	shell_lvl_int = -1;
+	if (shell_lvl_str)
+		shell_lvl_int = ft_atoi(shell_lvl_str);
 	shell_lvl_int++;
 	shell_lvl_str = ft_itoa(shell_lvl_int);
 	if (!shell_lvl_str)
