@@ -34,25 +34,76 @@ static t_token	*proccess_token(t_token *token)
 }
 
 /**
- * Helper function to print token to stdout
+ * Function to check all characters
+ * for the -n flag are n's
+ *
+ * @param str	str value to check for n characters
+ */
+static bool	is_valid_n_str(const char *str)
+{
+	int		i;
+
+	i = 0;
+	while (str[++i])
+	{
+		if (str[i] != 'n')
+			return (false);
+	}
+	return (true);
+}
+
+/**
+ * Function to check if token list
+ * contains the -n flag for ECHO
+ *
+ * @param data	main data struct
+ */
+static bool	is_n(t_minishell *data)
+{
+	t_token	*token;
+
+	token = data->token_list;
+	while (token)
+	{
+		if (ft_strncmp(token->value, "-n", 2) == 0)
+			if (is_valid_n_str(token->value) == true)
+				if (token->prev && token->prev->type == BUILTIN)
+					return (true);
+		token = token->next;
+	}
+	return (false);
+}
+
+/**
+ * Helper function to print token to fd
  * or add a new line if at the last argument
  *
- * @param token	root builtin token reference
+ * @param builtin_token	root builtin token reference
  */
-static int	print_token(t_token *token)
+static int	print_token(t_minishell *data, t_token *token)
 {
-	if (token->type == ARGUMENT)
+	if (token->prev->type == BUILTIN
+		&& token->next == NULL
+		&& is_n(data) == true)
+		return (0);
+	if (token->next && is_n(data) == true)
 	{
-		ft_putstr(token->value);
+		ft_putstr_fd(token->next->value, 1);
+		if (token->next->next != NULL)
+			ft_putstr_fd(" ", 1);
+	}
+	if (token->type == ARGUMENT && is_n(data) == false)
+	{
+		ft_putstr_fd(token->value, 1);
 		if (token->next && token->next->type == ARGUMENT)
-			ft_putstr(" ");
+			ft_putstr_fd(" ", 1);
 	}
-	if (token->next == NULL)
+	if (token->next == NULL && is_n(data) == false)
 	{
-		ft_putstr("\n");
-		return (EXIT_SUCCESS);
+		ft_putstr_fd("\n", 1);
+		return (0);
 	}
-	return (EXIT_FAILURE);
+	return (1);
 }
 
 /**
@@ -71,7 +122,7 @@ void	builtin_echo(t_minishell *data)
 		return ;
 	while (token)
 	{
-		if (print_token(token) == 0)
+		if (print_token(data, token) == 0)
 			break ;
 		token = token->next;
 	}

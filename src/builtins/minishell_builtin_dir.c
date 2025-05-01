@@ -64,7 +64,7 @@ char	*safe_getcwd(t_minishell *data)
 	{
 		cwd = ft_calloc(1, sizeof(char));
 		if (!cwd)
-			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
+			clean_error_exit(data, MSG_ERROR_NOSUCH, ERROR_NOSUCH);
 	}
 	temp = cwd;
 	cwd = ft_ma_strdup(data->arena, cwd);
