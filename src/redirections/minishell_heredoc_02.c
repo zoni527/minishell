@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+/**
+ * When sigint is received interrupts readline by setting rl_done to 1.
+ *
+ * @return	Always succesful
+ */
 static int	rl_heredoc_signal_handler(void)
 {
 	if (g_signal == SIGINT)
@@ -22,6 +27,16 @@ static int	rl_heredoc_signal_handler(void)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * Builds heredoc input in string pointed by result, one line at a time. Stops
+ * when ctrl-D is pressed, SIGINT is received or the delimiter is submitted.
+ *
+ * @param data		Pointer to main data struct
+ * @param result	Pointer to string where heredoc input is saved
+ * @param delim		String that contains heredoc delimiter
+ *
+ * @return	Last line returned by readline
+ */
 static char	*input_loop(t_minishell *data, char **result, const char *delim)
 {
 	char	*line;
@@ -39,23 +54,26 @@ static char	*input_loop(t_minishell *data, char **result, const char *delim)
 }
 
 /**
- * Function uses readline to build heredoc input which is then returned.
+ * Activates heredoc specific signal handler for the duration of heredoc input
+ * gathering, reactivates default signal handler afterwards.
+ *
+ * If heredoc is interrupted by ctrl-D calls error handling function, but lets
+ * execution continue. Signal interruptions are a cause to stop execution,
+ * this is communicated up the chain by returning NULL.
  *
  * @param data		Pointer to main data struct
- * @param delimiter	String that delimits the end of heredoc input
+ * @param delimiter	String that contains heredoc delimiter
+ *
+ * @return	Heredoc input on success, NULL on signal interrupt
  */
 char	*read_heredoc_input(t_minishell *data, const char *delimiter)
 {
 	char	*line;
 	char	*result;
-	int		std_in;
 
 	rl_event_hook = &rl_heredoc_signal_handler;
 	result = "";
-	std_in = safe_dup(data, STDOUT_FILENO);
 	line = input_loop(data, &result, delimiter);
-	safe_dup2(data, std_in, STDIN_FILENO);
-	safe_close(data, &std_in);
 	rl_event_hook = &rl_signal_handler;
 	if (!line && g_signal == 0)
 		handle_error(data, "warning", ERROR_NODELIM);

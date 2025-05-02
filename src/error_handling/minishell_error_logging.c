@@ -21,7 +21,7 @@ void	ms_perror(t_minishell *data, const char *file)
 {
 	char	*str;
 
-	str = BHCYN "minishell" CRESET;
+	str = BHCYN "mini🐚" CRESET;
 	if (file)
 		str = ft_ma_strjoin(data->arena, STR_PROMPTSTART, file);
 	perror(str);
