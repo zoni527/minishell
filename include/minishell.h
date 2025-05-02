@@ -66,7 +66,7 @@ extern volatile sig_atomic_t	g_signal;
 
 /* ---------------------------------------------------------- string literals */
 
-# define STR_PROMPTSTART		"\e[1;96mminishell:\e[0m "
+# define STR_PROMPTSTART		"\e[1;96mmini🐚:\e[0m "
 # define STR_PROMPTDELIM		" 🐢 "
 
 /* ----------------------------------------------------------- error messages */
