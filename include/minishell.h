@@ -309,6 +309,7 @@ int				remove_env(char *key, t_var *envp);
 void			env_list_from_envp(t_minishell *data, const char **envp);
 char			**create_envp_arr_from_custom_env(t_minishell *data,
 					t_var *envp_list);
+
 /* --------------------------------------------- minishell_environment_list.c */
 
 int				get_env_list_size(t_var *begin);

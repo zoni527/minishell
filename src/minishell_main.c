@@ -28,7 +28,6 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-//	envp[0] = NULL;
 	initialize_data(&data, envp);
 	set_and_activate_primary_signal_handler(&data);
 	loop(&data);
