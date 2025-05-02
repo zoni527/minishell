@@ -34,7 +34,7 @@ void	child_process(t_minishell *data)
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
 	if (handle_redirections(data) == EXIT_FAILURE)
 		clean_exit(data, EXIT_FAILURE);
-	command = copy_cmd_and_args_within_pipe(data);
+	command = skip_to(skip_to_current_pipe(data), is_builtin_or_command);
 	if (is_builtin(command))
 		run_builtin_within_pipe(data, command);
 	argv = create_args_arr(data, command);

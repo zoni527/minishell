@@ -53,7 +53,7 @@ static void	print_error_message(const char *str, const char *msg)
 
 static void	print_preamble(const char *str)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(STR_PROMPTSTART, STDERR_FILENO);
 	if (str)
 	{
 		ft_putstr_fd(str, STDERR_FILENO);
