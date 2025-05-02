@@ -20,8 +20,6 @@ static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe,
 				int *prev_pipe_read_fd);
 static void	wait_for_children(t_minishell *data);
 
-extern volatile int	g_signal;
-
 /**
  * Creates pipes, forks, and waits for child processes.
  * <p>
@@ -69,7 +67,7 @@ void	piping(t_minishell *data)
  * @see   safe_pipe
  */
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
-									int prev_pipe_read_fd)
+										int prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
 		safe_pipe(data, new_pipe);
@@ -91,7 +89,7 @@ static void	wait_for_children(t_minishell *data)
 	pid_t	pid;
 	int		status;
 
-	activate_secondary_signal_handler(data);
+	ignore_signals();
 	while (data->pipe_index--)
 	{
 		pid = wait(&status);
@@ -99,17 +97,19 @@ static void	wait_for_children(t_minishell *data)
 		{
 			if (WIFEXITED(status))
 				data->last_rval = WEXITSTATUS(status);
-			else if (g_signal != 0)
+			else if (WIFSIGNALED(status))
 			{
-				data->last_rval = 128 + g_signal;
+				if (WTERMSIG(status) == SIGQUIT)
+					ft_putstr("Quit (core dumped)");
+				ft_putendl("");
+				data->last_rval = 128 + WTERMSIG(status);
 				g_signal = 0;
 			}
 			else
-				data->last_rval = status;
+				data->last_rval = -1;
 		}
 	}
 	activate_primary_signal_handler(data);
-	data->pipe_index = 0;
 }
 
 /**
