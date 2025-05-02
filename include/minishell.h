@@ -38,7 +38,6 @@
 
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
-
 # define MAX_HEREDOCS	16
 
 /* --------------------------------------------------------------- exit codes */
@@ -57,9 +56,16 @@
 
 # define EXIT_ENOMEM		42
 
+/* -------------------------------------------------------------------- colors*/
+
+# define BHCYN	"\e[1;96m"
+# define BHGRN	"\e[1;92m"
+# define CRESET	"\e[0m"
+
 /* ---------------------------------------------------------- string literals */
 
-# define STR_MINISHELL			"minishell: "
+# define STR_PROMPTSTART		"\e[1;96mminishell:\e[0m "
+# define STR_PROMPTDELIM		" 🐢 "
 
 /* ----------------------------------------------------------- error messages */
 

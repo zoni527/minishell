@@ -106,7 +106,9 @@ static const char	*get_prompt(t_minishell *data)
 	current_dir = safe_getcwd(data);
 	if (!current_dir[0])
 		current_dir = ft_ma_strdup(data->arena, "./");
-	prompt = ft_ma_strjoin(data->arena, "minishell: ", current_dir);
-	prompt = ft_ma_strjoin(data->arena, prompt, "$ ");
+	prompt = ft_ma_strjoin(data->arena, STR_PROMPTSTART, BHGRN);
+	prompt = ft_ma_strjoin(data->arena, prompt, current_dir);
+	prompt = ft_ma_strjoin(data->arena, prompt, CRESET);
+	prompt = ft_ma_strjoin(data->arena, prompt, STR_PROMPTDELIM);
 	return (prompt);
 }

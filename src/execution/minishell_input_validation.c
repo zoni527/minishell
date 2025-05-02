@@ -22,7 +22,7 @@ int	validate_raw_input(const t_minishell *data)
 {
 	if (has_unclosed_quotes(data->raw_input))
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(STR_PROMPTSTART, STDERR_FILENO);
 		ft_putstr_fd(data->raw_input, STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 		ft_putendl_fd(MSG_ERROR_UNCLOSED, STDERR_FILENO);

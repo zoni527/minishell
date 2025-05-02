@@ -30,7 +30,7 @@ void	builtin_cd(t_minishell *data)
 	path = NULL;
 	if (cd_tokens->next && cd_tokens->next->next)
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		ft_putendl_fd(STR_PROMPTSTART "cd: too many arguments", 2);
 		data->last_rval = EXIT_FAILURE;
 		return ;
 	}
