@@ -30,6 +30,10 @@ int	reset_data(t_minishell *data)
 {
 	t_var	*env_copy;
 
+	data->token_list = NULL;
+	data->hd_delimiters = NULL;
+	data->hd_file_names = NULL;
+	data->pipe_index = 0;
 	if (!data->minishell_env)
 	{
 		ft_reset_memarena(data->arena);
@@ -41,10 +45,6 @@ int	reset_data(t_minishell *data)
 	ft_reset_memarena(data->arena);
 	data->minishell_env = copy_env_to_memarena(data->arena, env_copy);
 	free_env(&env_copy);
-	data->token_list = NULL;
-	data->hd_delimiters = NULL;
-	data->hd_file_names = NULL;
-	data->pipe_index = 0;
 	return (EXIT_SUCCESS);
 }
 

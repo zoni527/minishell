@@ -124,6 +124,8 @@ void	cmd_exec(t_minishell *data, char **command, char **envp)
 		handle_error(data, command[0], error);
 		return ;
 	}
+	sigaction(SIGINT, &data->act_int_old, NULL);
+	sigaction(SIGQUIT, &data->act_quit_old, NULL);
 	execve(path, command, envp);
 	handle_error(data, command[0], ERROR_EXECVE);
 }
