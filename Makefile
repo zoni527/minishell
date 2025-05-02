@@ -62,7 +62,8 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/execution/minishell_input_validation.c		\
 	$(SRC_DIR)/execution/minishell_single_builtin.c			\
 	\
-	$(SRC_DIR)/environment/minishell_environment.c			\
+	$(SRC_DIR)/environment/minishell_environment_01.c			\
+	$(SRC_DIR)/environment/minishell_environment_02.c			\
 	$(SRC_DIR)/environment/minishell_environment_list.c		\
 	$(SRC_DIR)/environment/minishell_environment_print_alpha.c	\
 	$(SRC_DIR)/environment/minishell_environment_export.c		\
