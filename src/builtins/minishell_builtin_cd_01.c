@@ -30,13 +30,14 @@ void	builtin_cd(t_minishell *data)
 	path = NULL;
 	if (cd_tokens->next && cd_tokens->next->next)
 	{
-		ft_putendl_fd("minishell: cd: too many arguments", 2);
+		ft_putendl_fd(STR_PROMPTSTART "cd: too many arguments", 2);
 		data->last_rval = EXIT_FAILURE;
 		return ;
 	}
 	if (cd_tokens->next && cd_tokens->next->type == ARGUMENT)
 		path = ft_ma_strdup(data->arena, cd_tokens->next->value);
-	handle_cd(data, cd_tokens, path);
+	if (handle_cd(data, cd_tokens, path) == EXIT_FAILURE)
+		return ;
 	ms_setenv(data, "OLDPWD", old_path);
 	data->last_rval = 0;
 }

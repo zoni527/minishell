@@ -33,14 +33,14 @@ void	child_process(t_minishell *data)
 	if (data->pipe_index != data->pipe_count)
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
 	if (handle_redirections(data) == EXIT_FAILURE)
-		exit(EXIT_FAILURE);
-	command = copy_cmd_and_args_within_pipe(data);
+		clean_exit(data, EXIT_FAILURE);
+	command = skip_to(skip_to_current_pipe(data), is_builtin_or_command);
 	if (is_builtin(command))
 		run_builtin_within_pipe(data, command);
 	argv = create_args_arr(data, command);
 	envp = create_envp_arr_from_custom_env(data, data->minishell_env);
 	cmd_exec(data, argv, envp);
-	exit (EXIT_EXECVE);
+	clean_exit(data, EXIT_EXECVE);
 }
 
 static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
@@ -61,7 +61,7 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 		builtin_unset(data);
 	else
 		clean_error_exit(data, MSG_ERROR_BLTN_NOSUCH, EXIT_BLTN_NOSUCH);
-	exit(data->last_rval);
+	clean_exit(data, data->last_rval);
 }
 
 /**

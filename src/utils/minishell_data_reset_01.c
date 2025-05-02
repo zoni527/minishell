@@ -26,7 +26,7 @@ static void		free_var_contents(t_var *var);
  * @param data	Pointer to main data struct
  * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
-int	reset_arena_and_pointers(t_minishell *data)
+int	reset_data(t_minishell *data)
 {
 	t_var	*env_copy;
 

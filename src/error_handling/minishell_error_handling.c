@@ -20,9 +20,9 @@ void	handle_error(t_minishell *data, const char *str, t_error error)
 {
 	if (errno == ENOMEM)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, ERROR_ENOMEM);
-	close_fds(data);
 	if (match_minishell_error(str, error) == EXIT_FAILURE)
 		ms_perror(data, str);
+	close_fds(data);
 	match_exit_value_to_error(data, error);
 }
 
@@ -53,7 +53,7 @@ static void	print_error_message(const char *str, const char *msg)
 
 static void	print_preamble(const char *str)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	ft_putstr_fd(STR_PROMPTSTART, STDERR_FILENO);
 	if (str)
 	{
 		ft_putstr_fd(str, STDERR_FILENO);

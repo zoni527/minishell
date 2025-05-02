@@ -38,7 +38,6 @@
 
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
-
 # define MAX_HEREDOCS	16
 
 /* --------------------------------------------------------------- exit codes */
@@ -57,9 +56,16 @@
 
 # define EXIT_ENOMEM		42
 
+/* -------------------------------------------------------------------- colors*/
+
+# define BHCYN	"\e[1;96m"
+# define BGRN	"\e[1;32m"
+# define CRESET	"\e[0m"
+
 /* ---------------------------------------------------------- string literals */
 
-# define STR_MINISHELL			"minishell: "
+# define STR_PROMPTSTART		"\e[1;96mminishell:\e[0m "
+# define STR_PROMPTDELIM		" 🐢 "
 
 /* ----------------------------------------------------------- error messages */
 
@@ -337,7 +343,7 @@ void			builtin_cd(t_minishell *data);
 
 /* ------------------------------------------------ minishell_builtin_cd_02.c */
 
-void			handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
+int				handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
 
 /* -------------------------------------------------- minishell_builtin_pwd.c */
 
@@ -518,7 +524,7 @@ bool			pipe_has_append(const t_minishell *data);
 
 /* ------------------------------------------------ minishell_data_reset_01.c */
 
-int				reset_arena_and_pointers(t_minishell *data);
+int				reset_data(t_minishell *data);
 
 /* ------------------------------------------------ minishell_data_reset_02.c */
 
