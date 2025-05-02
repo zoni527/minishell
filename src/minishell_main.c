@@ -48,6 +48,7 @@ static void	loop(t_minishell *data)
 {
 	const char	*prompt;
 
+	rl_event_hook = rl_signal_handler;
 	while (true)
 	{
 		prompt = get_prompt(data);
@@ -60,7 +61,8 @@ static void	loop(t_minishell *data)
 		tokenization(data);
 		if (validate_tokens(data) == EXIT_FAILURE)
 			continue ;
-		heredoc(data);
+		if (heredoc(data) == EXIT_FAILURE)
+			continue ;
 		execution(data);
 		reset_data(data);
 		free((void *)data->raw_input);

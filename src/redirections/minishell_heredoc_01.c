@@ -38,7 +38,11 @@ int	heredoc(t_minishell *data)
 	create_heredoc_delimiters(data);
 	setup_heredoc_file_names(data);
 	if (run_heredocs(data) == EXIT_FAILURE)
+	{
+		free((void *)data->raw_input);
+		reset_data(data);
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -135,6 +139,8 @@ static int	run_heredoc(t_minishell *data, int index)
 
 	delimiter = data->hd_delimiters[index];
 	input = read_heredoc_input(data, delimiter);
+	if (!input)
+		return (EXIT_FAILURE);
 	input_len = ft_strlen(input);
 	fd = open(data->hd_file_names[index], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)

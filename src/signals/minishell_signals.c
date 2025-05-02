@@ -16,7 +16,7 @@
  * Global signal variable, declared in minishell.h as:
  * extern volatile int g_signal
  */
-volatile int	g_signal = 0;
+volatile sig_atomic_t	g_signal = 0;
 
 /**
  * Function activates when SIGINT is received. Sets g_signal to SIGINT, writes
@@ -25,24 +25,9 @@ volatile int	g_signal = 0;
  *
  * @param signal_type	Received signal's int code, should always be SIGINT
  */
-static void	main_process_default_handler(int signal_type)
+static void	main_process_signal_handler(int signal_type)
 {
 	g_signal = signal_type;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 1);
-	rl_redisplay();
-}
-
-/**
- * @param signal_type	Received signal's int code, should always be SIGINT
- */
-static void	main_process_second_handler(int signal_type)
-{
-	g_signal = signal_type;
-	if (signal_type == SIGQUIT)
-		ft_putstr_fd("Quit (core dumped)", STDERR_FILENO);
-	ft_putendl_fd("", STDERR_FILENO);
 }
 
 /**
@@ -56,26 +41,41 @@ void	set_and_activate_primary_signal_handler(t_minishell *data)
 {
 	sigemptyset(&data->act_int.sa_mask);
 	sigaddset(&data->act_int.sa_mask, SIGINT);
-	data->act_int.sa_handler = &main_process_default_handler;
+	data->act_int.sa_handler = &main_process_signal_handler;
 	sigaction(SIGINT, &data->act_int, &data->act_int_old);
 	sigemptyset(&data->act_quit.sa_mask);
 	sigaddset(&data->act_quit.sa_mask, SIGQUIT);
 	data->act_quit.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &data->act_quit, &data->act_quit_old);
+	rl_catch_signals = 0;
 }
 
 void	activate_primary_signal_handler(t_minishell *data)
 {
-	data->act_int.sa_handler = &main_process_default_handler;
+	data->act_int.sa_handler = &main_process_signal_handler;
 	sigaction(SIGINT, &data->act_int, NULL);
-	data->act_quit.sa_handler = &main_process_default_handler;
+	data->act_quit.sa_handler = &main_process_signal_handler;
 	sigaction(SIGQUIT, &data->act_quit, NULL);
 }
 
-void	activate_secondary_signal_handler(t_minishell *data)
+void	ignore_signals(void)
 {
-	data->act_int.sa_handler = &main_process_second_handler;
-	sigaction(SIGINT, &data->act_int, NULL);
-	data->act_quit.sa_handler = &main_process_second_handler;
-	sigaction(SIGQUIT, &data->act_quit, NULL);
+	struct sigaction	sa;
+
+	sa.sa_handler = SIG_IGN;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
+}
+
+int	rl_signal_handler(void)
+{
+	if (g_signal == SIGINT)
+	{
+		ft_putendl("^C");
+		rl_on_new_line();
+		rl_replace_line("", 1);
+		rl_redisplay();
+	}
+	g_signal = 0;
+	return (EXIT_SUCCESS);
 }

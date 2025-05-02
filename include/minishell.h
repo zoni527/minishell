@@ -32,6 +32,8 @@
 # include <string.h>
 # include <sys/ioctl.h>
 
+extern volatile sig_atomic_t	g_signal;
+
 /* =============================== MACROS =================================== */
 
 /* -------------------------------------------------------- numeric constants */
@@ -173,8 +175,8 @@ typedef enum e_bltn_type
 
 /* ================================ TYPEDEFS ================================ */
 
-typedef struct s_token		t_token;
-typedef struct s_var		t_var;
+typedef struct s_token			t_token;
+typedef struct s_var			t_var;
 
 typedef struct s_minishell
 {
@@ -396,7 +398,8 @@ void			child_process(t_minishell *data);
 
 void			set_and_activate_primary_signal_handler(t_minishell *data);
 void			activate_primary_signal_handler(t_minishell *data);
-void			activate_secondary_signal_handler(t_minishell *data);
+void			ignore_signals(void);
+int				rl_signal_handler(void);
 
 /* ============================== REDIRECTIONS ============================== */
 
