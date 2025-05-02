@@ -352,9 +352,17 @@ int				handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
 
 void			builtin_pwd(t_minishell *data);
 
-/* ----------------------------------------------- minishell_builtin_export.c */
+/* -------------------------------------------- minishell_builtin_export_01.c */
 
 void			builtin_export(t_minishell *data);
+
+/* -------------------------------------------- minishell_builtin_export_02.c */
+
+void			set_key_and_value(t_minishell *data, t_token *token);
+
+/* -------------------------------------------- minishell_builtin_export_03.c */
+
+char			*create_raw(t_minishell *data, char *key, char *value);
 
 /* ------------------------------------------------ minishell_builtin_unset.c */
 

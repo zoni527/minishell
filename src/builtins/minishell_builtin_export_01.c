@@ -12,46 +12,6 @@
 
 #include "minishell.h"
 
-static bool	is_valid_key(t_token *token)
-{
-	if (ft_isalpha(token->value[0]) || token->value[0] == '_')
-		return (true);
-	ft_putstr_fd(STR_PROMPTSTART "export: `", 2);
-	ft_putstr_fd(token->value, 2);
-	ft_putendl_fd("': not a valid identifier", 2);
-	return (false);
-}
-
-/**
- * Function to set key and value
- *
- * @param data	main data struct
- * @param token	token reference
- */
-static void	set_key_and_value(t_minishell *data, t_token *token)
-{
-	char	*key;
-	char	*value;
-	int		i;
-
-	if (is_valid_key(token))
-	{
-		i = ft_char_index(token->value, '=');
-		if (i == -1)
-		{
-			key = ft_ma_strdup(data->arena, token->value);
-			value = "\0";
-		}
-		else
-		{
-			key = ft_ma_substr(data->arena, token->value, 0, i);
-			value = ft_ma_substr(data->arena, token->value,
-					(i + 1), (ft_strlen(token->value) - (i + 1)));
-		}
-		ms_setenv_export(data, key, value, token->value);
-	}
-}
-
 /**
  * Function to call the EXPORT builtin
  *
