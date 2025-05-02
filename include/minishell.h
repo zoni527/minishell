@@ -527,7 +527,7 @@ bool			pipe_has_append(const t_minishell *data);
 
 /* ------------------------------------------------ minishell_data_reset_01.c */
 
-int				reset_arena_and_pointers(t_minishell *data);
+int				reset_data(t_minishell *data);
 
 /* ------------------------------------------------ minishell_data_reset_02.c */
 

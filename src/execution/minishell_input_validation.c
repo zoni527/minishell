@@ -20,6 +20,8 @@
  */
 int	validate_raw_input(const t_minishell *data)
 {
+	if (ft_is_whitespace_string(data->raw_input))
+		return (EXIT_FAILURE);
 	if (has_unclosed_quotes(data->raw_input))
 	{
 		ft_putstr_fd(STR_PROMPTSTART, STDERR_FILENO);
@@ -47,7 +49,7 @@ int	validate_tokens(t_minishell *data)
 	{
 		log_syntax_error(syntax_error_at_token(data->token_list));
 		free((void *)data->raw_input);
-		reset_arena_and_pointers(data);
+		reset_data(data);
 		return (EXIT_FAILURE);
 	}
 	return (EXIT_SUCCESS);

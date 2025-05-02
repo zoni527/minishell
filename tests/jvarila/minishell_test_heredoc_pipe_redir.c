@@ -37,7 +37,7 @@ void	loop(t_minishell *data)
 		tokenization(data);
 		heredoc(data);
 		piping(data);
-		reset_arena_and_pointers(data);
+		reset_data(data);
 		data->token_list = NULL;
 		free(line);
 	}
