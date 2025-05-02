@@ -47,14 +47,15 @@ int	builtin_exit(t_minishell *data)
 		clean_exit(data, EXIT_SUCCESS);
 	if (validate_arguments(token->next) == EXIT_BLTN_NAN)
 	{
-		ft_putstr_fd("minishell: exit: ", STDERR_FILENO);
+		ft_putstr_fd(STR_PROMPTSTART "exit: ", STDERR_FILENO);
 		ft_putstr_fd(token->next->value, STDERR_FILENO);
 		ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 		clean_exit(data, EXIT_BLTN_NAN);
 	}
 	else if (validate_arguments(token->next) == EXIT_BLTN_TOOMANY)
 	{
-		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+		ft_putendl_fd(STR_PROMPTSTART "exit: too many arguments",
+				STDERR_FILENO);
 		data->last_rval = EXIT_FAILURE;
 		return (EXIT_FAILURE);
 	}
