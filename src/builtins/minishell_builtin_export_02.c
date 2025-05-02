@@ -49,7 +49,14 @@ static	void	handle_append(t_minishell *data, t_token *token, int i)
 
 	key = ft_ma_substr(data->arena, token->value, 0, (i - 1));
 	if (token->value[i + 1] == '\0' && ms_getenv(data, key) == NULL)
+	{
 		value = "\0";
+	}
+	else if (ms_getenv(data, key) == NULL && token->value[i + 1] != '\0')
+	{
+		value = ft_ma_substr(data->arena, token->value,
+				(i + 1), (ft_strlen(token->value) - (i + 1)));
+	}
 	else
 	{
 		value = ms_getenv(data, ft_ma_substr(data->arena,
