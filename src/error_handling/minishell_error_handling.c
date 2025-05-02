@@ -22,8 +22,8 @@ void	handle_error(t_minishell *data, const char *str, t_error error)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, ERROR_ENOMEM);
 	if (match_minishell_error(str, error) == EXIT_FAILURE)
 		ms_perror(data, str);
-	match_exit_value_to_error(data, error);
 	close_fds(data);
+	match_exit_value_to_error(data, error);
 }
 
 static int	match_minishell_error(const char *str, t_error error)
