@@ -54,15 +54,15 @@ static void	loop(t_minishell *data)
 		data->raw_input = readline(prompt);
 		if (!data->raw_input)
 			break ;
-		add_history(data->raw_input);
 		if (validate_raw_input(data) == EXIT_FAILURE)
 			continue ;
+		add_history(data->raw_input);
 		tokenization(data);
 		if (validate_tokens(data) == EXIT_FAILURE)
 			continue ;
 		heredoc(data);
 		execution(data);
-		reset_arena_and_pointers(data);
+		reset_data(data);
 		free((void *)data->raw_input);
 	}
 }
