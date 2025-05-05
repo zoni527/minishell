@@ -1,0 +1,28 @@
+echo
+echo "Command: echo Hello"
+echo Hello
+printf "%s\n\n" "exit value: $?"
+echo 'Command: echo "Hello"'
+echo "Hello"
+printf "%s\n\n" "exit value: $?"
+echo "Command: echo 'Hello'"
+echo 'Hello'
+printf "%s\n\n" "exit value: $?"
+echo "Command: Hello world"
+echo Hello world
+printf "%s\n\n" "exit value: $?"
+echo 'Command: echo "Hello world"'
+echo "Hello world"
+printf "%s\n\n" "exit value: $?"
+echo "Command: echo 'Hello world'"
+echo 'Hello world'
+printf "%s\n\n" "exit value: $?"
+echo "Command: echo -n No newline"
+echo -n No newline
+printf "%s\n\n" "exit value: $?"
+echo "Command: echo -nnnnnnn No newline again"
+echo -nnnnnnn No newline again
+printf "%s\n\n" "exit value: $?"
+echo "Command: echo -nnnnnnz No newline again"
+echo -nnnnnnz No newline again
+printf "%s\n\n" "exit value: $?"

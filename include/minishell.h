@@ -534,5 +534,9 @@ int				reset_data(t_minishell *data);
 t_var			*copy_env_to_memarena(t_memarena *arena, const t_var *env_list);
 void			append_var(t_var **env_list, t_var *var);
 
+/* --------------------------------------------------- minishell_user_input.c */
+
+int				read_user_input(t_minishell *data);
+
 /* -------------------------------------------------------------------------- */
 #endif

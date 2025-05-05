@@ -15,7 +15,6 @@
 static void			loop(t_minishell *data);
 static void			execution(t_minishell *data);
 static void			initialize_data(t_minishell *data, char *envp[]);
-static const char	*get_prompt(t_minishell *data);
 
 /**
  * @param argc	Argument count from shell
@@ -46,14 +45,10 @@ int	main(int argc, char *argv[], char *envp[])
  */
 static void	loop(t_minishell *data)
 {
-	const char	*prompt;
-
 	rl_event_hook = rl_signal_handler;
 	while (true)
 	{
-		prompt = get_prompt(data);
-		data->raw_input = readline(prompt);
-		if (!data->raw_input)
+		if (read_user_input(data) == EXIT_FAILURE)
 			break ;
 		if (validate_raw_input(data) == EXIT_FAILURE)
 			continue ;
@@ -94,23 +89,4 @@ static void	initialize_data(t_minishell *data, char *envp[])
 	data->pipe_fds[READ] = -1;
 	data->pipe_fds[WRITE] = -1;
 	env_list_from_envp(data, data->initial_env);
-}
-
-/**
- * @param data	Pointer to main data struct
- * @param envp	NULL terminated array of environment variables
- */
-static const char	*get_prompt(t_minishell *data)
-{
-	const char	*prompt;
-	char		*current_dir;
-
-	current_dir = safe_getcwd(data);
-	if (!current_dir[0])
-		current_dir = ft_ma_strdup(data->arena, "./");
-	prompt = ft_ma_strjoin(data->arena, STR_PROMPTSTART, BGRN);
-	prompt = ft_ma_strjoin(data->arena, prompt, current_dir);
-	prompt = ft_ma_strjoin(data->arena, prompt, CRESET);
-	prompt = ft_ma_strjoin(data->arena, prompt, STR_PROMPTDELIM);
-	return (prompt);
 }
