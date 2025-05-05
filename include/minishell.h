@@ -304,14 +304,17 @@ int				ms_setenv_export(t_minishell *data, char *key,
 
 void			print_env_alphabetically(t_minishell *data);
 
-/* -------------------------------------------------- minishell_environment.c */
+/* ----------------------------------------------- minishell_environment_01.c */
+
+char			*ms_getenv(t_minishell *data, char *key);
+int				ms_setenv(t_minishell *data, char *key, char *value);
+int				remove_env(char *key, t_var *envp);
+
+/* ----------------------------------------------- minishell_environment_02.c */
 
 void			env_list_from_envp(t_minishell *data, const char **envp);
 char			**create_envp_arr_from_custom_env(t_minishell *data,
 					t_var *envp_list);
-char			*ms_getenv(t_minishell *data, char *key);
-int				ms_setenv(t_minishell *data, char *key, char *value);
-int				remove_env(char *key, t_var *envp);
 
 /* --------------------------------------------- minishell_environment_list.c */
 
@@ -349,9 +352,17 @@ int				handle_cd(t_minishell *data, t_token *cd_tokens, char *path);
 
 void			builtin_pwd(t_minishell *data);
 
-/* ----------------------------------------------- minishell_builtin_export.c */
+/* -------------------------------------------- minishell_builtin_export_01.c */
 
 void			builtin_export(t_minishell *data);
+
+/* -------------------------------------------- minishell_builtin_export_02.c */
+
+void			set_key_and_value(t_minishell *data, t_token *token);
+
+/* -------------------------------------------- minishell_builtin_export_03.c */
+
+char			*create_raw(t_minishell *data, char *key, char *value);
 
 /* ------------------------------------------------ minishell_builtin_unset.c */
 

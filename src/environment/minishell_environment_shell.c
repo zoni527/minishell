@@ -23,11 +23,13 @@ void	set_shell_lvl(t_minishell *data)
 	int		shell_lvl_int;
 
 	shell_lvl_str = ms_getenv(data, "SHLVL");
-	shell_lvl_int = ft_atoi(shell_lvl_str);
+	shell_lvl_int = -1;
+	if (shell_lvl_str)
+		shell_lvl_int = ft_atoi(shell_lvl_str);
 	shell_lvl_int++;
 	shell_lvl_str = ft_itoa(shell_lvl_int);
 	if (!shell_lvl_str)
 		clean_error_exit(data, MSG_ERROR_ALLOC, EXIT_ENOMEM);
-	ms_setenv(data, "SHLVL", shell_lvl_str);
+	ms_setenv(data, "SHLVL", ft_ma_strdup(data->arena, shell_lvl_str));
 	free(shell_lvl_str);
 }
