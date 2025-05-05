@@ -27,6 +27,8 @@ static void	handle_no_equals(t_minishell *data, t_token *token)
 
 	raw = token->value;
 	key = ft_ma_strdup(data->arena, token->value);
+	if (ms_getenv(data, key) != NULL)
+		return ;
 	value = "\0";
 	ms_setenv_export(data, key, value, raw);
 }
@@ -98,12 +100,21 @@ static void	handle_equals(t_minishell *data, t_token *token, int i)
  */
 static bool	is_valid_key(t_token *token)
 {
-	if (ft_isalpha(token->value[0]) || token->value[0] == '_')
-		return (true);
-	ft_putstr_fd(STR_PROMPTSTART "export: `", 2);
-	ft_putstr_fd(token->value, 2);
-	ft_putendl_fd("': not a valid identifier", 2);
-	return (false);
+	int	i;
+
+	i = 0;
+	if ((ft_isalpha(token->value[i]) == 0 || token->value[i] == '_'))
+		return (false);
+	i++;
+	while (token->value[i] && token->value[i] != '=')
+	{
+		if (token->value[i] == '+' && token->value[i + 1] == '=')
+			return (true);
+		if (ft_isalnum(token->value[i]) == 0)
+			return (false);
+		i++;
+	}
+	return (true);
 }
 
 /**
@@ -125,5 +136,11 @@ void	set_key_and_value(t_minishell *data, t_token *token)
 			handle_append(data, token, i);
 		else
 			handle_equals(data, token, i);
+	}
+	else
+	{
+		ft_putstr_fd(STR_PROMPTSTART "export: `", 2);
+		ft_putstr_fd(token->value, 2);
+		ft_putendl_fd("': not a valid identifier", 2);
 	}
 }
