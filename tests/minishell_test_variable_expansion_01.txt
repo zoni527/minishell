@@ -1,46 +1,15 @@
 echo
-echo "Command: echo $USER"
+printf "Command: echo %s\nn"
 echo $USER
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo $HOME"
 echo $HOME
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo $USER$HOME"
 echo $USER$HOME
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo $NOT_A_VALID_EXPANSION"
 echo $NOT_A_VALID_EXPANSION
-printf "%s\n\n" "exit value: $?"
-echo 'Command: echo "$USER"'
 echo "$USER"
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo '$USER'"
 echo '$USER'
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo '$NOT_A_VALID_EXPANSION'"
 echo '$NOT_A_VALID_EXPANSION'
-printf "%s\n\n" "exit value: $?"
-echo 'Command: echo "abc$USER"'
 echo "abc$USER"
-printf "%s\n\n" "exit value: $?"
-echo 'Command: echo "$USERabc"'
 echo "$USERabc"
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo 'abc$USER'"
 echo 'abc$USER'
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo '$USERabc'"
 echo '$USERabc'
-printf "%s\n\n" "exit value: $?"
-echo 'Command: echo "|$USER"'
 echo "|$USER"
-printf "%s\n\n" "exit value: $?"
-echo 'Command: echo "$USER|"'
 echo "$USER|"
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo '|$USER'"
-echo '|$USER'
-printf "%s\n\n" "exit value: $?"
-echo "Command: echo '$USER|'"
-echo '$USER|'
-printf "%s\n\n" "exit value: $?"
