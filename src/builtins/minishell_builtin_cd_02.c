@@ -30,7 +30,7 @@ static int	handle_tilde(t_minishell *data, char *path)
 	if (home_path == NULL)
 	{
 		handle_error(data, MSG_ERROR_NOHOME, ERROR_NOHOME);
-			return (EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
 	if (change_dir(data, new_home_path) == EXIT_FAILURE)
@@ -53,7 +53,7 @@ static int	handle_no_arg(t_minishell *data)
 	if (home_path == NULL)
 	{
 		handle_error(data, MSG_ERROR_NOHOME, ERROR_NOHOME);
-		return(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
 	if (change_dir(data, home_path) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
