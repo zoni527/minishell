@@ -93,6 +93,7 @@
 # define MSG_ERROR_BLTN_NOSUCH	"No matching builtin could be found"
 # define MSG_ERROR_NOCMD		"command not found"
 # define MSG_ERROR_NOHOME		"HOME not set"
+# define MSG_ERROR_NOOLDPWD		"OLDPWD not set"
 
 # define METACHARACTERS			"|<> \t\n"
 
@@ -137,6 +138,7 @@ typedef enum e_error
 	ERROR_NOTADIR,
 	ERROR_NOCMD,
 	ERROR_NOHOME,
+	ERROR_NOOLDPWD,
 	ERROR_BINPERM,
 	ERROR_BINISADIR,
 	ERROR_BINNOTADIR,

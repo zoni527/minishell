@@ -29,7 +29,7 @@ static int	handle_tilde(t_minishell *data, char *path)
 	home_path = ms_getenv(data, "HOME");
 	if (home_path == NULL)
 	{
-		handle_error(data, MSG_ERROR_NOHOME, ERROR_NOHOME);
+		handle_error(data, "cd", ERROR_NOHOME);
 		return (EXIT_FAILURE);
 	}
 	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
@@ -52,7 +52,7 @@ static int	handle_no_arg(t_minishell *data)
 	home_path = ms_getenv(data, "HOME");
 	if (home_path == NULL)
 	{
-		handle_error(data, MSG_ERROR_NOHOME, ERROR_NOHOME);
+		handle_error(data, "cd", ERROR_NOHOME);
 		return (EXIT_FAILURE);
 	}
 	if (change_dir(data, home_path) == EXIT_FAILURE)
@@ -73,7 +73,7 @@ static int	handle_dash(t_minishell *data)
 	path = ms_getenv(data, "OLDPWD");
 	if (path == NULL)
 	{
-		handle_error(data, MSG_ERROR_NOHOME, ERROR_NOHOME);
+		handle_error(data, "cd", ERROR_NOOLDPWD);
 		return (EXIT_FAILURE);
 	}
 	if (change_dir(data, path) == EXIT_FAILURE)
