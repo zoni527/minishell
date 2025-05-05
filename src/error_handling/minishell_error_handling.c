@@ -40,6 +40,10 @@ static int	match_minishell_error(const char *str, t_error error)
 		print_error_message(str, MSG_ERROR_ISADIR);
 	else if (error == ERROR_NOTADIR)
 		print_error_message(str, MSG_ERROR_NOTADIR);
+	else if (error == ERROR_NOHOME)
+		print_error_message(str, MSG_ERROR_NOHOME);
+	else if (error == ERROR_NOOLDPWD)
+		print_error_message(str, MSG_ERROR_NOOLDPWD);
 	else
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

@@ -103,14 +103,14 @@ static bool	is_valid_key(t_token *token)
 	int	i;
 
 	i = 0;
-	if ((ft_isalpha(token->value[i]) == 0 || token->value[i] == '_'))
+	if ((ft_isalpha(token->value[i]) == 0 && token->value[i] != '_'))
 		return (false);
 	i++;
 	while (token->value[i] && token->value[i] != '=')
 	{
 		if (token->value[i] == '+' && token->value[i + 1] == '=')
 			return (true);
-		if (ft_isalnum(token->value[i]) == 0)
+		if (ft_isalnum(token->value[i]) == 0 && token->value[i] != '_')
 			return (false);
 		i++;
 	}

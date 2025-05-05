@@ -90,8 +90,10 @@ static char	*path_parsing(t_minishell *data, const char *command, char **envp)
 		return (fullpath);
 	}
 	i = 0;
-	while (!ft_strnstr(envp[i], "PATH", 4))
+	while (envp[i] && !ft_strnstr(envp[i], "PATH", 4))
 		i++;
+	if (!envp[i])
+		return (NULL);
 	mypaths = ft_ma_split(data->arena, envp[i] + 5, ':');
 	i = 0;
 	fullpath = set_paths(data, command, mypaths);
