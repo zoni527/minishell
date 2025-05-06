@@ -55,5 +55,4 @@ minishell
 *.out
 *.swo
 *.swp
-*.sh
 tests/*/*[0-9]$

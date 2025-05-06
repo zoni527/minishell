@@ -44,6 +44,10 @@ static int	match_minishell_error(const char *str, t_error error)
 		print_error_message(str, MSG_ERROR_NOHOME);
 	else if (error == ERROR_NOOLDPWD)
 		print_error_message(str, MSG_ERROR_NOOLDPWD);
+	else if (error == ERROR_TOOLONG)
+		print_error_message(NULL, MSG_ERROR_TOOLONG);
+	else if (error == ERROR_UNCLOSED)
+		print_error_message(str, MSG_ERROR_UNCLOSED);
 	else
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

@@ -123,7 +123,7 @@ static bool	is_valid_key(t_token *token)
  * @param data	main data struct
  * @param token	token reference
  */
-void	set_key_and_value(t_minishell *data, t_token *token)
+int	set_key_and_value(t_minishell *data, t_token *token)
 {
 	int		i;
 
@@ -142,5 +142,8 @@ void	set_key_and_value(t_minishell *data, t_token *token)
 		ft_putstr_fd(STR_PROMPTSTART "export: `", 2);
 		ft_putstr_fd(token->value, 2);
 		ft_putendl_fd("': not a valid identifier", 2);
+		data->last_rval = EXIT_BLTN_INVALIDID;
+		return (EXIT_FAILURE);
 	}
+	return (EXIT_SUCCESS);
 }

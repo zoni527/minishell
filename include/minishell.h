@@ -41,6 +41,11 @@ extern volatile sig_atomic_t	g_signal;
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
 # define MAX_HEREDOCS	16
+# ifndef ARG_MAX
+#  define ARG_MAX		2097152
+# endif
+# define READ			0
+# define WRITE			1
 
 /* --------------------------------------------------------------- exit codes */
 
@@ -52,9 +57,10 @@ extern volatile sig_atomic_t	g_signal;
 # define EXIT_EXECVE		128
 
 /* Builtin exit values */
-# define EXIT_BLTN_NAN		2
-# define EXIT_BLTN_NOSUCH	5
-# define EXIT_BLTN_TOOMANY	6
+# define EXIT_BLTN_INVALIDID	1
+# define EXIT_BLTN_NAN			2
+# define EXIT_BLTN_NOSUCH		5
+# define EXIT_BLTN_TOOMANY		6
 
 # define EXIT_ENOMEM		42
 
@@ -96,16 +102,9 @@ extern volatile sig_atomic_t	g_signal;
 # define MSG_ERROR_NOCMD		"command not found"
 # define MSG_ERROR_NOHOME		"HOME not set"
 # define MSG_ERROR_NOOLDPWD		"OLDPWD not set"
+# define MSG_ERROR_TOOLONG		"Input is too long"
 
 # define METACHARACTERS			"|<> \t\n"
-
-# ifndef READ
-#  define READ	0
-# endif
-
-# ifndef WRITE
-#  define WRITE	1
-# endif
 
 /* ================================ ENUMS =================================== */
 
@@ -145,6 +144,7 @@ typedef enum e_error
 	ERROR_BINISADIR,
 	ERROR_BINNOTADIR,
 	ERROR_LIMITHEREDOC,
+	ERROR_TOOLONG,
 }	t_error;
 
 typedef enum e_token_type
@@ -364,7 +364,7 @@ void			builtin_export(t_minishell *data);
 
 /* -------------------------------------------- minishell_builtin_export_02.c */
 
-void			set_key_and_value(t_minishell *data, t_token *token);
+int				set_key_and_value(t_minishell *data, t_token *token);
 
 /* -------------------------------------------- minishell_builtin_export_03.c */
 
@@ -442,7 +442,7 @@ void			cmd_exec(t_minishell *data, char **command, char **envp);
 
 /* --------------------------------------------- minishell_input_validation.c */
 
-int				validate_raw_input(const t_minishell *data);
+int				validate_raw_input(t_minishell *data);
 int				validate_tokens(t_minishell *data);
 
 /* ----------------------------------------------- minishell_single_builtin.c */

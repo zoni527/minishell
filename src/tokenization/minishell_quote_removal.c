@@ -18,6 +18,8 @@ static size_t	remove_quotes_at_index(t_minishell *data, t_token *token,
 
 /**
  * Loops through tokens and calls remove_quotes_from_token with all of them.
+ * Also removes empty, unquoted tokens that should only be produced by invalid
+ * expansions.
  *
  * @param data	Pointer to main data struct
  */
@@ -28,7 +30,18 @@ void	quote_removal(t_minishell *data)
 	token = data->token_list;
 	while (token)
 	{
-		remove_quotes_from_token(data, token);
+		if (token->value[0] != '\0')
+			remove_quotes_from_token(data, token);
+		else
+		{
+			if (token->prev)
+				token->prev->next = token->next;
+			else
+			{
+				data->token_list = token->next;
+				data->token_list->prev = NULL;
+			}
+		}
 		token = token->next;
 	}
 }

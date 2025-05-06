@@ -9,6 +9,7 @@ cd $asdlfsdf                                ->  invalid variable expansion goes 
 cd < .gitignore ""                          ->  returns nothing / goes nowhere
 cd ""test
 cd "" test
+$abc echo hello
 export abc=test
 export abc
 export test+=test

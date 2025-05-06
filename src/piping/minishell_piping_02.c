@@ -40,7 +40,6 @@ void	child_process(t_minishell *data)
 	argv = create_args_arr(data, command);
 	envp = create_envp_arr_from_custom_env(data, data->minishell_env);
 	cmd_exec(data, argv, envp);
-	clean_exit(data, EXIT_EXECVE);
 }
 
 static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)

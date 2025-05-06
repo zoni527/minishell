@@ -79,6 +79,7 @@ static int	handle_dash(t_minishell *data)
 	if (change_dir(data, path) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	ms_setenv(data, "PWD", path);
+	ft_putendl(path);
 	return (EXIT_SUCCESS);
 }
 
