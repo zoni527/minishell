@@ -390,7 +390,7 @@ void			piping(t_minishell *data);
 
 /* ---------------------------------------------------- minishell_piping_02.c */
 
-void			child_process(t_minishell *data);
+void			child_process(t_minishell *data, int extra_fd);
 
 /* ================================= SIGNALS ================================ */
 

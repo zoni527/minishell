@@ -20,7 +20,7 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *command);
  *
  * @param data	Pointer to main data struct
  */
-void	child_process(t_minishell *data)
+void	child_process(t_minishell *data, int extra_fd)
 {
 	char	**argv;
 	char	**envp;
@@ -29,7 +29,10 @@ void	child_process(t_minishell *data)
 	if (data->pipe_index != 0)
 		redirect_stdin_and_close_fd(data, &data->pipe_fds[READ]);
 	if (data->pipe_index != data->pipe_count)
+	{
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
+		safe_close(data, &extra_fd);
+	}
 	if (handle_redirections(data) == EXIT_FAILURE)
 		clean_exit(data, EXIT_FAILURE);
 	command = skip_to(skip_to_current_pipe(data), is_builtin_or_command);

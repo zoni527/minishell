@@ -42,10 +42,12 @@ void	set_and_activate_primary_signal_handler(t_minishell *data)
 	sigemptyset(&data->act_int.sa_mask);
 	sigaddset(&data->act_int.sa_mask, SIGINT);
 	data->act_int.sa_handler = &main_process_signal_handler;
+	data->act_int.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &data->act_int, &data->act_int_old);
 	sigemptyset(&data->act_quit.sa_mask);
 	sigaddset(&data->act_quit.sa_mask, SIGQUIT);
 	data->act_quit.sa_handler = SIG_IGN;
+	data->act_quit.sa_flags = SA_RESTART;
 	sigaction(SIGQUIT, &data->act_quit, &data->act_quit_old);
 	rl_catch_signals = 0;
 }
@@ -62,6 +64,10 @@ void	ignore_signals(void)
 {
 	struct sigaction	sa;
 
+	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGINT);
+	sigaddset(&sa.sa_mask, SIGQUIT);
+	sa.sa_flags = SA_RESTART;
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);

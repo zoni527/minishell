@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
-				int prev_pipe_read_fd);
+				const int *prev_pipe_read_fd);
 static void	handle_fork_failure(t_minishell *data, int *new_pipe,
 				int prev_pipe_read_fd);
 static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe,
@@ -35,10 +35,9 @@ void	piping(t_minishell *data)
 
 	data->pipe_index = 0;
 	data->last_pid = 1;
-	prev_pipe_read_fd = -1;
 	while (data->pipe_index <= data->pipe_count && data->last_pid != 0)
 	{
-		create_new_pipe_and_assign_fds(data, new_pipe, prev_pipe_read_fd);
+		create_new_pipe_and_assign_fds(data, new_pipe, &prev_pipe_read_fd);
 		data->last_pid = fork();
 		if (data->last_pid < 0)
 			handle_fork_failure(data, new_pipe, prev_pipe_read_fd);
@@ -50,7 +49,7 @@ void	piping(t_minishell *data)
 		data->pipe_index++;
 	}
 	if (data->last_pid == 0)
-		child_process(data);
+		child_process(data, new_pipe[READ]);
 	else
 		wait_for_children(data);
 }
@@ -67,12 +66,14 @@ void	piping(t_minishell *data)
  * @see   safe_pipe
  */
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
-										int prev_pipe_read_fd)
+										const int *prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
 		safe_pipe(data, new_pipe);
-	if (prev_pipe_read_fd != -1)
-		data->pipe_fds[READ] = prev_pipe_read_fd;
+	data->pipe_fds[READ] = -1;
+	data->pipe_fds[WRITE] = -1;
+	if (data->pipe_index != 0)
+		data->pipe_fds[READ] = *prev_pipe_read_fd;
 	if (data->pipe_index != data->pipe_count)
 		data->pipe_fds[WRITE] = new_pipe[WRITE];
 }
