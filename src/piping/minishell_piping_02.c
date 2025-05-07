@@ -35,7 +35,7 @@ void	child_process(t_minishell *data, int extra_fd)
 	}
 	if (handle_redirections(data) == EXIT_FAILURE)
 		clean_exit(data, EXIT_FAILURE);
-	command = skip_to(skip_to_current_pipe(data), is_builtin_or_command);
+	command = copy_cmd_and_args_within_pipe(data);
 	if (!command)
 		clean_exit(data, EXIT_SUCCESS);
 	if (is_builtin(command))

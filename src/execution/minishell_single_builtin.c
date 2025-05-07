@@ -12,6 +12,9 @@
 
 #include "minishell.h"
 
+static void	restore_stdin_and_stdout(t_minishell *data, int *std_in,
+									 int *std_out);
+
 /**
  * Handler for executing a single builtin within the main process. Cheks for
  * redirections and heredocs, saves copies of stdin and stdout when necessary,
@@ -31,11 +34,19 @@ void	run_single_builtin(t_minishell *data)
 	if (pipe_has_output_redirection(data) || pipe_has_append(data))
 		std_out = safe_dup(data, STDOUT_FILENO);
 	if (handle_redirections(data) == EXIT_FAILURE)
+	{
+		restore_stdin_and_stdout(data, &std_in, &std_out);
 		return ;
+	}
 	builtins(data);
-	safe_dup2(data, std_in, STDIN_FILENO);
-	safe_dup2(data, std_out, STDOUT_FILENO);
-	safe_close(data, &std_in);
-	safe_close(data, &std_out);
-	return ;
+	restore_stdin_and_stdout(data, &std_in, &std_out);
+}
+
+static void	restore_stdin_and_stdout(t_minishell *data, int *std_in,
+									 int *std_out)
+{
+	safe_dup2(data, *std_in, STDIN_FILENO);
+	safe_dup2(data, *std_out, STDOUT_FILENO);
+	safe_close(data, std_in);
+	safe_close(data, std_out);
 }

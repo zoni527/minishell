@@ -115,7 +115,7 @@ void	cmd_exec(t_minishell *data, char **command, char **envp)
 
 	error = 0;
 	path = path_parsing(data, command[0], envp);
-	if (!path)
+	if (!path || access(path, F_OK) < 0)
 		error = ERROR_NOCMD;
 	else if (pretends_to_be_a_directory(data, path))
 		error = ERROR_BINNOTADIR;

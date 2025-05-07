@@ -39,7 +39,8 @@ void	quote_removal(t_minishell *data)
 			else
 			{
 				data->token_list = token->next;
-				data->token_list->prev = NULL;
+				if (data->token_list)
+					data->token_list->prev = NULL;
 			}
 		}
 		token = token->next;

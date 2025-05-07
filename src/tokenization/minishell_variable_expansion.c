@@ -64,7 +64,8 @@ static void	expand_variables(t_minishell *data, t_token *token)
 			++i;
 		if (token->value[i] == '\'' || token->value[i] == '"')
 			toggle_quote_flag(&quote_flag, token->value[i]);
-		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1])
+		else if (token->value[i] == '$'
+			&& is_expandable_char(token->value[i + 1])
 			&& !(quote_flag == '\'') && !is_heredoc(token->prev))
 		{
 			if (token->value[++i] == '?')

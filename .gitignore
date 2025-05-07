@@ -56,3 +56,4 @@ minishell
 *.swo
 *.swp
 tests/*/*[0-9]$
+minishell_tester

@@ -235,6 +235,10 @@ void			tokenization(t_minishell *data);
 
 void			variable_expansion(t_minishell *data);
 
+/* ---------------------------------------- minishell_expandable_characters.c */
+
+bool			is_expandable_char(int c);
+
 /* ----------------------------------------------- minishell_word_splitting.c */
 
 void			word_splitting(t_minishell *data);
@@ -314,7 +318,7 @@ void			print_env_alphabetically(t_minishell *data);
 
 char			*ms_getenv(t_minishell *data, char *key);
 int				ms_setenv(t_minishell *data, char *key, char *value);
-int				remove_env(char *key, t_var *envp);
+int				remove_env(t_minishell *data, char *key);
 
 /* ----------------------------------------------- minishell_environment_02.c */
 

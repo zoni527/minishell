@@ -112,11 +112,11 @@ int	ms_setenv(t_minishell *data, char *key, char *value)
  * @param name	key input
  * @param envp	enviroment pointer
  */
-int	remove_env(char *key, t_var *envp)
+int	remove_env(t_minishell *data, char *key)
 {
 	t_var	*current;
 
-	current = envp;
+	current = data->minishell_env;
 	while (current)
 	{
 		if (ft_strcmp(key, current->key) == 0)
@@ -125,10 +125,15 @@ int	remove_env(char *key, t_var *envp)
 			{
 				if (current->prev)
 					current->prev->next = NULL;
+				else
+					data->minishell_env = NULL;
 				return (0);
 			}
 			current->next->prev = current->prev;
-			current->prev->next = current->next;
+			if (current->prev)
+				current->prev->next = current->next;
+			else
+				data->minishell_env = current->next;
 			return (0);
 		}
 		current = current->next;
