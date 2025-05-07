@@ -60,6 +60,6 @@ int	builtin_exit(t_minishell *data)
 		return (EXIT_FAILURE);
 	}
 	if (ft_isnumstr(token->next->value))
-		clean_exit(data, ft_atoi(token->value));
+		clean_exit(data, ft_atoi(token->next->value));
 	return (EXIT_SUCCESS);
 }

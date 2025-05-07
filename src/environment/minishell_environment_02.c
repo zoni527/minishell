@@ -28,7 +28,7 @@ void	env_list_from_envp(t_minishell *data, const char **envp)
 
 	current = NULL;
 	i = -1;
-	while (envp[++i])
+	while (envp && envp[++i])
 	{
 		vals[0] = ft_ma_strdup(data->arena, envp[i]);
 		j = ft_char_index(vals[0], '=');

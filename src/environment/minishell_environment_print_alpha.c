@@ -71,6 +71,8 @@ static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
 {
 	char	*res;
 
+	if (ft_strcmp(token->key, "_") == 0)
+		return ;
 	res = ft_ma_strjoin(data->arena, "declare -x ", token->key);
 	if (ft_strchr(token->raw, '=') != NULL)
 	{

@@ -116,7 +116,6 @@ int	remove_env(char *key, t_var *envp)
 {
 	t_var	*current;
 
-	current = NULL;
 	current = envp;
 	while (current)
 	{
@@ -124,7 +123,8 @@ int	remove_env(char *key, t_var *envp)
 		{
 			if (current->next == NULL)
 			{
-				current->prev->next = NULL;
+				if (current->prev)
+					current->prev->next = NULL;
 				return (0);
 			}
 			current->next->prev = current->prev;
