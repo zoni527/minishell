@@ -6,7 +6,7 @@
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 15:04:06 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/17 15:10:31 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:22:31 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
  * from the envp list
  *
  * @param envp	pointer to the fist envp element
+ *
+ * @return	Largest var in environment list
  */
 static t_var	*get_largest(t_var *envp)
 {
@@ -41,6 +43,8 @@ static t_var	*get_largest(t_var *envp)
  * from the envp list
  *
  * @param envp	pointer to the fist envp element
+ *
+ * @return	Smallest var in environment list
  */
 static t_var	*get_smallest(t_var *envp)
 {
@@ -64,7 +68,7 @@ static t_var	*get_smallest(t_var *envp)
  * Function to print envp tokens with quotes and 
  * other needed formatting
  *
- * @param data	pointer to teh main data struct
+ * @param data	pointer to the main data struct
  * @param token	pointer to the relevent envp token
  */
 static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
@@ -87,7 +91,7 @@ static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
  * Function to print next env element 
  * in alphabetical order
  *
- * @param envp	pointer to the fist envp element
+ * @param data		Pointer to main data struct
  * @param smallest	pointer to the smallest element in the env
  * @param largest	pointer to the largest element in the env
  * @param len	len of the envp list
@@ -124,7 +128,7 @@ static void	print_next(t_minishell *data, t_var *smallest,
 /**
  * Function to print env in alphabetical order
  *
- * @param envp	pinter to the fist envp element
+ * @param data		Pointer to main data struct
  */
 void	print_env_alphabetically(t_minishell *data)
 {
@@ -133,6 +137,8 @@ void	print_env_alphabetically(t_minishell *data)
 	t_var	*envp;
 	int		len;
 
+	if (!data->minishell_env)
+		return ;
 	envp = data->minishell_env;
 	len = get_envp_len(envp);
 	largest = get_largest(envp);

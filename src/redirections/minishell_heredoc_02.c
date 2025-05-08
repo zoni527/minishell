@@ -15,7 +15,7 @@
 /**
  * When sigint is received interrupts readline by setting rl_done to 1.
  *
- * @return	Always succesful
+ * @return	EXIT_SUCCESS
  */
 static int	rl_heredoc_signal_handler(void)
 {

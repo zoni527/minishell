@@ -17,6 +17,8 @@
  * data->pipe_index.
  * 
  * @param data	Pointer to main data struct
+ *
+ * @return	Copy of tokens within the pipe specified by data->pipe_index
  */
 t_token	*copy_tokens_within_pipe(const t_minishell *data)
 {
@@ -40,8 +42,11 @@ t_token	*copy_tokens_within_pipe(const t_minishell *data)
 /**
  * Creates a new list of tokens from within the pipe specified by
  * data->pipe_index, selects only command and argument tokens.
- * 
+ *
  * @param data	Pointer to main data struct
+ *
+ * @return	Copy of command and argument tokens within the pipe specified by
+ *			data->pipe_index
  */
 t_token	*copy_cmd_and_args_within_pipe(const t_minishell *data)
 {
@@ -69,6 +74,9 @@ t_token	*copy_cmd_and_args_within_pipe(const t_minishell *data)
  * (input, output, heredoc, append, file names and delimiters).
  * 
  * @param data	Pointer to main data struct
+ *
+ * @return	Copy of redirection tokens within the pipe specified by
+ *			data->pipe_index
  */
 t_token	*copy_redirections_within_pipe(const t_minishell *data)
 {
@@ -101,6 +109,8 @@ t_token	*copy_redirections_within_pipe(const t_minishell *data)
  * 
  * @param data	Pointer to main data struct
  * @param start	Token to copy
+ *
+ * @return	Deep copy of token
  */
 t_token	*copy_token(const t_minishell *data, const t_token *token)
 {

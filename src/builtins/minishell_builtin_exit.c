@@ -16,8 +16,9 @@
  * Helper Function to validate arguments
  * returns error if too many arguments or non numeric arguments
  *
- * @param data	main data struct
  * @param token	token reference
+ *
+ * @return	EXIT_SUCCESS if arguments are valid, failure flag if not
  */
 static int	validate_arguments(t_token *token)
 {
@@ -34,7 +35,8 @@ static int	validate_arguments(t_token *token)
  * Function to call EXIT builtin
  *
  * @param data	main data struct
- * @param builtin_token	builtin_token reference
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE if too many arguments given
  */
 int	builtin_exit(t_minishell *data)
 {

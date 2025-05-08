@@ -16,6 +16,17 @@ static int	match_minishell_error(const char *str, t_error error);
 static void	print_preamble(const char *str);
 static void	print_error_message(const char *str, const char *msg);
 
+/**
+ * Function categorizes errors, calls the correct error messaging function and
+ * sets the correct return value by calling match_exit_value_to_error.
+ *
+ * @param data	Pointer to main data struct
+ * @param str	String associated with error, could be a file name or incorrect
+ *				command name
+ * @param error	Error flag to match
+ *
+ * @see	match_exit_value_to_error
+ */
 void	handle_error(t_minishell *data, const char *str, t_error error)
 {
 	if (errno == ENOMEM)
@@ -26,6 +37,13 @@ void	handle_error(t_minishell *data, const char *str, t_error error)
 	match_exit_value_to_error(data, error);
 }
 
+/**
+ * @param str	String associated with error, could be a file name or incorrect
+ *				command name
+ * @param error	Error flag to match
+ *
+ * @return	EXIT_SUCCESS if matching error is found, EXIT_FAILURE if not
+ */
 static int	match_minishell_error(const char *str, t_error error)
 {
 	if (error == ERROR_NOSUCH)
@@ -53,12 +71,24 @@ static int	match_minishell_error(const char *str, t_error error)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * @param str	String associated with error, could be a file name or incorrect
+ *				command name
+ * @param msg	Error message that is associated with the previously matched
+ *				error
+ */
 static void	print_error_message(const char *str, const char *msg)
 {
 	print_preamble(str);
 	ft_putendl_fd(msg, STDERR_FILENO);
 }
 
+/**
+ * Prints the preamble part of error message, aka "<prompt>: <str>: "
+ *
+ * @param str	String associated with error, could be a file name or incorrect
+ *				command name
+ */
 static void	print_preamble(const char *str)
 {
 	ft_putstr_fd(STR_PROMPTSTART, STDERR_FILENO);

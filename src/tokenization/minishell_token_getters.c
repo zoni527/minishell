@@ -45,7 +45,9 @@ t_bltn_type	get_builtin_type(const t_token *token)
 /**
  * Returns string that matches token->type.
  *
- * @param token	
+ * @param token	Token to match against
+ *
+ * @return	String representing the type of the token parameter
  */
 const char	*get_token_type_str(const t_token *token)
 {
@@ -76,6 +78,13 @@ const char	*get_token_type_str(const t_token *token)
 	return (type_str);
 }
 
+/**
+ * Returns string that matches token->type.
+ *
+ * @param token	Token to match against
+ *
+ * @return	String representing the type of the token parameter
+ */
 static const char	*get_token_type_str_2(const t_token *token)
 {
 	const char	*type_str;

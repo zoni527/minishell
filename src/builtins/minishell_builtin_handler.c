@@ -17,6 +17,8 @@
  * returns NULL if none found
  *
  * @param data	main data struct
+ *
+ * @return	First builtin token in data->token_list, NULL no builtin found
  */
 t_token	*fetch_builtin(t_minishell *data)
 {
@@ -39,6 +41,8 @@ t_token	*fetch_builtin(t_minishell *data)
  * Function to handle and reroute builtins
  *
  * @param data	main data struct
+ *
+ * @return EXIT_SUCCESS if builtin is matched and run, EXIT_FAILURE if not
  */
 int	builtins(t_minishell *data)
 {

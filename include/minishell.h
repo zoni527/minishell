@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:09:56 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/28 15:54:56 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/08 16:11:42 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,10 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <signal.h>
-# include <dirent.h>
-# include <string.h>
-# include <sys/ioctl.h>
 
 extern volatile sig_atomic_t	g_signal;
 
@@ -186,14 +182,13 @@ typedef struct s_minishell
 	size_t				token_count;
 	size_t				pipe_count;
 	size_t				hd_count;
-	size_t				var_count;
 	size_t				pipe_index;
 	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
 	struct sigaction	act_int;
-	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
+	struct sigaction	act_int_old;
 	struct sigaction	act_quit_old;
 	const char			*raw_input;
 	const char			**initial_env;
@@ -234,6 +229,7 @@ void			tokenization(t_minishell *data);
 /* ------------------------------------------- minishell_variable_expansion.c */
 
 void			variable_expansion(t_minishell *data);
+void			expand_variables(t_minishell *data, t_token *token);
 
 /* ---------------------------------------- minishell_expandable_characters.c */
 
@@ -290,7 +286,6 @@ const char		*get_token_type_str(const t_token *token);
 size_t			count_tokens(const t_token *list);
 size_t			count_pipes(const t_token *list);
 size_t			count_heredocs(const t_token *list);
-size_t			count_vars(const t_var *list);
 
 /* ------------------------------------------- minishell_tokenization_utils.c */
 
@@ -307,7 +302,7 @@ void			set_shell_lvl(t_minishell *data);
 
 /* ------------------------------------------- minishell_environment_export.c */
 
-int				ms_setenv_export(t_minishell *data, char *key,
+void			ms_setenv_export(t_minishell *data, char *key,
 					char *value, char *raw);
 
 /* -------------------------------------- minishell_environment_print_alpha.c */
@@ -317,14 +312,13 @@ void			print_env_alphabetically(t_minishell *data);
 /* ----------------------------------------------- minishell_environment_01.c */
 
 char			*ms_getenv(t_minishell *data, char *key);
-int				ms_setenv(t_minishell *data, char *key, char *value);
-int				remove_env(t_minishell *data, char *key);
+void			ms_setenv(t_minishell *data, char *key, char *value);
+void			remove_env(t_minishell *data, char *key);
 
 /* ----------------------------------------------- minishell_environment_02.c */
 
 void			env_list_from_envp(t_minishell *data, const char **envp);
-char			**create_envp_arr_from_custom_env(t_minishell *data,
-					t_var *envp_list);
+char			**create_envp_arr_from_custom_env(t_minishell *data);
 
 /* --------------------------------------------- minishell_environment_list.c */
 

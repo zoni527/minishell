@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_builtin_export_set_key_and_value.c       :+:      :+:    :+:   */
+/*   minishell_builtin_export_02.c                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 16:07:36 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/05/02 16:10:05 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/05/08 15:04:14 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "minishell.h"
@@ -97,6 +97,8 @@ static void	handle_equals(t_minishell *data, t_token *token, int i)
  * Function to check if key is valid
  *
  * @param token	token reference
+ *
+ * @return	true if token->value is a valid key string, false if not
  */
 static bool	is_valid_key(t_token *token)
 {
@@ -122,6 +124,9 @@ static bool	is_valid_key(t_token *token)
  *
  * @param data	main data struct
  * @param token	token reference
+ *
+ * @return	EXIT_SUCCESS if key and value are set succesfully and a new variable
+ *			is set, EXIT_FAILURE if setting and or creating fails
  */
 int	set_key_and_value(t_minishell *data, t_token *token)
 {

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_environment.c                            :+:      :+:    :+:   */
+/*   minishell_environment_01.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:52:15 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/09 12:12:14 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:19:06 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
  *
  * @param key	key name of target envp variable
  * @param envp	pointer to first envp element
+ *
+ * @return	Value of matched environment variable, NULL if not found
  */
 char	*ms_getenv(t_minishell *data, char *key)
 {
@@ -48,6 +50,8 @@ char	*ms_getenv(t_minishell *data, char *key)
  * @param key	key input
  * @param value	value input
  * @param raw	raw input
+ *
+ * @return	NULL when matching variable is found, last element in list if not
  */
 static t_var	*find_and_replace_env(t_minishell *data,
 					char *key,
@@ -80,7 +84,7 @@ static t_var	*find_and_replace_env(t_minishell *data,
  * @param value	value input
  * @param envp	enviroment pointer
  */
-int	ms_setenv(t_minishell *data, char *key, char *value)
+void	ms_setenv(t_minishell *data, char *key, char *value)
 {
 	char	*raw;
 	t_var	*last;
@@ -103,7 +107,6 @@ int	ms_setenv(t_minishell *data, char *key, char *value)
 				ft_ma_strdup(data->arena, raw),
 				ft_ma_strdup(data->arena, key),
 				ft_ma_strdup(data->arena, value));
-	return (0);
 }
 
 /**
@@ -112,7 +115,7 @@ int	ms_setenv(t_minishell *data, char *key, char *value)
  * @param name	key input
  * @param envp	enviroment pointer
  */
-int	remove_env(t_minishell *data, char *key)
+void	remove_env(t_minishell *data, char *key)
 {
 	t_var	*current;
 
@@ -127,16 +130,15 @@ int	remove_env(t_minishell *data, char *key)
 					current->prev->next = NULL;
 				else
 					data->minishell_env = NULL;
-				return (0);
+				return ;
 			}
 			current->next->prev = current->prev;
 			if (current->prev)
 				current->prev->next = current->next;
 			else
 				data->minishell_env = current->next;
-			return (0);
+			return ;
 		}
 		current = current->next;
 	}
-	return (0);
 }

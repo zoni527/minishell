@@ -31,13 +31,14 @@ void	toggle_quote_flag(char *quote_flag, char c)
 
 /**
  * Creates new token node using str, uses memory arena to request heap memory.
- * <p>
+ *
  * Does an initial categorization for operators, everything else will be a word
  * at first. More granular categorization will follow after all possible
  * expansions, word splits and quote removals are completed.
  *
  * @param arena	Pointer to first node in memarena
  * @param str	String is assigned to be the value of the new token node
+ *
  * @return		Return newly created token node
  */
 t_token	*new_token_node(t_minishell *data, const char *str)

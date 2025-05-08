@@ -15,6 +15,9 @@
 /**
  * Calls pipe with new_pipe as parameter, in case the pipe fails calls 
  * clean_error_exit, ending the program.
+ *
+ * @param data		Pointer to main data struct
+ * @param new_pipe	Pointer to two ints
  */
 void	safe_pipe(t_minishell *data, int *new_pipe)
 {

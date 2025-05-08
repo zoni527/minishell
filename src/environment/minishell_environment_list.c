@@ -16,6 +16,8 @@
  * Function that returns the length of a list
  *
  * @param begin_list	pointer to the beginning of the list
+ *
+ * @return	Length of environment list
  */
 int	get_env_list_size(t_var *begin)
 {
@@ -47,10 +49,12 @@ void	print_custom_env(t_var *list)
  * Function creates and returns an 
  * env node
  *
- * @param data	Main data struct
+ * @param data	Pointer to main data struct
  * @param raw	Raw input
  * @param key	Key input
  * @param value	Value input
+ *
+ * @return	New environment variable node
  */
 t_var	*create_new_env_var(t_minishell *data,
 		char *raw, char *key, char *value)

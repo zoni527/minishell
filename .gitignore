@@ -55,5 +55,7 @@ minishell
 *.out
 *.swo
 *.swp
+*.log
+.cache
 tests/*/*[0-9]$
 minishell_tester

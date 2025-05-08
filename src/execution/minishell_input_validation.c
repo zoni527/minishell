@@ -16,7 +16,8 @@
  * Frees data->raw_input in case of invalid input.
  *
  * @param data	Pointer to main data struct
- * @return	Int flag for success or failure
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	validate_raw_input(t_minishell *data)
 {
@@ -50,7 +51,8 @@ int	validate_raw_input(t_minishell *data)
  * Frees data->raw_input in case of invalid input.
  *
  * @param data	Pointer to main data struct
- * @return	Int flag for success or failure
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	validate_tokens(t_minishell *data)
 {

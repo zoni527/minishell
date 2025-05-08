@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/**
+ * Categorization function for variable name expansion, matches acceptable
+ * characters for variable names.
+ *
+ * @param c	Int to check against
+ *
+ * @return	true if c is '?', '_' or alphanumeric
+ */
 bool	is_expandable_char(int c)
 {
 	if (c == '?' || ft_isalnum(c) || c == '_')

@@ -22,7 +22,7 @@ static void	wait_for_children(t_minishell *data);
 
 /**
  * Creates pipes, forks, and waits for child processes.
- * <p>
+ *
  * If a fork or file descriptor redirection fails, subfunctions will call a
  * cleanup and exit function.
  *
@@ -82,6 +82,7 @@ static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
  * Waits for child processes, data->pipe_index is used instead of
  * data->pipe_count to account for situations when not all pipes are created.
  * Sets data->last_rval to match the exit value of the last child's exit value.
+ * Reactivates primary signal handling for parent.
  *
  * @param data	Pointer to main data struct
  */

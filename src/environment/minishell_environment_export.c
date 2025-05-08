@@ -20,6 +20,8 @@
  * @param key	key input
  * @param value	value input
  * @param raw	raw input
+ *
+ * @return	NULL if it finds variable matching key, last node if not
  */
 static t_var	*find_and_replace_env(t_minishell *data, char *key,
 							char *value, char *raw)
@@ -52,7 +54,7 @@ static t_var	*find_and_replace_env(t_minishell *data, char *key,
  * @param value	value input
  * @param raw	raw input
  */
-int	ms_setenv_export(t_minishell *data, char *key, char *value, char *raw)
+void	ms_setenv_export(t_minishell *data, char *key, char *value, char *raw)
 {
 	t_var	*last;
 
@@ -70,5 +72,4 @@ int	ms_setenv_export(t_minishell *data, char *key, char *value, char *raw)
 				ft_ma_strdup(data->arena, raw),
 				ft_ma_strdup(data->arena, key),
 				ft_ma_strdup(data->arena, value));
-	return (0);
 }

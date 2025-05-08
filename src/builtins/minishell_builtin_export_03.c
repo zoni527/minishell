@@ -20,6 +20,8 @@
  * @param data	pointer to the main data struct
  * @param key	key value 
  * @param value	value value 
+ *
+ * @return	New raw string formed from key and value
  */
 char	*create_raw(t_minishell *data, char *key, char *value)
 {

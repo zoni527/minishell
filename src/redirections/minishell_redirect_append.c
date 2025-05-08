@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/**
+ * Handles append type redirections.
+ *
+ * @param data		Pointer to main data struct
+ * @param append	Append token to user for redirection
+ *
+ * @return	EXIT_SUCCESS if redirection succeeds, EXIT_FAILURE on failure
+ */
 int	redirect_append(t_minishell *data, const t_token *append)
 {
 	const char	*file_name;

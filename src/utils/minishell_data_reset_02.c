@@ -41,6 +41,8 @@ void	append_var(t_var **env_list, t_var *var)
  *
  * @param arena		Memarena to copy into
  * @param env_list	Linked list of environment variables
+ *
+ * @return	First node in copied environment list
  */
 t_var	*copy_env_to_memarena(t_memarena *arena, const t_var *env_list)
 {

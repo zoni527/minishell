@@ -13,10 +13,12 @@
 #include "minishell.h"
 
 /**
- * Function that creates a null terminated argv to pass to execve
+ * Function that creates a NULL terminated argv to pass to execve
  *
- * @param data	main data struct
- * @param command	token for the relevant command
+ * @param data		Pointer to main data struct
+ * @param command	Token for the relevant command
+ *
+ * @return	NULL terminated char * array of arguments
  */
 char	**create_args_arr(t_minishell *data, t_token *command)
 {
@@ -47,8 +49,11 @@ char	**create_args_arr(t_minishell *data, t_token *command)
 /**
  * Function to set paths for execution
  *
- * @param command	command input
- * @param mypaths	list of paths
+ * @param data		Pointer to main data struct
+ * @param command	Command input
+ * @param mypaths	List of paths
+ *
+ * @return	Full path to command, NULL on failure
  */
 static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 {
@@ -77,8 +82,11 @@ static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 /**
  * Function that parses the paths for cmd execution
  *
- * @param command	command input
- * @param envp	envp_arr input (not list)
+ * @param data		Pointer to main data struct
+ * @param command	Command input
+ * @param envp		NUll terminated array of environment variables (not list)
+ *
+ * @return	Full path to command, NULL on failure
  */
 static char	*path_parsing(t_minishell *data, const char *command, char **envp)
 {
@@ -103,10 +111,12 @@ static char	*path_parsing(t_minishell *data, const char *command, char **envp)
 }
 
 /*
- * Function that runs execve / execution
+ * Function that runs execve / execution. Performs validation before execution,
+ * calls error handling function and exits if command is deemed invalid.
  *
- * @param argv	argument input vector
- * @param envp	envp_arr (not list)
+ * @param data		Pointer to main data struct
+ * @param command	NULL terminated array of command arguments
+ * @param envp		NUll terminated array of environment variables (not list)
  */
 void	cmd_exec(t_minishell *data, char **command, char **envp)
 {

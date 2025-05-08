@@ -41,10 +41,19 @@ void	child_process(t_minishell *data, int extra_fd)
 	if (is_builtin(command))
 		run_builtin_within_pipe(data, command);
 	argv = create_args_arr(data, command);
-	envp = create_envp_arr_from_custom_env(data, data->minishell_env);
+	envp = create_envp_arr_from_custom_env(data);
 	cmd_exec(data, argv, envp);
 }
 
+/**
+ * Function to select correct builtin and run it in the current child process,
+ * clean_error_exits if type can't be matched.
+ *
+ * @param data		Pointer to main data struct
+ * @param builtin	Token to match
+ *
+ * @return	The return value of the builtin that was run
+ */
 static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 {
 	if (get_builtin_type(builtin) == BLTN_CD)

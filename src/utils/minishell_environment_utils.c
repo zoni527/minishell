@@ -17,10 +17,12 @@
  * envp list
  *
  * @param envp	pointer to the fist envp element
+ *
+ * @return	Length of environment list
  */
 int	get_envp_len(t_var *envp)
 {
-	if (envp == 0)
+	if (envp == NULL)
 		return (0);
 	else
 		return (1 + get_envp_len(envp->next));

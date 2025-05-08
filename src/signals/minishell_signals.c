@@ -52,6 +52,12 @@ void	set_and_activate_primary_signal_handler(t_minishell *data)
 	rl_catch_signals = 0;
 }
 
+/**
+ * Sets data->act_int.sa_handler and data->act_quit.sa_handler, and activates
+ * them by calling sigaction.
+ *
+ * @param data	Pointer to main data struct
+ */
 void	activate_primary_signal_handler(t_minishell *data)
 {
 	data->act_int.sa_handler = &main_process_signal_handler;
@@ -60,6 +66,9 @@ void	activate_primary_signal_handler(t_minishell *data)
 	sigaction(SIGQUIT, &data->act_quit, NULL);
 }
 
+/**
+ * Creates and activates a signal handler that will ignore SIGINT and SIGQUIT.
+ */
 void	ignore_signals(void)
 {
 	struct sigaction	sa;
@@ -73,6 +82,11 @@ void	ignore_signals(void)
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
+/**
+ * Default readline signal handler, used as a readline hook.
+ *
+ * @return	EXIT_SUCCESS
+ */
 int	rl_signal_handler(void)
 {
 	if (g_signal == SIGINT)

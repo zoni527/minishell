@@ -17,6 +17,8 @@
  * before handing to the main function.
  *
  * @param builtin_token	token reference
+ *
+ * @return	Next token, NULL if no next token
  */
 static t_token	*proccess_token(t_token *token)
 {
@@ -38,6 +40,8 @@ static t_token	*proccess_token(t_token *token)
  * for the -n flag are n's
  *
  * @param str	str value to check for n characters
+ *
+ * @return	true if valid n flag string, false if not
  */
 static bool	is_valid_n_str(const char *str)
 {
@@ -57,6 +61,8 @@ static bool	is_valid_n_str(const char *str)
  * contains the -n flag for ECHO
  *
  * @param data	main data struct
+ *
+ * @return	true if valid n flag string, false if not
  */
 static bool	is_n(t_minishell *data)
 {
@@ -79,6 +85,8 @@ static bool	is_n(t_minishell *data)
  * or add a new line if at the last argument
  *
  * @param builtin_token	root builtin token reference
+ *
+ * @return	Flag for builtin_echo to break or keep going
  */
 static int	print_token(t_minishell *data, t_token *token)
 {

@@ -80,6 +80,9 @@ static void	remove_quotes_from_token(t_minishell *data, t_token *token)
  * @param token	Pointer to token from which quotes are being removed
  * @param i		Index of opening quote, which will be removed as well as the
  *				matching closing quote
+ *
+ * @return	Index of the character that used to be the next character of the
+ *			closing quote in the new string
  */
 static size_t	remove_quotes_at_index(t_minishell *data, t_token *token,
 									size_t i)

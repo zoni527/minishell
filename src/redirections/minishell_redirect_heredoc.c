@@ -14,6 +14,14 @@
 
 static size_t	get_file_name_index(t_minishell *data, const t_token *heredoc);
 
+/**
+ * Handles temporary heredoc file redirections.
+ *
+ * @param data		Pointer to main data struct
+ * @param heredoc	Heredoc token to match
+ *
+ * @return	EXIT_SUCCESS if redirection succeeds, EXIT_FAILURE on failure
+ */
 int	redirect_heredoc(t_minishell *data, const t_token *heredoc)
 {
 	const char		*file_name;
@@ -31,6 +39,14 @@ int	redirect_heredoc(t_minishell *data, const t_token *heredoc)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * Calculates unique index to match a given heredoc token.
+ *
+ * @param data		Pointer to main data struct
+ * @param heredoc	Heredoc token to match
+ *
+ * @return	Unique index for temporary heredoc file name creation
+ */
 static size_t	get_file_name_index(t_minishell *data, const t_token *heredoc)
 {
 	size_t			file_name_index;
