@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+/**
+ * Custom function to get the length of a string that is meant to be used as a
+ * variable name, so the characters can be alphanumeric or an underscore.
+ *
+ * @param str	String containing variable name
+ *
+ * @return	Length of variable name
+ */
 size_t	var_name_len(const char *str)
 {
 	size_t	len;

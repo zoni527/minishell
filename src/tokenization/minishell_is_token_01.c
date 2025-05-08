@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 18:42:09 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/26 18:43:46 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/08 14:56:36 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
  * Checks if token->type is an operator type.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is between PIPE and APPEND, false if not
  */
 bool	is_operator(const t_token *token)
 {
@@ -28,6 +30,8 @@ bool	is_operator(const t_token *token)
  * Checks if token->type is PIPE.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is PIPE, false if not
  */
 bool	is_pipe(const t_token *token)
 {
@@ -40,6 +44,9 @@ bool	is_pipe(const t_token *token)
  * Checks if token->type matches input or ouptut redirection or appending.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is REDIRECT_OUTPUT or REDIRECT_INPUT,
+ *			false if not
  */
 bool	is_redirection(const t_token *token)
 {
@@ -55,6 +62,8 @@ bool	is_redirection(const t_token *token)
  * Checks if token->type is REDIRECT_INPUT.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is REDIRECT_INPUT, false if not
  */
 bool	is_input_redirection(const t_token *token)
 {
@@ -67,6 +76,8 @@ bool	is_input_redirection(const t_token *token)
  * Checks if token->type is REDIRECT_OUTPUT
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is REDIRECT_OUTPUT, false if not
  */
 bool	is_output_redirection(const t_token *token)
 {

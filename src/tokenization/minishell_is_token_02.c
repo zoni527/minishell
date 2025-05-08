@@ -16,6 +16,8 @@
  * Checks if token->type is APPEND.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is FILE_NAME, false if not
  */
 bool	is_append(const t_token *token)
 {
@@ -28,6 +30,8 @@ bool	is_append(const t_token *token)
  * Checks if token->type is HEREDOC.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is HEREDOC, false if not
  */
 bool	is_heredoc(const t_token *token)
 {
@@ -41,6 +45,11 @@ bool	is_heredoc(const t_token *token)
  * to other tokens, or the previously assigned type.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is BUILTIN or COMMND, otherwise check if token
+ *			hasn't been categorized yet (type is WORD), and if not check if
+ *			it qualifies to be a command or builtin (first token or only
+ *			redirections and or a pipe to the left), return false if not
  */
 bool	is_builtin_or_command(const t_token *token)
 {
@@ -66,6 +75,9 @@ bool	is_builtin_or_command(const t_token *token)
  * assigned type.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token position and name match the requirements of being a
+ *			builtin, false if not
  *
  * @see is_builtin_or_command
  */
@@ -95,6 +107,9 @@ bool	is_builtin(const t_token *token)
  * and that it isn't a builtin.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is COMMAND or if the token fulfills the
+ *			requirements of being categorized as a command, false if not
  *
  * @see is_builtin_or_command
  * @see is_builtin

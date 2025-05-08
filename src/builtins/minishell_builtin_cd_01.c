@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell_builtin_cd.c                             :+:      :+:    :+:   */
+/*   minishell_builtin_cd_01.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rhvidste <rhvidste@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:11:23 by rhvidste          #+#    #+#             */
-/*   Updated: 2025/04/08 17:10:17 by rhvidste         ###   ########.fr       */
+/*   Updated: 2025/05/08 10:35:26 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
  * Function to call the CD builtin
  *
  * @param data	pointer to the main data struct
- * @param builtin_token	pointer to root builtin token
- * @param envp	pointer to fist element in envp array
  */
 void	builtin_cd(t_minishell *data)
 {
@@ -30,7 +28,7 @@ void	builtin_cd(t_minishell *data)
 	path = NULL;
 	if (cd_tokens->next && cd_tokens->next->next)
 	{
-		ft_putendl_fd(STR_PROMPTSTART "cd: too many arguments", 2);
+		ft_putendl_fd(STR_PROMPTSTART "cd: too many arguments", STDERR_FILENO);
 		data->last_rval = EXIT_FAILURE;
 		return ;
 	}

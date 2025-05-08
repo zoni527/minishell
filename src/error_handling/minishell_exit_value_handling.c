@@ -12,6 +12,12 @@
 
 #include "minishell.h"
 
+/**
+ * Function sets data->last_rval based on the sent error.
+ *
+ * @param data	Pointer to main data struct
+ * @param error	Error flag to match against
+ */
 void	match_exit_value_to_error(t_minishell *data, t_error error)
 {
 	if (error == 0)

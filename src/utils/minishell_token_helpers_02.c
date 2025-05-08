@@ -18,6 +18,9 @@
  *
  * @param list	First node in list of tokens
  * @param f		Pointer to a token classification function
+ *
+ * @return	First token in list that returns true when evaluated by function f,
+ *			NULL if such a token isn't found
  */
 t_token	*skip_to(const t_token *list, bool (*f)(const t_token *token))
 {
@@ -32,6 +35,9 @@ t_token	*skip_to(const t_token *list, bool (*f)(const t_token *token))
  *
  * @param list	First node in list of tokens
  * @param f		Pointer to a token classification function
+ *
+ * @return	Next token in list that returns true when evaluated by function f
+ *			(can't be the first token), NULL if such a token isn't found
  *
  * @see skip_to
  */
@@ -49,6 +55,8 @@ t_token	*skip_to_next(const t_token *list, bool (*f)(const t_token *token))
  * by data->pipe_index.
  *
  * @param data	Pointer to main data struct
+ *
+ * @return	First token inside the pipe determined by data->pipe_index
  *
  * @see skip_to
  */
@@ -75,6 +83,9 @@ t_token	*skip_to_current_pipe(const t_minishell *data)
  * @param list	First node in list of tokens
  * @param f		Pointer to a token classification function
  *
+ * @return	True if list contains token that returns true when evaluated by
+ *			function f, false if not
+ *
  * @see skip_to
  */
 bool	tokens_contain(const t_token *list, bool (*f)(const t_token *token))
@@ -91,6 +102,9 @@ bool	tokens_contain(const t_token *list, bool (*f)(const t_token *token))
  *
  * @param data	Pointer to main data struct
  * @param f		Pointer to a token classification function
+ *
+ * @return	True if pipe contains a token that returns true when evaluated by
+ *			function f, false if not
  *
  * @see skip_to_current_pipe
  * @see skip_to

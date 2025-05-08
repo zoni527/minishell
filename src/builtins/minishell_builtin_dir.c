@@ -17,6 +17,8 @@
  * PWD
  *
  * @param void	no input
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	get_current_dir(t_minishell *data)
 {
@@ -37,6 +39,8 @@ int	get_current_dir(t_minishell *data)
  * Function to switch dir
  *
  * @param str	dir address to change to
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	change_dir(t_minishell *data, char *str)
 {
@@ -66,6 +70,8 @@ int	change_dir(t_minishell *data, char *str)
  * where it returns NULL
  *
  * @param data	pointer to the main data struct
+ *
+ * @return	String inside memory arena, can't be NULL
  */
 char	*safe_getcwd(t_minishell *data)
 {

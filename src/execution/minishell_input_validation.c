@@ -16,18 +16,28 @@
  * Frees data->raw_input in case of invalid input.
  *
  * @param data	Pointer to main data struct
- * @return	Int flag for success or failure
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
-int	validate_raw_input(const t_minishell *data)
+int	validate_raw_input(t_minishell *data)
 {
+	bool	error;
+
+	error = false;
 	if (ft_is_whitespace_string(data->raw_input))
-		return (EXIT_FAILURE);
-	if (has_unclosed_quotes(data->raw_input))
+		error = true;
+	else if (ft_strlen(data->raw_input) > ARG_MAX)
 	{
-		ft_putstr_fd(STR_PROMPTSTART, STDERR_FILENO);
-		ft_putstr_fd(data->raw_input, STDERR_FILENO);
-		ft_putstr_fd(": ", STDERR_FILENO);
-		ft_putendl_fd(MSG_ERROR_UNCLOSED, STDERR_FILENO);
+		error = true;
+		handle_error(data, NULL, ERROR_TOOLONG);
+	}
+	else if (has_unclosed_quotes(data->raw_input))
+	{
+		error = true;
+		handle_error(data, data->raw_input, ERROR_UNCLOSED);
+	}
+	if (error)
+	{
 		free((void *)data->raw_input);
 		return (EXIT_FAILURE);
 	}
@@ -41,7 +51,8 @@ int	validate_raw_input(const t_minishell *data)
  * Frees data->raw_input in case of invalid input.
  *
  * @param data	Pointer to main data struct
- * @return	Int flag for success or failure
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	validate_tokens(t_minishell *data)
 {

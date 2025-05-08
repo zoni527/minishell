@@ -6,13 +6,12 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 10:48:53 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/21 10:03:01 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/08 14:27:02 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		expand_variables(t_minishell *data, t_token *token);
 static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 					size_t var_index);
 static t_var	*find_var(t_minishell *data, const char *str);
@@ -50,7 +49,7 @@ void	variable_expansion(t_minishell *data)
  * @param data	Pointer to main data struct
  * @param token	Token to expand
  */
-static void	expand_variables(t_minishell *data, t_token *token)
+void	expand_variables(t_minishell *data, t_token *token)
 {
 	t_var		*var;
 	char		quote_flag;
@@ -64,7 +63,8 @@ static void	expand_variables(t_minishell *data, t_token *token)
 			++i;
 		if (token->value[i] == '\'' || token->value[i] == '"')
 			toggle_quote_flag(&quote_flag, token->value[i]);
-		else if (token->value[i] == '$' && !ft_isspace(token->value[i + 1])
+		else if (token->value[i] == '$'
+			&& is_expandable_char(token->value[i + 1])
 			&& !(quote_flag == '\'') && !is_heredoc(token->prev))
 		{
 			if (token->value[++i] == '?')
@@ -87,6 +87,7 @@ static void	expand_variables(t_minishell *data, t_token *token)
  * @param var_index	Index of first character after '$', also corresponds to
  *					"len before '$'" + 1, which can be used in ft_strlcat to
  *					concatenate everything before '$'
+ *
  * @return			Returns index for updated token->value so that expansion
  *					can continue at the right spot
  */
@@ -127,6 +128,7 @@ static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
  * @param data	Pointer to main data struct
  * @param str	String that points to the first character of the variable name
  *				(the first character after the char '$')
+ *
  * @return		Returns variable on a match, NULL if no matching variable can
  *				be found in data->custom_env
  */
@@ -153,6 +155,9 @@ static t_var	*find_var(t_minishell *data, const char *str)
  * data->last_rval to variable->value.
  *
  * @param data	Pointer to main data struct
+ *
+ * @return	Variable node with variable->value containig a string version of the
+ *			last return value
  */
 static t_var	*question_mark_variable(t_minishell *data)
 {

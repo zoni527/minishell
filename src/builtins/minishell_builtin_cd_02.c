@@ -18,6 +18,8 @@
  * @param data	minishell data struct
  * @param path	path to change dir too.
  * @param envp	pointer to the first element in envp list
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 static int	handle_tilde(t_minishell *data, char *path)
 {
@@ -44,6 +46,8 @@ static int	handle_tilde(t_minishell *data, char *path)
  *
  * @param data	main data struct
  * @param envp	pointer to first element in envp list
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 static int	handle_no_arg(t_minishell *data)
 {
@@ -65,6 +69,8 @@ static int	handle_no_arg(t_minishell *data)
  * Function to handle the DASH case for CD builtin
  *
  * @param data	main data struct
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 static int	handle_dash(t_minishell *data)
 {
@@ -79,6 +85,7 @@ static int	handle_dash(t_minishell *data)
 	if (change_dir(data, path) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	ms_setenv(data, "PWD", path);
+	ft_putendl(path);
 	return (EXIT_SUCCESS);
 }
 
@@ -87,6 +94,8 @@ static int	handle_dash(t_minishell *data)
  *
  * @param data	main data struct
  * @param path	pointer to path
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 static int	handle_change_dir(t_minishell *data, char *path)
 {
@@ -99,6 +108,13 @@ static int	handle_change_dir(t_minishell *data, char *path)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * @param data		Pointer to main data struct
+ * @param cd_tokens	Tokens that contain the command and arguments for cd
+ * @param path		Path to change to
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
+ */
 int	handle_cd(t_minishell *data, t_token *cd_tokens, char *path)
 {
 	if (ft_strncmp(data->raw_input, "cd \"\"", 5) == 0

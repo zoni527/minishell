@@ -6,14 +6,13 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 09:51:37 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/18 13:34:57 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/02 14:20:28 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void	run_builtin_within_pipe(t_minishell *data, t_token *command);
-static void	restore_default_signals(t_minishell *data);
 
 /**
  * Main child process function. Handles pipe reading and writing, input and
@@ -21,28 +20,40 @@ static void	restore_default_signals(t_minishell *data);
  *
  * @param data	Pointer to main data struct
  */
-void	child_process(t_minishell *data)
+void	child_process(t_minishell *data, int extra_fd)
 {
 	char	**argv;
 	char	**envp;
 	t_token	*command;
 
-	restore_default_signals(data);
 	if (data->pipe_index != 0)
 		redirect_stdin_and_close_fd(data, &data->pipe_fds[READ]);
 	if (data->pipe_index != data->pipe_count)
+	{
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
+		safe_close(data, &extra_fd);
+	}
 	if (handle_redirections(data) == EXIT_FAILURE)
 		clean_exit(data, EXIT_FAILURE);
-	command = skip_to(skip_to_current_pipe(data), is_builtin_or_command);
+	command = copy_cmd_and_args_within_pipe(data);
+	if (!command)
+		clean_exit(data, EXIT_SUCCESS);
 	if (is_builtin(command))
 		run_builtin_within_pipe(data, command);
 	argv = create_args_arr(data, command);
-	envp = create_envp_arr_from_custom_env(data, data->minishell_env);
+	envp = create_envp_arr_from_custom_env(data);
 	cmd_exec(data, argv, envp);
-	clean_exit(data, EXIT_EXECVE);
 }
 
+/**
+ * Function to select correct builtin and run it in the current child process,
+ * clean_error_exits if type can't be matched.
+ *
+ * @param data		Pointer to main data struct
+ * @param builtin	Token to match
+ *
+ * @return	The return value of the builtin that was run
+ */
 static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 {
 	if (get_builtin_type(builtin) == BLTN_CD)
@@ -62,16 +73,4 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 	else
 		clean_error_exit(data, MSG_ERROR_BLTN_NOSUCH, EXIT_BLTN_NOSUCH);
 	clean_exit(data, data->last_rval);
-}
-
-/**
- * Reactivates the original signal handlers, so that signals work in child
- * processes.
- *
- * @param data	Pointer to main data struct
- */
-static void	restore_default_signals(t_minishell *data)
-{
-	sigaction(SIGQUIT, &data->act_quit_old, NULL);
-	sigaction(SIGINT, &data->act_int_old, NULL);
 }

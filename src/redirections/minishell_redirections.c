@@ -18,6 +18,8 @@ static int	redirect(t_minishell *data, const t_token *token);
  * Handler function for managing redirections and heredocs within a pipe.
  *
  * @param data	Pointer to main data struct
+ *
+ * @return	EXIT_SUCCESS if redirections succeed, EXIT_FAILURE if not
  */
 int	handle_redirections(t_minishell *data)
 {
@@ -35,6 +37,14 @@ int	handle_redirections(t_minishell *data)
 	return (EXIT_SUCCESS);
 }
 
+/**
+ * Handler function for managing redirections and heredocs within a pipe.
+ *
+ * @param data	Pointer to main data struct
+ * @param token	Token to match a redirection type against
+ *
+ * @return	EXIT_SUCCESS if redirections succeed, EXIT_FAILURE if not
+ */
 static int	redirect(t_minishell *data, const t_token *token)
 {
 	if (is_input_redirection(token))

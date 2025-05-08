@@ -1,0 +1,1136 @@
+[
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_tokenization.c",
+   "-o",
+   "obj/tokenization/minishell_tokenization.o"
+  ],
+  "file": "src/tokenization/minishell_tokenization.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_variable_expansion.c",
+   "-o",
+   "obj/tokenization/minishell_variable_expansion.o"
+  ],
+  "file": "src/tokenization/minishell_variable_expansion.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_expandable_characters.c",
+   "-o",
+   "obj/tokenization/minishell_expandable_characters.o"
+  ],
+  "file": "src/tokenization/minishell_expandable_characters.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_word_splitting.c",
+   "-o",
+   "obj/tokenization/minishell_word_splitting.o"
+  ],
+  "file": "src/tokenization/minishell_word_splitting.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_quote_removal.c",
+   "-o",
+   "obj/tokenization/minishell_quote_removal.o"
+  ],
+  "file": "src/tokenization/minishell_quote_removal.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_token_classification.c",
+   "-o",
+   "obj/tokenization/minishell_token_classification.o"
+  ],
+  "file": "src/tokenization/minishell_token_classification.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_is_token_01.c",
+   "-o",
+   "obj/tokenization/minishell_is_token_01.o"
+  ],
+  "file": "src/tokenization/minishell_is_token_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_is_token_02.c",
+   "-o",
+   "obj/tokenization/minishell_is_token_02.o"
+  ],
+  "file": "src/tokenization/minishell_is_token_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_is_token_03.c",
+   "-o",
+   "obj/tokenization/minishell_is_token_03.o"
+  ],
+  "file": "src/tokenization/minishell_is_token_03.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_assign_token_indices.c",
+   "-o",
+   "obj/tokenization/minishell_assign_token_indices.o"
+  ],
+  "file": "src/tokenization/minishell_assign_token_indices.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_token_getters.c",
+   "-o",
+   "obj/tokenization/minishell_token_getters.o"
+  ],
+  "file": "src/tokenization/minishell_token_getters.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_token_analysis.c",
+   "-o",
+   "obj/tokenization/minishell_token_analysis.o"
+  ],
+  "file": "src/tokenization/minishell_token_analysis.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_tokenization_utils.c",
+   "-o",
+   "obj/tokenization/minishell_tokenization_utils.o"
+  ],
+  "file": "src/tokenization/minishell_tokenization_utils.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/tokenization/minishell_quote_validation.c",
+   "-o",
+   "obj/tokenization/minishell_quote_validation.o"
+  ],
+  "file": "src/tokenization/minishell_quote_validation.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/error_handling/minishell_error_handling.c",
+   "-o",
+   "obj/error_handling/minishell_error_handling.o"
+  ],
+  "file": "src/error_handling/minishell_error_handling.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/error_handling/minishell_error_logging.c",
+   "-o",
+   "obj/error_handling/minishell_error_logging.o"
+  ],
+  "file": "src/error_handling/minishell_error_logging.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/error_handling/minishell_syntax_error.c",
+   "-o",
+   "obj/error_handling/minishell_syntax_error.o"
+  ],
+  "file": "src/error_handling/minishell_syntax_error.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/error_handling/minishell_exit_value_handling.c",
+   "-o",
+   "obj/error_handling/minishell_exit_value_handling.o"
+  ],
+  "file": "src/error_handling/minishell_exit_value_handling.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/signals/minishell_signals.c",
+   "-o",
+   "obj/signals/minishell_signals.o"
+  ],
+  "file": "src/signals/minishell_signals.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/piping/minishell_piping_01.c",
+   "-o",
+   "obj/piping/minishell_piping_01.o"
+  ],
+  "file": "src/piping/minishell_piping_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/piping/minishell_piping_02.c",
+   "-o",
+   "obj/piping/minishell_piping_02.o"
+  ],
+  "file": "src/piping/minishell_piping_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_redirections.c",
+   "-o",
+   "obj/redirections/minishell_redirections.o"
+  ],
+  "file": "src/redirections/minishell_redirections.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_redirect_input.c",
+   "-o",
+   "obj/redirections/minishell_redirect_input.o"
+  ],
+  "file": "src/redirections/minishell_redirect_input.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_redirect_output.c",
+   "-o",
+   "obj/redirections/minishell_redirect_output.o"
+  ],
+  "file": "src/redirections/minishell_redirect_output.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_redirect_heredoc.c",
+   "-o",
+   "obj/redirections/minishell_redirect_heredoc.o"
+  ],
+  "file": "src/redirections/minishell_redirect_heredoc.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_redirect_append.c",
+   "-o",
+   "obj/redirections/minishell_redirect_append.o"
+  ],
+  "file": "src/redirections/minishell_redirect_append.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/execution/minishell_execution.c",
+   "-o",
+   "obj/execution/minishell_execution.o"
+  ],
+  "file": "src/execution/minishell_execution.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/execution/minishell_input_validation.c",
+   "-o",
+   "obj/execution/minishell_input_validation.o"
+  ],
+  "file": "src/execution/minishell_input_validation.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/execution/minishell_single_builtin.c",
+   "-o",
+   "obj/execution/minishell_single_builtin.o"
+  ],
+  "file": "src/execution/minishell_single_builtin.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/environment/minishell_environment_01.c",
+   "-o",
+   "obj/environment/minishell_environment_01.o"
+  ],
+  "file": "src/environment/minishell_environment_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/environment/minishell_environment_02.c",
+   "-o",
+   "obj/environment/minishell_environment_02.o"
+  ],
+  "file": "src/environment/minishell_environment_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/environment/minishell_environment_list.c",
+   "-o",
+   "obj/environment/minishell_environment_list.o"
+  ],
+  "file": "src/environment/minishell_environment_list.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/environment/minishell_environment_print_alpha.c",
+   "-o",
+   "obj/environment/minishell_environment_print_alpha.o"
+  ],
+  "file": "src/environment/minishell_environment_print_alpha.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/environment/minishell_environment_export.c",
+   "-o",
+   "obj/environment/minishell_environment_export.o"
+  ],
+  "file": "src/environment/minishell_environment_export.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/environment/minishell_environment_shell.c",
+   "-o",
+   "obj/environment/minishell_environment_shell.o"
+  ],
+  "file": "src/environment/minishell_environment_shell.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_cd_01.c",
+   "-o",
+   "obj/builtins/minishell_builtin_cd_01.o"
+  ],
+  "file": "src/builtins/minishell_builtin_cd_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_cd_02.c",
+   "-o",
+   "obj/builtins/minishell_builtin_cd_02.o"
+  ],
+  "file": "src/builtins/minishell_builtin_cd_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_echo.c",
+   "-o",
+   "obj/builtins/minishell_builtin_echo.o"
+  ],
+  "file": "src/builtins/minishell_builtin_echo.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_env.c",
+   "-o",
+   "obj/builtins/minishell_builtin_env.o"
+  ],
+  "file": "src/builtins/minishell_builtin_env.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_exit.c",
+   "-o",
+   "obj/builtins/minishell_builtin_exit.o"
+  ],
+  "file": "src/builtins/minishell_builtin_exit.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_export_01.c",
+   "-o",
+   "obj/builtins/minishell_builtin_export_01.o"
+  ],
+  "file": "src/builtins/minishell_builtin_export_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_export_02.c",
+   "-o",
+   "obj/builtins/minishell_builtin_export_02.o"
+  ],
+  "file": "src/builtins/minishell_builtin_export_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_export_03.c",
+   "-o",
+   "obj/builtins/minishell_builtin_export_03.o"
+  ],
+  "file": "src/builtins/minishell_builtin_export_03.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_pwd.c",
+   "-o",
+   "obj/builtins/minishell_builtin_pwd.o"
+  ],
+  "file": "src/builtins/minishell_builtin_pwd.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_unset.c",
+   "-o",
+   "obj/builtins/minishell_builtin_unset.o"
+  ],
+  "file": "src/builtins/minishell_builtin_unset.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_dir.c",
+   "-o",
+   "obj/builtins/minishell_builtin_dir.o"
+  ],
+  "file": "src/builtins/minishell_builtin_dir.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/builtins/minishell_builtin_handler.c",
+   "-o",
+   "obj/builtins/minishell_builtin_handler.o"
+  ],
+  "file": "src/builtins/minishell_builtin_handler.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_heredoc_01.c",
+   "-o",
+   "obj/redirections/minishell_heredoc_01.o"
+  ],
+  "file": "src/redirections/minishell_heredoc_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/redirections/minishell_heredoc_02.c",
+   "-o",
+   "obj/redirections/minishell_heredoc_02.o"
+  ],
+  "file": "src/redirections/minishell_heredoc_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_environment_utils.c",
+   "-o",
+   "obj/utils/minishell_environment_utils.o"
+  ],
+  "file": "src/utils/minishell_environment_utils.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_var_name_len.c",
+   "-o",
+   "obj/utils/minishell_var_name_len.o"
+  ],
+  "file": "src/utils/minishell_var_name_len.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_cleanup_and_exiting.c",
+   "-o",
+   "obj/utils/minishell_cleanup_and_exiting.o"
+  ],
+  "file": "src/utils/minishell_cleanup_and_exiting.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_safe_fd_management.c",
+   "-o",
+   "obj/utils/minishell_safe_fd_management.o"
+  ],
+  "file": "src/utils/minishell_safe_fd_management.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_safe_pipe_management.c",
+   "-o",
+   "obj/utils/minishell_safe_pipe_management.o"
+  ],
+  "file": "src/utils/minishell_safe_pipe_management.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_token_helpers_01.c",
+   "-o",
+   "obj/utils/minishell_token_helpers_01.o"
+  ],
+  "file": "src/utils/minishell_token_helpers_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_token_helpers_02.c",
+   "-o",
+   "obj/utils/minishell_token_helpers_02.o"
+  ],
+  "file": "src/utils/minishell_token_helpers_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_token_helpers_03.c",
+   "-o",
+   "obj/utils/minishell_token_helpers_03.o"
+  ],
+  "file": "src/utils/minishell_token_helpers_03.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_directory_validation.c",
+   "-o",
+   "obj/utils/minishell_directory_validation.o"
+  ],
+  "file": "src/utils/minishell_directory_validation.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_print_debug.c",
+   "-o",
+   "obj/utils/minishell_print_debug.o"
+  ],
+  "file": "src/utils/minishell_print_debug.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_data_reset_01.c",
+   "-o",
+   "obj/utils/minishell_data_reset_01.o"
+  ],
+  "file": "src/utils/minishell_data_reset_01.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_data_reset_02.c",
+   "-o",
+   "obj/utils/minishell_data_reset_02.o"
+  ],
+  "file": "src/utils/minishell_data_reset_02.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_user_input.c",
+   "-o",
+   "obj/utils/minishell_user_input.o"
+  ],
+  "file": "src/utils/minishell_user_input.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/minishell_main.c",
+   "-o",
+   "obj/minishell_main.o"
+  ],
+  "file": "src/minishell_main.c"
+ }
+]

@@ -13,10 +13,12 @@
 #include "minishell.h"
 
 /**
- * Function that creates a null terminated argv to pass to execve
+ * Function that creates a NULL terminated argv to pass to execve
  *
- * @param data	main data struct
- * @param command	token for the relevant command
+ * @param data		Pointer to main data struct
+ * @param command	Token for the relevant command
+ *
+ * @return	NULL terminated char * array of arguments
  */
 char	**create_args_arr(t_minishell *data, t_token *command)
 {
@@ -47,8 +49,11 @@ char	**create_args_arr(t_minishell *data, t_token *command)
 /**
  * Function to set paths for execution
  *
- * @param command	command input
- * @param mypaths	list of paths
+ * @param data		Pointer to main data struct
+ * @param command	Command input
+ * @param mypaths	List of paths
+ *
+ * @return	Full path to command, NULL on failure
  */
 static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 {
@@ -56,6 +61,8 @@ static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 	char	*onepath;
 	int		i;
 
+	if (ft_is_empty_string(command))
+		return (NULL);
 	i = 0;
 	while (mypaths[i])
 	{
@@ -75,8 +82,11 @@ static char	*set_paths(t_minishell *data, const char *command, char **mypaths)
 /**
  * Function that parses the paths for cmd execution
  *
- * @param command	command input
- * @param envp	envp_arr input (not list)
+ * @param data		Pointer to main data struct
+ * @param command	Command input
+ * @param envp		NUll terminated array of environment variables (not list)
+ *
+ * @return	Full path to command, NULL on failure
  */
 static char	*path_parsing(t_minishell *data, const char *command, char **envp)
 {
@@ -101,10 +111,12 @@ static char	*path_parsing(t_minishell *data, const char *command, char **envp)
 }
 
 /*
- * Function that runs execve / execution
+ * Function that runs execve / execution. Performs validation before execution,
+ * calls error handling function and exits if command is deemed invalid.
  *
- * @param argv	argument input vector
- * @param envp	envp_arr (not list)
+ * @param data		Pointer to main data struct
+ * @param command	NULL terminated array of command arguments
+ * @param envp		NUll terminated array of environment variables (not list)
  */
 void	cmd_exec(t_minishell *data, char **command, char **envp)
 {
@@ -113,7 +125,7 @@ void	cmd_exec(t_minishell *data, char **command, char **envp)
 
 	error = 0;
 	path = path_parsing(data, command[0], envp);
-	if (!path)
+	if (!path || access(path, F_OK) < 0)
 		error = ERROR_NOCMD;
 	else if (pretends_to_be_a_directory(data, path))
 		error = ERROR_BINNOTADIR;
@@ -124,8 +136,11 @@ void	cmd_exec(t_minishell *data, char **command, char **envp)
 	if (error)
 	{
 		handle_error(data, command[0], error);
-		return ;
+		clean_exit(data, data->last_rval);
 	}
+	sigaction(SIGINT, &data->act_int_old, NULL);
+	sigaction(SIGQUIT, &data->act_quit_old, NULL);
 	execve(path, command, envp);
 	handle_error(data, command[0], ERROR_EXECVE);
+	clean_exit(data, ERROR_EXECVE);
 }

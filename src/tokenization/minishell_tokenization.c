@@ -88,6 +88,8 @@ static void	tokenize(t_minishell *data, const char *src, size_t len)
  * (vs |<>).
  *
  * @param str	String whose first character is part of an operator
+ *
+ * @return	String position past an operator
  */
 static char	*skip_over_operator(const char *str)
 {
@@ -101,6 +103,8 @@ static char	*skip_over_operator(const char *str)
  * Breaks when it finds a metacharacter that is not within quotes.
  *
  * @param str	String containing raw input
+ *
+ * @return	String position past one word
  */
 static char	*skip_over_word(const char *str)
 {

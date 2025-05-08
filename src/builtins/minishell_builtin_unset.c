@@ -25,7 +25,7 @@ void	builtin_unset(t_minishell *data)
 	tokens = tokens->next;
 	while (tokens)
 	{
-		remove_env(tokens->value, data->minishell_env);
+		remove_env(data, tokens->value);
 		tokens = tokens->next;
 	}
 	data->last_rval = 0;

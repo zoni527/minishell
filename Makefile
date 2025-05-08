@@ -6,7 +6,7 @@
 #    By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/22 09:49:19 by jvarila           #+#    #+#              #
-#    Updated: 2025/04/25 19:35:45 by jvarila          ###   ########.fr        #
+#    Updated: 2025/05/07 15:18:06 by jvarila          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,6 +30,7 @@ OBJ_DIR	:=	./obj
 #------------------------------------------------------------------------------#
 SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/tokenization/minishell_variable_expansion.c		\
+	$(SRC_DIR)/tokenization/minishell_expandable_characters.c	\
 	$(SRC_DIR)/tokenization/minishell_word_splitting.c		\
 	$(SRC_DIR)/tokenization/minishell_quote_removal.c		\
 	$(SRC_DIR)/tokenization/minishell_token_classification.c	\
@@ -97,6 +98,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/utils/minishell_print_debug.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_01.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_02.c			\
+	$(SRC_DIR)/utils/minishell_user_input.c				\
 	\
 	$(SRC_DIR)/minishell_main.c
 #------------------------------------------------------------------------------#

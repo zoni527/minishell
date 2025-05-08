@@ -18,6 +18,8 @@
  * means that the string contains an unclosed quote.
  *
  * @param str	String to be searched
+ *
+ * @return	true if string contains unclosed quotes, false if not
  */
 bool	has_unclosed_quotes(const char *str)
 {

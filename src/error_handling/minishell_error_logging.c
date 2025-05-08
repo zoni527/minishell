@@ -13,15 +13,17 @@
 #include "minishell.h"
 
 /**
- * Writes error messages to stderr, always starts with 'minishell: '
+ * Writes error messages to stderr, always starts with 'minishell: '.
+ * Calls system error for more information about errno.
  *
+ * @param data	Pointer to main data struct
  * @param file	Name of file associated with error
  */
 void	ms_perror(t_minishell *data, const char *file)
 {
 	char	*str;
 
-	str = BHCYN "minishell" CRESET;
+	str = BHCYN "mini🐚" CRESET;
 	if (file)
 		str = ft_ma_strjoin(data->arena, STR_PROMPTSTART, file);
 	perror(str);

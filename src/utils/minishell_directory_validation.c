@@ -18,6 +18,8 @@
  *
  * @param data	Pointer to main data struct
  * @param str	String with file name
+ *
+ * @return	true if str is a directory, false if not
  */
 bool	is_a_directory(t_minishell *data, const char *str)
 {
@@ -38,6 +40,9 @@ bool	is_a_directory(t_minishell *data, const char *str)
  *
  * @param data	Pointer to main data struct
  * @param str	String with file name
+ *
+ * @return	true if str ends with '/', thus pretending to be a directory, false
+ *			if not
  */
 bool	pretends_to_be_a_directory(t_minishell *data, const char *str)
 {

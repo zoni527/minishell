@@ -13,18 +13,16 @@
 #include "minishell.h"
 
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
-				int prev_pipe_read_fd);
+				const int *prev_pipe_read_fd);
 static void	handle_fork_failure(t_minishell *data, int *new_pipe,
 				int prev_pipe_read_fd);
 static void	close_pipe_fds_in_parent(t_minishell *data, int *new_pipe,
 				int *prev_pipe_read_fd);
 static void	wait_for_children(t_minishell *data);
 
-extern volatile int	g_signal;
-
 /**
  * Creates pipes, forks, and waits for child processes.
- * <p>
+ *
  * If a fork or file descriptor redirection fails, subfunctions will call a
  * cleanup and exit function.
  *
@@ -37,10 +35,9 @@ void	piping(t_minishell *data)
 
 	data->pipe_index = 0;
 	data->last_pid = 1;
-	prev_pipe_read_fd = -1;
 	while (data->pipe_index <= data->pipe_count && data->last_pid != 0)
 	{
-		create_new_pipe_and_assign_fds(data, new_pipe, prev_pipe_read_fd);
+		create_new_pipe_and_assign_fds(data, new_pipe, &prev_pipe_read_fd);
 		data->last_pid = fork();
 		if (data->last_pid < 0)
 			handle_fork_failure(data, new_pipe, prev_pipe_read_fd);
@@ -52,7 +49,7 @@ void	piping(t_minishell *data)
 		data->pipe_index++;
 	}
 	if (data->last_pid == 0)
-		child_process(data);
+		child_process(data, new_pipe[READ]);
 	else
 		wait_for_children(data);
 }
@@ -69,12 +66,14 @@ void	piping(t_minishell *data)
  * @see   safe_pipe
  */
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
-									int prev_pipe_read_fd)
+										const int *prev_pipe_read_fd)
 {
 	if (data->pipe_index != data->pipe_count)
 		safe_pipe(data, new_pipe);
-	if (prev_pipe_read_fd != -1)
-		data->pipe_fds[READ] = prev_pipe_read_fd;
+	data->pipe_fds[READ] = -1;
+	data->pipe_fds[WRITE] = -1;
+	if (data->pipe_index != 0)
+		data->pipe_fds[READ] = *prev_pipe_read_fd;
 	if (data->pipe_index != data->pipe_count)
 		data->pipe_fds[WRITE] = new_pipe[WRITE];
 }
@@ -83,6 +82,7 @@ static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
  * Waits for child processes, data->pipe_index is used instead of
  * data->pipe_count to account for situations when not all pipes are created.
  * Sets data->last_rval to match the exit value of the last child's exit value.
+ * Reactivates primary signal handling for parent.
  *
  * @param data	Pointer to main data struct
  */
@@ -91,7 +91,7 @@ static void	wait_for_children(t_minishell *data)
 	pid_t	pid;
 	int		status;
 
-	activate_secondary_signal_handler(data);
+	ignore_signals();
 	while (data->pipe_index--)
 	{
 		pid = wait(&status);
@@ -99,17 +99,19 @@ static void	wait_for_children(t_minishell *data)
 		{
 			if (WIFEXITED(status))
 				data->last_rval = WEXITSTATUS(status);
-			else if (g_signal != 0)
+			else if (WIFSIGNALED(status))
 			{
-				data->last_rval = 128 + g_signal;
+				if (WTERMSIG(status) == SIGQUIT)
+					ft_putstr("Quit (core dumped)");
+				ft_putendl("");
+				data->last_rval = 128 + WTERMSIG(status);
 				g_signal = 0;
 			}
 			else
-				data->last_rval = status;
+				data->last_rval = -1;
 		}
 	}
 	activate_primary_signal_handler(data);
-	data->pipe_index = 0;
 }
 
 /**

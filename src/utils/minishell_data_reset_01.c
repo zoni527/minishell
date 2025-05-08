@@ -24,12 +24,17 @@ static void		free_var_contents(t_var *var);
  * were previously pointing to addresses inside the memarena to NULL.
  *
  * @param data	Pointer to main data struct
+ *
  * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 int	reset_data(t_minishell *data)
 {
 	t_var	*env_copy;
 
+	data->token_list = NULL;
+	data->hd_delimiters = NULL;
+	data->hd_file_names = NULL;
+	data->pipe_index = 0;
 	if (!data->minishell_env)
 	{
 		ft_reset_memarena(data->arena);
@@ -41,10 +46,6 @@ int	reset_data(t_minishell *data)
 	ft_reset_memarena(data->arena);
 	data->minishell_env = copy_env_to_memarena(data->arena, env_copy);
 	free_env(&env_copy);
-	data->token_list = NULL;
-	data->hd_delimiters = NULL;
-	data->hd_file_names = NULL;
-	data->pipe_index = 0;
 	return (EXIT_SUCCESS);
 }
 
@@ -52,6 +53,7 @@ int	reset_data(t_minishell *data)
  * Creates a deep copy of a t_var in a new location on the heap.
  *
  * @param var	Environment variable to be copied
+ *
  * @return	Deep copy of var, prev and next assigned to NULL
  */
 static t_var	*copy_var(const t_var *var)
@@ -121,6 +123,8 @@ static void	free_env(t_var **env)
  * outside the memarena.
  *
  * @param env	First node in environment list
+ * 
+ * @return	First node in copied environment list (copy outside of memarena)
  */
 static t_var	*copy_env(const t_var *env)
 {

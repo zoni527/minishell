@@ -44,6 +44,14 @@ void	token_classification(t_minishell *data)
 	}
 }
 
+/**
+ * Compares token's value to builtin names. Returns correct enum value when
+ * matched, -1 if not found
+ *
+ * @param token	Token to match against
+ *
+ * @return	Matched builtin type when matched, -1 if match can't be found
+ */
 t_bltn_type	return_builtin_type(t_token *token)
 {
 	if (ft_strcmp(token->value, "echo") == 0)

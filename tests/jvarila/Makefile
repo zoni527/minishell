@@ -38,6 +38,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/error_handling/minishell_error_handling.c		\
 	$(SRC_DIR)/error_handling/minishell_error_logging.c		\
 	$(SRC_DIR)/error_handling/minishell_syntax_error.c		\
+	$(SRC_DIR)/error_handling/minishell_exit_value_handling.c	\
 	\
 	$(SRC_DIR)/signals/minishell_signals.c				\
 	\
@@ -77,6 +78,7 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/utils/minishell_token_helpers_03.c			\
 	$(SRC_DIR)/utils/minishell_directory_validation.c		\
 	$(SRC_DIR)/utils/minishell_print_debug.c			\
+	$(SRC_DIR)/utils/minishell_environment_utils.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_01.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_02.c
 #------------------------------------------------------------------------------#

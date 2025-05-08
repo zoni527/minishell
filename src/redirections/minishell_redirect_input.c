@@ -19,6 +19,8 @@ static int	validate_infile(t_minishell *data, const char *file_name);
  *
  * @param data	Pointer to main data struct
  * @param token	Token to start redirection operation from
+ *
+ * @return	EXIT_SUCCESS if redirections succeed, EXIT_FAILURE on failure
  */
 int	redirect_input(t_minishell *data, const t_token *input)
 {
@@ -43,6 +45,8 @@ int	redirect_input(t_minishell *data, const t_token *input)
  *
  * @param data		Pointer to main data struct
  * @param file_name	String containing a file name
+ *
+ * @return	EXIT_SUCCESS if all tests are passed, EXIT_FAILURE if not
  */
 static int	validate_infile(t_minishell *data, const char *file_name)
 {

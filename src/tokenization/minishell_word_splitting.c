@@ -67,7 +67,7 @@ static void	split_token(t_minishell *data, t_token *token)
  * Creates a substring from token->value using len as the length of the
  * substring. Function also updates the string pointed to by str_ptr so
  * that the progression in split_token is correct.
- * <p>
+ *
  * If the token split is the first element in data->token list, updates
  * the first element to be the new node.
  *
@@ -98,6 +98,7 @@ static void	handle_token_split(t_minishell *data, t_token *token,
  * Looks for whitespace that is not within quotes to delimit words.
  *
  * @param str	String to be traversed
+ *
  * @return		Position in string where a whitespace character outsife of
  *				quotes was found, or the end of the string
  */

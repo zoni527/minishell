@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:09:56 by jvarila           #+#    #+#             */
-/*   Updated: 2025/03/28 15:54:56 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/08 16:11:42 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,12 @@
 
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <stdio.h>
 # include <errno.h>
 # include <fcntl.h>
 # include <sys/wait.h>
 # include <signal.h>
-# include <dirent.h>
-# include <string.h>
-# include <sys/ioctl.h>
+
+extern volatile sig_atomic_t	g_signal;
 
 /* =============================== MACROS =================================== */
 
@@ -39,6 +37,11 @@
 // Default size is 10 MiB (1024^2)
 # define MEM_ARENA_SIZE	1048576
 # define MAX_HEREDOCS	16
+# ifndef ARG_MAX
+#  define ARG_MAX		2097152
+# endif
+# define READ			0
+# define WRITE			1
 
 /* --------------------------------------------------------------- exit codes */
 
@@ -50,9 +53,10 @@
 # define EXIT_EXECVE		128
 
 /* Builtin exit values */
-# define EXIT_BLTN_NAN		2
-# define EXIT_BLTN_NOSUCH	5
-# define EXIT_BLTN_TOOMANY	6
+# define EXIT_BLTN_INVALIDID	1
+# define EXIT_BLTN_NAN			2
+# define EXIT_BLTN_NOSUCH		5
+# define EXIT_BLTN_TOOMANY		6
 
 # define EXIT_ENOMEM		42
 
@@ -64,7 +68,7 @@
 
 /* ---------------------------------------------------------- string literals */
 
-# define STR_PROMPTSTART		"\e[1;96mminishell:\e[0m "
+# define STR_PROMPTSTART		"\e[1;96mmini🐚:\e[0m "
 # define STR_PROMPTDELIM		" 🐢 "
 
 /* ----------------------------------------------------------- error messages */
@@ -94,16 +98,9 @@
 # define MSG_ERROR_NOCMD		"command not found"
 # define MSG_ERROR_NOHOME		"HOME not set"
 # define MSG_ERROR_NOOLDPWD		"OLDPWD not set"
+# define MSG_ERROR_TOOLONG		"Input is too long"
 
 # define METACHARACTERS			"|<> \t\n"
-
-# ifndef READ
-#  define READ	0
-# endif
-
-# ifndef WRITE
-#  define WRITE	1
-# endif
 
 /* ================================ ENUMS =================================== */
 
@@ -143,6 +140,7 @@ typedef enum e_error
 	ERROR_BINISADIR,
 	ERROR_BINNOTADIR,
 	ERROR_LIMITHEREDOC,
+	ERROR_TOOLONG,
 }	t_error;
 
 typedef enum e_token_type
@@ -173,8 +171,8 @@ typedef enum e_bltn_type
 
 /* ================================ TYPEDEFS ================================ */
 
-typedef struct s_token		t_token;
-typedef struct s_var		t_var;
+typedef struct s_token			t_token;
+typedef struct s_var			t_var;
 
 typedef struct s_minishell
 {
@@ -184,14 +182,13 @@ typedef struct s_minishell
 	size_t				token_count;
 	size_t				pipe_count;
 	size_t				hd_count;
-	size_t				var_count;
 	size_t				pipe_index;
 	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
 	struct sigaction	act_int;
-	struct sigaction	act_int_old;
 	struct sigaction	act_quit;
+	struct sigaction	act_int_old;
 	struct sigaction	act_quit_old;
 	const char			*raw_input;
 	const char			**initial_env;
@@ -232,6 +229,11 @@ void			tokenization(t_minishell *data);
 /* ------------------------------------------- minishell_variable_expansion.c */
 
 void			variable_expansion(t_minishell *data);
+void			expand_variables(t_minishell *data, t_token *token);
+
+/* ---------------------------------------- minishell_expandable_characters.c */
+
+bool			is_expandable_char(int c);
 
 /* ----------------------------------------------- minishell_word_splitting.c */
 
@@ -284,7 +286,6 @@ const char		*get_token_type_str(const t_token *token);
 size_t			count_tokens(const t_token *list);
 size_t			count_pipes(const t_token *list);
 size_t			count_heredocs(const t_token *list);
-size_t			count_vars(const t_var *list);
 
 /* ------------------------------------------- minishell_tokenization_utils.c */
 
@@ -301,7 +302,7 @@ void			set_shell_lvl(t_minishell *data);
 
 /* ------------------------------------------- minishell_environment_export.c */
 
-int				ms_setenv_export(t_minishell *data, char *key,
+void			ms_setenv_export(t_minishell *data, char *key,
 					char *value, char *raw);
 
 /* -------------------------------------- minishell_environment_print_alpha.c */
@@ -311,14 +312,13 @@ void			print_env_alphabetically(t_minishell *data);
 /* ----------------------------------------------- minishell_environment_01.c */
 
 char			*ms_getenv(t_minishell *data, char *key);
-int				ms_setenv(t_minishell *data, char *key, char *value);
-int				remove_env(char *key, t_var *envp);
+void			ms_setenv(t_minishell *data, char *key, char *value);
+void			remove_env(t_minishell *data, char *key);
 
 /* ----------------------------------------------- minishell_environment_02.c */
 
 void			env_list_from_envp(t_minishell *data, const char **envp);
-char			**create_envp_arr_from_custom_env(t_minishell *data,
-					t_var *envp_list);
+char			**create_envp_arr_from_custom_env(t_minishell *data);
 
 /* --------------------------------------------- minishell_environment_list.c */
 
@@ -362,7 +362,7 @@ void			builtin_export(t_minishell *data);
 
 /* -------------------------------------------- minishell_builtin_export_02.c */
 
-void			set_key_and_value(t_minishell *data, t_token *token);
+int				set_key_and_value(t_minishell *data, t_token *token);
 
 /* -------------------------------------------- minishell_builtin_export_03.c */
 
@@ -388,7 +388,7 @@ void			piping(t_minishell *data);
 
 /* ---------------------------------------------------- minishell_piping_02.c */
 
-void			child_process(t_minishell *data);
+void			child_process(t_minishell *data, int extra_fd);
 
 /* ================================= SIGNALS ================================ */
 
@@ -396,7 +396,8 @@ void			child_process(t_minishell *data);
 
 void			set_and_activate_primary_signal_handler(t_minishell *data);
 void			activate_primary_signal_handler(t_minishell *data);
-void			activate_secondary_signal_handler(t_minishell *data);
+void			ignore_signals(void);
+int				rl_signal_handler(void);
 
 /* ============================== REDIRECTIONS ============================== */
 
@@ -439,7 +440,7 @@ void			cmd_exec(t_minishell *data, char **command, char **envp);
 
 /* --------------------------------------------- minishell_input_validation.c */
 
-int				validate_raw_input(const t_minishell *data);
+int				validate_raw_input(t_minishell *data);
 int				validate_tokens(t_minishell *data);
 
 /* ----------------------------------------------- minishell_single_builtin.c */
@@ -545,6 +546,10 @@ int				reset_data(t_minishell *data);
 
 t_var			*copy_env_to_memarena(t_memarena *arena, const t_var *env_list);
 void			append_var(t_var **env_list, t_var *var);
+
+/* --------------------------------------------------- minishell_user_input.c */
+
+int				read_user_input(t_minishell *data);
 
 /* -------------------------------------------------------------------------- */
 #endif

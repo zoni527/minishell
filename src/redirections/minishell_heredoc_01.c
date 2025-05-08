@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 10:01:54 by jvarila           #+#    #+#             */
-/*   Updated: 2025/04/18 17:23:58 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/08 14:25:32 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ static int	run_heredoc(t_minishell *data, int index);
  * index.
  *
  * @param data	Pointer to main data struct
+ *
+ * @return	EXIT_SUCCESS for successful heredoc input collection, EXIT_FAILURE
+ *			for failure
  */
 int	heredoc(t_minishell *data)
 {
@@ -38,7 +41,11 @@ int	heredoc(t_minishell *data)
 	create_heredoc_delimiters(data);
 	setup_heredoc_file_names(data);
 	if (run_heredocs(data) == EXIT_FAILURE)
+	{
+		free((void *)data->raw_input);
+		reset_data(data);
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -105,6 +112,8 @@ static void	setup_heredoc_file_names(t_minishell *data)
  * index.
  *
  * @param data	Pointer to main data struct
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 static int	run_heredocs(t_minishell *data)
 {
@@ -125,6 +134,8 @@ static int	run_heredocs(t_minishell *data)
  *
  * @param data	Pointer to main data struct
  * @param index	Index for heredoc delimiter and file name selection
+ *
+ * @return	EXIT_SUCCESS on success, EXIT_FAILURE on failure
  */
 static int	run_heredoc(t_minishell *data, int index)
 {
@@ -132,10 +143,16 @@ static int	run_heredoc(t_minishell *data, int index)
 	const char	*input;
 	int			fd;
 	int			input_len;
+	t_token		*temp;
 
 	delimiter = data->hd_delimiters[index];
 	input = read_heredoc_input(data, delimiter);
+	if (!input)
+		return (EXIT_FAILURE);
 	input_len = ft_strlen(input);
+	temp = new_token_node(data, input);
+	expand_variables(data, temp);
+	input = temp->value;
 	fd = open(data->hd_file_names[index], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
 		clean_error_exit(data, MSG_ERROR_OPEN, ERROR_OPEN);

@@ -16,6 +16,8 @@
  * Checks if token->type is FILE_NAME.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is FILE_NAME, false if not
  */
 bool	is_file_name(const t_token *token)
 {
@@ -28,6 +30,8 @@ bool	is_file_name(const t_token *token)
  * Checks if token->type is ARGUMENT.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is ARGUMENT, false if not
  */
 bool	is_argument(const t_token *token)
 {
@@ -40,6 +44,8 @@ bool	is_argument(const t_token *token)
  * Checks if token->type is WORD.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is WORD, false if not
  */
 bool	is_word(const t_token *token)
 {
@@ -52,6 +58,8 @@ bool	is_word(const t_token *token)
  * Checks if token->type is DELIMITER.
  *
  * @param token	Pointer to token which is checked
+ *
+ * @return	true if token->type is DELIMITER, false if not
  */
 bool	is_delimiter(const t_token *token)
 {

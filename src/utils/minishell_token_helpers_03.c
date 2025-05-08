@@ -14,6 +14,9 @@
 
 /**
  * @param data	Pointer to main data struct
+ *
+ * @return	True if pipe contains redirection, false if not
+ *
  * @see	pipe_has
  */
 bool	pipe_has_redirections(const t_minishell *data)
@@ -23,6 +26,9 @@ bool	pipe_has_redirections(const t_minishell *data)
 
 /**
  * @param data	Pointer to main data struct
+ *
+ * @return	True if pipe contains heredoc, false if not
+ *
  * @see	pipe_has
  */
 bool	pipe_has_heredoc(const t_minishell *data)
@@ -32,6 +38,9 @@ bool	pipe_has_heredoc(const t_minishell *data)
 
 /**
  * @param data	Pointer to main data struct
+ *
+ * @return	True if pipe contains input redirection, false if not
+ *
  * @see	pipe_has
  */
 bool	pipe_has_input_redirection(const t_minishell *data)
@@ -41,6 +50,9 @@ bool	pipe_has_input_redirection(const t_minishell *data)
 
 /**
  * @param data	Pointer to main data struct
+ *
+ * @return	True if pipe contains output redirection, false if not
+ *
  * @see	pipe_has
  */
 bool	pipe_has_output_redirection(const t_minishell *data)
@@ -50,6 +62,9 @@ bool	pipe_has_output_redirection(const t_minishell *data)
 
 /**
  * @param data	Pointer to main data struct
+ *
+ * @return	True if pipe contains append, false if not
+ *
  * @see	pipe_has
  */
 bool	pipe_has_append(const t_minishell *data)

@@ -20,7 +20,9 @@
 void	builtin_export(t_minishell *data)
 {
 	t_token	*tokens;
+	bool	problem_with_variable;
 
+	problem_with_variable = false;
 	tokens = copy_cmd_and_args_within_pipe(data);
 	tokens = tokens->next;
 	if (tokens == NULL)
@@ -30,8 +32,10 @@ void	builtin_export(t_minishell *data)
 	}
 	while (tokens)
 	{
-		set_key_and_value(data, tokens);
+		if (set_key_and_value(data, tokens) == EXIT_FAILURE)
+			problem_with_variable = true;
 		tokens = tokens->next;
 	}
-	data->last_rval = 0;
+	if (!problem_with_variable)
+		data->last_rval = 0;
 }

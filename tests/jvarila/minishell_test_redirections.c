@@ -46,7 +46,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)envp;
 	data.arena = ft_new_memarena();
 	data.initial_env = (const char **)envp;
-	env_list_from_envp(&data, (char **)data.initial_env);
+	env_list_from_envp(&data, data.initial_env);
 	if (!data.arena)
 		return (ft_write_error_return_int(MSG_ERROR_ALLOC, ERROR_ALLOC));
 	loop(&data);

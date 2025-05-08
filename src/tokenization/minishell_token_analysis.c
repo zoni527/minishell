@@ -19,6 +19,8 @@ static size_t	count_type(const t_token *list,
  * Counts tokens in token list.
  *
  * @param list	First node in list of tokens
+ *
+ * @return	Amount of tokens in list
  */
 size_t	count_tokens(const t_token *list)
 {
@@ -39,6 +41,8 @@ size_t	count_tokens(const t_token *list)
  * Counts pipe tokens in token list.
  *
  * @param list	First node in list of tokens
+ *
+ * @return	Amount of pipe tokens in list
  */
 size_t	count_pipes(const t_token *list)
 {
@@ -49,12 +53,22 @@ size_t	count_pipes(const t_token *list)
  * Counts heredoc tokens in token list.
  *
  * @param list	First node in list of tokens
+ *
+ * @return	Amount of heredoc tokens in list
  */
 size_t	count_heredocs(const t_token *list)
 {
 	return (count_type(list, is_heredoc));
 }
 
+/**
+ * Generic counting function for tokens, uses a given token list and matching
+ * function for filtering.
+ *
+ * @param list	First node in list of tokens
+ *
+ * @return	Amount of tokens that return true when evaluated by function f
+ */
 static size_t	count_type(const t_token *list, bool (*f)(const t_token *token))
 {
 	size_t	count;
@@ -66,24 +80,6 @@ static size_t	count_type(const t_token *list, bool (*f)(const t_token *token))
 	{
 		if (f(list))
 			++count;
-		list = list->next;
-	}
-	return (count);
-}
-
-/**
- * Counts variables in list of variables.
- *
- * @param list	First node in list of variables
- */
-size_t	count_vars(const t_var *list)
-{
-	size_t	count;
-
-	count = 0;
-	while (list)
-	{
-		++count;
 		list = list->next;
 	}
 	return (count);
