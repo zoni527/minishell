@@ -32,7 +32,7 @@ bool	contains_syntax_error(t_token *list)
 		if (is_pipe(list) && is_pipe(list->next))
 			return (true);
 		else if ((is_redirection(list) || is_heredoc(list))
-			&& is_operator(list->next))
+			&& (is_operator(list->next) || !list->next))
 			return (true);
 		else if (is_pipe(list) && !list->next)
 			return (true);
