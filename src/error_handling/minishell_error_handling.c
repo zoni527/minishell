@@ -54,9 +54,9 @@ static int	match_minishell_error(const char *str, t_error error)
 		print_error_message(str, MSG_ERROR_NOCMD);
 	else if (error == ERROR_PERMISSION || error == ERROR_BINPERM)
 		print_error_message(str, MSG_ERROR_PERMISSION);
-	else if (error == ERROR_ISADIR)
+	else if (error == ERROR_ISADIR || error == ERROR_BINISADIR)
 		print_error_message(str, MSG_ERROR_ISADIR);
-	else if (error == ERROR_NOTADIR)
+	else if (error == ERROR_NOTADIR || error == ERROR_BINNOTADIR)
 		print_error_message(str, MSG_ERROR_NOTADIR);
 	else if (error == ERROR_NOHOME)
 		print_error_message(str, MSG_ERROR_NOHOME);

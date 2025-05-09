@@ -68,7 +68,7 @@ static bool	is_n(t_minishell *data)
 {
 	t_token	*token;
 
-	token = data->token_list;
+	token = copy_tokens_within_pipe(data);
 	while (token)
 	{
 		if (ft_strncmp(token->value, "-n", 2) == 0)
@@ -96,19 +96,19 @@ static int	print_token(t_minishell *data, t_token *token)
 		return (0);
 	if (token->next && is_n(data) == true)
 	{
-		ft_putstr_fd(token->next->value, 1);
+		ft_putstr(token->next->value);
 		if (token->next->next != NULL)
-			ft_putstr_fd(" ", 1);
+			ft_putstr(" ");
 	}
 	if (token->type == ARGUMENT && is_n(data) == false)
 	{
-		ft_putstr_fd(token->value, 1);
+		ft_putstr(token->value);
 		if (token->next && token->next->type == ARGUMENT)
-			ft_putstr_fd(" ", 1);
+			ft_putstr(" ");
 	}
 	if (token->next == NULL && is_n(data) == false)
 	{
-		ft_putstr_fd("\n", 1);
+		ft_putstr("\n");
 		return (0);
 	}
 	return (1);
