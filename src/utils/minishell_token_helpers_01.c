@@ -88,7 +88,8 @@ t_token	*copy_redirections_within_pipe(const t_minishell *data)
 	tokens = NULL;
 	while (start && !is_pipe(start))
 	{
-		if (is_redirection(start) || is_heredoc(start))
+		if ((is_redirection(start) && is_file_name(start->next))
+			|| (is_heredoc(start) && is_delimiter(start->next)))
 		{
 			new = copy_token(data, start);
 			append_token(&tokens, new);

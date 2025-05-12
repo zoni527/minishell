@@ -33,6 +33,11 @@ int	read_user_input(t_minishell *data)
 	}
 	else
 		data->raw_input = get_next_line(STDIN_FILENO);
+	if (g_signal == SIGINT_DURING_READLINE)
+	{
+		data->last_rval = 128 + SIGINT;
+		g_signal = 0;
+	}
 	if (!data->raw_input)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

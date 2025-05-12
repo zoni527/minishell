@@ -95,7 +95,7 @@ int	rl_signal_handler(void)
 		rl_on_new_line();
 		rl_replace_line("", 1);
 		rl_redisplay();
+		g_signal = SIGINT_DURING_READLINE;
 	}
-	g_signal = 0;
 	return (EXIT_SUCCESS);
 }

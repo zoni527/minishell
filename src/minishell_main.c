@@ -50,9 +50,9 @@ static void	loop(t_minishell *data)
 	{
 		if (read_user_input(data) == EXIT_FAILURE)
 			break ;
+		add_history(data->raw_input);
 		if (validate_raw_input(data) == EXIT_FAILURE)
 			continue ;
-		add_history(data->raw_input);
 		tokenization(data);
 		if (validate_tokens(data) == EXIT_FAILURE)
 			continue ;

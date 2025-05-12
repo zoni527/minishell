@@ -149,10 +149,10 @@ static int	run_heredoc(t_minishell *data, int index)
 	input = read_heredoc_input(data, delimiter);
 	if (!input)
 		return (EXIT_FAILURE);
-	input_len = ft_strlen(input);
 	temp = new_token_node(data, input);
 	expand_variables(data, temp);
 	input = temp->value;
+	input_len = ft_strlen(input);
 	fd = open(data->hd_file_names[index], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd < 0)
 		clean_error_exit(data, MSG_ERROR_OPEN, ERROR_OPEN);

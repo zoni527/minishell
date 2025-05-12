@@ -13,29 +13,6 @@
 #include "minishell.h"
 
 /**
- * Helper Function to prepare root token
- * before handing to the main function.
- *
- * @param builtin_token	token reference
- *
- * @return	Next token, NULL if no next token
- */
-static t_token	*proccess_token(t_token *token)
-{
-	if (token->next == NULL)
-	{
-		ft_putendl("");
-		return (NULL);
-	}
-	else
-	{
-		token = token->next;
-		return (token);
-	}
-	return (NULL);
-}
-
-/**
  * Function to check all characters
  * for the -n flag are n's
  *
@@ -45,8 +22,10 @@ static t_token	*proccess_token(t_token *token)
  */
 static bool	is_valid_n_str(const char *str)
 {
-	int		i;
+	size_t	i;
 
+	if (!str || str[0] != '-')
+		return (false);
 	i = 0;
 	while (str[++i])
 	{
@@ -54,64 +33,6 @@ static bool	is_valid_n_str(const char *str)
 			return (false);
 	}
 	return (true);
-}
-
-/**
- * Function to check if token list
- * contains the -n flag for ECHO
- *
- * @param data	main data struct
- *
- * @return	true if valid n flag string, false if not
- */
-static bool	is_n(t_minishell *data)
-{
-	t_token	*token;
-
-	token = data->token_list;
-	while (token)
-	{
-		if (ft_strncmp(token->value, "-n", 2) == 0)
-			if (is_valid_n_str(token->value) == true)
-				if (token->prev && token->prev->type == BUILTIN)
-					return (true);
-		token = token->next;
-	}
-	return (false);
-}
-
-/**
- * Helper function to print token to fd
- * or add a new line if at the last argument
- *
- * @param builtin_token	root builtin token reference
- *
- * @return	Flag for builtin_echo to break or keep going
- */
-static int	print_token(t_minishell *data, t_token *token)
-{
-	if (token->prev->type == BUILTIN
-		&& token->next == NULL
-		&& is_n(data) == true)
-		return (0);
-	if (token->next && is_n(data) == true)
-	{
-		ft_putstr_fd(token->next->value, 1);
-		if (token->next->next != NULL)
-			ft_putstr_fd(" ", 1);
-	}
-	if (token->type == ARGUMENT && is_n(data) == false)
-	{
-		ft_putstr_fd(token->value, 1);
-		if (token->next && token->next->type == ARGUMENT)
-			ft_putstr_fd(" ", 1);
-	}
-	if (token->next == NULL && is_n(data) == false)
-	{
-		ft_putstr_fd("\n", 1);
-		return (0);
-	}
-	return (1);
 }
 
 /**
@@ -123,16 +44,23 @@ static int	print_token(t_minishell *data, t_token *token)
 void	builtin_echo(t_minishell *data)
 {
 	t_token	*token;
+	bool	n_flag;
 
-	token = copy_cmd_and_args_within_pipe(data);
-	token = proccess_token(token);
-	if (token == NULL)
-		return ;
-	while (token)
+	data->last_rval = 0;
+	token = copy_cmd_and_args_within_pipe(data)->next;
+	n_flag = false;
+	if (token && is_valid_n_str(token->value))
+		n_flag = true;
+	while (token && is_valid_n_str(token->value))
+		token = token->next;
+	while (token && token->next)
 	{
-		if (print_token(data, token) == 0)
-			break ;
+		ft_putstr(token->value);
+		ft_putstr(" ");
 		token = token->next;
 	}
-	data->last_rval = 0;
+	if (token)
+		ft_putstr(token->value);
+	if (!n_flag)
+		ft_putendl("");
 }

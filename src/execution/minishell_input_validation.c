@@ -59,6 +59,7 @@ int	validate_tokens(t_minishell *data)
 	if (contains_syntax_error(data->token_list))
 	{
 		log_syntax_error(syntax_error_at_token(data->token_list));
+		data->last_rval = EXIT_SYNTAXERROR;
 		free((void *)data->raw_input);
 		reset_data(data);
 		return (EXIT_FAILURE);

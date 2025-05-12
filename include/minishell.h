@@ -6,7 +6,7 @@
 /*   By: jvarila <jvarila@student.hive.fi>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 10:09:56 by jvarila           #+#    #+#             */
-/*   Updated: 2025/05/08 16:11:42 by jvarila          ###   ########.fr       */
+/*   Updated: 2025/05/09 18:10:50 by jvarila          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ extern volatile sig_atomic_t	g_signal;
 
 /* --------------------------------------------------------------- exit codes */
 
-/* Execution exit values */
 # define EXIT_LIMITHEREDOC	2
+# define EXIT_SYNTAXERROR	2
 # define EXIT_HEREDOC_FILE	3
 # define EXIT_BINPERM		126
 # define EXIT_NOCMD			127
@@ -59,6 +59,10 @@ extern volatile sig_atomic_t	g_signal;
 # define EXIT_BLTN_TOOMANY		6
 
 # define EXIT_ENOMEM		42
+
+/* ----------------------------------------------------- custom signal values */
+
+# define SIGINT_DURING_READLINE	32
 
 /* -------------------------------------------------------------------- colors*/
 
