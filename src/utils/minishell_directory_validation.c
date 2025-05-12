@@ -47,13 +47,15 @@ bool	is_a_directory(t_minishell *data, const char *str)
 bool	pretends_to_be_a_directory(t_minishell *data, const char *str)
 {
 	char	*check;
+	size_t	len;
 
 	if (!str)
 		return (false);
-	if (str[ft_strlen(str) - 1] != '/')
+	len = ft_strlen(str);
+	if (str[len - 1] != '/')
 		return (false);
 	check = ft_ma_strdup(data->arena, str);
-	check[ft_strlen(check) - 1] = '\0';
+	check[len - 1] = '\0';
 	if (access(check, F_OK) < 0)
 		return (false);
 	if (is_a_directory(data, str))
