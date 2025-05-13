@@ -20,7 +20,7 @@
  *
  * @return	Copy of tokens within the pipe specified by data->pipe_index
  */
-t_token	*copy_tokens_within_pipe(const t_minishell *data)
+t_token	*copy_tokens_within_pipe(t_minishell *data)
 {
 	const t_token	*start;
 	t_token			*tokens;
@@ -48,7 +48,7 @@ t_token	*copy_tokens_within_pipe(const t_minishell *data)
  * @return	Copy of command and argument tokens within the pipe specified by
  *			data->pipe_index
  */
-t_token	*copy_cmd_and_args_within_pipe(const t_minishell *data)
+t_token	*copy_cmd_and_args_within_pipe(t_minishell *data)
 {
 	const t_token	*start;
 	t_token			*tokens;
@@ -78,7 +78,7 @@ t_token	*copy_cmd_and_args_within_pipe(const t_minishell *data)
  * @return	Copy of redirection tokens within the pipe specified by
  *			data->pipe_index
  */
-t_token	*copy_redirections_within_pipe(const t_minishell *data)
+t_token	*copy_redirections_within_pipe(t_minishell *data)
 {
 	const t_token	*start;
 	t_token			*tokens;
@@ -113,12 +113,12 @@ t_token	*copy_redirections_within_pipe(const t_minishell *data)
  *
  * @return	Deep copy of token
  */
-t_token	*copy_token(const t_minishell *data, const t_token *token)
+t_token	*copy_token(t_minishell *data, const t_token *token)
 {
 	t_token	*new;
 
-	new = ft_ma_calloc(data->arena, 1, sizeof(t_token));
-	new->value = ft_ma_strdup(data->arena, token->value);
+	new = ms_calloc(data, 1, sizeof(t_token));
+	new->value = ms_strdup(data, token->value);
 	new->index = token->index;
 	new->type = token->type;
 	return (new);

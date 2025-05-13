@@ -98,11 +98,11 @@ static size_t	remove_quotes_at_index(t_minishell *data, t_token *token,
 	while (token->value[i] != quote)
 		++i;
 	within_quotes_len = i - opening_quote_index - 1;
-	within_quotes = ft_ma_substr(data->arena, token->value,
+	within_quotes = ms_substr(data, token->value,
 			opening_quote_index + 1, within_quotes_len);
-	result = ft_ma_substr(data->arena, token->value, 0, opening_quote_index);
-	result = ft_ma_strjoin(data->arena, result, within_quotes);
-	result = ft_ma_strjoin(data->arena, result, &token->value[i + 1]);
+	result = ms_substr(data, token->value, 0, opening_quote_index);
+	result = ms_strjoin(data, result, within_quotes);
+	result = ms_strjoin(data, result, &token->value[i + 1]);
 	token->value = result;
 	return (i - 2);
 }

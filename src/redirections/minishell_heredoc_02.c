@@ -46,8 +46,8 @@ static char	*input_loop(t_minishell *data, char **result, const char *delim)
 		line = readline("> ");
 		if (!line || ft_strcmp(line, delim) == 0 || g_signal == SIGINT)
 			break ;
-		*result = ft_ma_strjoin(data->arena, *result, line);
-		*result = ft_ma_strjoin(data->arena, *result, "\n");
+		*result = ms_strjoin(data, *result, line);
+		*result = ms_strjoin(data, *result, "\n");
 		free(line);
 	}
 	return (line);

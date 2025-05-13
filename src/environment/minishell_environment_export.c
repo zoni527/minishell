@@ -62,14 +62,14 @@ void	ms_setenv_export(t_minishell *data, char *key, char *value, char *raw)
 	if (last)
 	{
 		last->next = create_new_env_var(data,
-				ft_ma_strdup(data->arena, raw),
-				ft_ma_strdup(data->arena, key),
-				ft_ma_strdup(data->arena, value));
+				ms_strdup(data, raw),
+				ms_strdup(data, key),
+				ms_strdup(data, value));
 		last->next->prev = last;
 	}
 	else if (!last && data->minishell_env == NULL)
 		data->minishell_env = create_new_env_var(data,
-				ft_ma_strdup(data->arena, raw),
-				ft_ma_strdup(data->arena, key),
-				ft_ma_strdup(data->arena, value));
+				ms_strdup(data, raw),
+				ms_strdup(data, key),
+				ms_strdup(data, value));
 }

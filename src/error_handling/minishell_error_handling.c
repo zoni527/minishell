@@ -33,7 +33,6 @@ void	handle_error(t_minishell *data, const char *str, t_error error)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, ERROR_ENOMEM);
 	if (match_minishell_error(str, error) == EXIT_FAILURE)
 		ms_perror(data, str);
-	close_fds(data);
 	match_exit_value_to_error(data, error);
 }
 
@@ -46,7 +45,7 @@ void	handle_error(t_minishell *data, const char *str, t_error error)
  */
 static int	match_minishell_error(const char *str, t_error error)
 {
-	if (error == ERROR_NOSUCH)
+	if (error == ERROR_NOSUCH || error == ERROR_NOSUCHCMD)
 		print_error_message(str, MSG_ERROR_NOSUCH);
 	else if (error == ERROR_NODELIM)
 		print_error_message(str, MSG_ERROR_NODELIM);

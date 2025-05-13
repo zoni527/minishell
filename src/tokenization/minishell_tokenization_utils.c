@@ -45,7 +45,7 @@ t_token	*new_token_node(t_minishell *data, const char *str)
 {
 	t_token	*new;
 
-	new = ft_ma_calloc(data->arena, 1, sizeof(t_token));
+	new = ms_calloc(data, 1, sizeof(t_token));
 	new->value = (char *)str;
 	if (*str == '|')
 		new->type = PIPE;

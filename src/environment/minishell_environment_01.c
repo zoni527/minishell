@@ -33,7 +33,7 @@ char	*ms_getenv(t_minishell *data, char *key)
 	{
 		if (ft_strcmp(key, current->key) == 0)
 		{
-			value = ft_ma_strdup(data->arena, current->value);
+			value = ms_strdup(data, current->value);
 			return (value);
 		}
 		else
@@ -90,23 +90,23 @@ void	ms_setenv(t_minishell *data, char *key, char *value)
 	t_var	*last;
 
 	last = NULL;
-	raw = ft_ma_strjoin(data->arena, key, "=");
+	raw = ms_strjoin(data, key, "=");
 	if (value != NULL)
-		raw = ft_ma_strjoin(data->arena, raw, value);
+		raw = ms_strjoin(data, raw, value);
 	last = find_and_replace_env(data, key, value, raw);
 	if (last)
 	{
 		last->next = create_new_env_var(data,
-				ft_ma_strdup(data->arena, raw),
-				ft_ma_strdup(data->arena, key),
-				ft_ma_strdup(data->arena, value));
+				ms_strdup(data, raw),
+				ms_strdup(data, key),
+				ms_strdup(data, value));
 		last->next->prev = last;
 	}
 	else if (last == NULL && data->minishell_env == NULL)
 		data->minishell_env = create_new_env_var(data,
-				ft_ma_strdup(data->arena, raw),
-				ft_ma_strdup(data->arena, key),
-				ft_ma_strdup(data->arena, value));
+				ms_strdup(data, raw),
+				ms_strdup(data, key),
+				ms_strdup(data, value));
 }
 
 /**

@@ -27,7 +27,7 @@ char	*create_raw(t_minishell *data, char *key, char *value)
 {
 	char	*raw;
 
-	raw = ft_ma_strjoin(data->arena, key, "=");
-	raw = ft_ma_strjoin(data->arena, raw, value);
+	raw = ms_strjoin(data, key, "=");
+	raw = ms_strjoin(data, raw, value);
 	return (raw);
 }

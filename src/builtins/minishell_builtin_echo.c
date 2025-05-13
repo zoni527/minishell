@@ -24,7 +24,7 @@ static bool	is_valid_n_str(const char *str)
 {
 	size_t	i;
 
-	if (!str || str[0] != '-')
+	if (!str || str[0] != '-' || str[1] != 'n')
 		return (false);
 	i = 0;
 	while (str[++i])

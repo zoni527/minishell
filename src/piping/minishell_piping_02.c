@@ -20,19 +20,17 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *command);
  *
  * @param data	Pointer to main data struct
  */
-void	child_process(t_minishell *data, int extra_fd)
+void	child_process(t_minishell *data)
 {
 	char	**argv;
 	char	**envp;
 	t_token	*command;
 
+	safe_close(data, &data->extra_fd);
 	if (data->pipe_index != 0)
 		redirect_stdin_and_close_fd(data, &data->pipe_fds[READ]);
 	if (data->pipe_index != data->pipe_count)
-	{
 		redirect_stdout_and_close_fd(data, &data->pipe_fds[WRITE]);
-		safe_close(data, &extra_fd);
-	}
 	if (handle_redirections(data) == EXIT_FAILURE)
 		clean_exit(data, EXIT_FAILURE);
 	command = copy_cmd_and_args_within_pipe(data);

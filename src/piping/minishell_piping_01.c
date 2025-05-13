@@ -49,7 +49,7 @@ void	piping(t_minishell *data)
 		data->pipe_index++;
 	}
 	if (data->last_pid == 0)
-		child_process(data, new_pipe[READ]);
+		child_process(data);
 	else
 		wait_for_children(data);
 }
@@ -68,14 +68,18 @@ void	piping(t_minishell *data)
 static void	create_new_pipe_and_assign_fds(t_minishell *data, int *new_pipe,
 										const int *prev_pipe_read_fd)
 {
-	if (data->pipe_index != data->pipe_count)
-		safe_pipe(data, new_pipe);
 	data->pipe_fds[READ] = -1;
 	data->pipe_fds[WRITE] = -1;
+	data->extra_fd = -1;
+	if (data->pipe_index != data->pipe_count)
+		safe_pipe(data, new_pipe);
 	if (data->pipe_index != 0)
 		data->pipe_fds[READ] = *prev_pipe_read_fd;
 	if (data->pipe_index != data->pipe_count)
+	{
 		data->pipe_fds[WRITE] = new_pipe[WRITE];
+		data->extra_fd = new_pipe[READ];
+	}
 }
 
 /**

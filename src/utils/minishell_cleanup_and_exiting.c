@@ -31,16 +31,24 @@ void	free_heap_memory(t_minishell *data)
  */
 void	close_fds(t_minishell *data)
 {
-	if (data->pipe_fds[READ] > 2)
+	if (data->pipe_fds[READ] != -1)
 	{
 		close(data->pipe_fds[READ]);
 		data->pipe_fds[READ] = -1;
 	}
-	if (data->pipe_fds[WRITE] > 2)
+	if (data->pipe_fds[WRITE] != -1)
 	{
 		close(data->pipe_fds[WRITE]);
 		data->pipe_fds[WRITE] = -1;
 	}
+	if (data->extra_fd != -1)
+	{
+		close(data->extra_fd);
+		data->extra_fd = -1;
+	}
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
 }
 
 /**
@@ -75,7 +83,7 @@ void	clean_exit(t_minishell *data, int exit_code)
  */
 void	clean_error_exit(t_minishell *data, const char *msg, int exit_code)
 {
-	clean(data);
 	ft_putendl_fd(msg, STDERR_FILENO);
+	clean(data);
 	exit(exit_code);
 }

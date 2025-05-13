@@ -46,19 +46,19 @@ int	change_dir(t_minishell *data, char *str)
 {
 	if (access(str, F_OK) < 0)
 	{
-		handle_error(data, ft_ma_strjoin(data->arena, "cd: ", str),
+		handle_error(data, ms_strjoin(data, "cd: ", str),
 			ERROR_NOSUCH);
 		return (EXIT_FAILURE);
 	}
 	else if (access(str, X_OK) < 0)
 	{
-		handle_error(data, ft_ma_strjoin(data->arena, "cd: ", str),
+		handle_error(data, ms_strjoin(data, "cd: ", str),
 			ERROR_PERMISSION);
 		return (EXIT_FAILURE);
 	}
 	if (chdir(str) == -1)
 	{
-		handle_error(data, ft_ma_strjoin(data->arena, "cd: ", str),
+		handle_error(data, ms_strjoin(data, "cd: ", str),
 			ERROR_CHDIR);
 		return (EXIT_FAILURE);
 	}
@@ -86,7 +86,7 @@ char	*safe_getcwd(t_minishell *data)
 			clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	}
 	temp = cwd;
-	cwd = ft_ma_strdup(data->arena, cwd);
+	cwd = ms_strdup(data, cwd);
 	free(temp);
 	return (cwd);
 }

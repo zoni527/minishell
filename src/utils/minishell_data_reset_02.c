@@ -44,7 +44,7 @@ void	append_var(t_var **env_list, t_var *var)
  *
  * @return	First node in copied environment list
  */
-t_var	*copy_env_to_memarena(t_memarena *arena, const t_var *env_list)
+t_var	*copy_env_to_memarena(t_minishell *data, const t_var *env_list)
 {
 	t_var	*copy;
 	t_var	*new_env;
@@ -52,10 +52,10 @@ t_var	*copy_env_to_memarena(t_memarena *arena, const t_var *env_list)
 	new_env = NULL;
 	while (env_list)
 	{
-		copy = ft_ma_calloc(arena, 1, sizeof(t_var));
-		copy->raw = ft_ma_strdup(arena, env_list->raw);
-		copy->key = ft_ma_strdup(arena, env_list->key);
-		copy->value = ft_ma_strdup(arena, env_list->value);
+		copy = ms_calloc(data, 1, sizeof(t_var));
+		copy->raw = ms_strdup(data, env_list->raw);
+		copy->key = ms_strdup(data, env_list->key);
+		copy->value = ms_strdup(data, env_list->value);
 		append_var(&new_env, copy);
 		env_list = env_list->next;
 	}
