@@ -13,6 +13,7 @@
 #include "minishell.h"
 
 static void	run_builtin_within_pipe(t_minishell *data, t_token *command);
+static void	ignore_sigpipe(void);
 
 /**
  * Main child process function. Handles pipe reading and writing, input and
@@ -54,6 +55,7 @@ void	child_process(t_minishell *data)
  */
 static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 {
+	ignore_sigpipe();
 	if (get_builtin_type(builtin) == BLTN_CD)
 		builtin_cd(data);
 	else if (get_builtin_type(builtin) == BLTN_ECHO)
@@ -71,4 +73,15 @@ static void	run_builtin_within_pipe(t_minishell *data, t_token *builtin)
 	else
 		clean_error_exit(data, MSG_ERROR_BLTN_NOSUCH, EXIT_BLTN_NOSUCH);
 	clean_exit(data, data->last_rval);
+}
+
+static void	ignore_sigpipe(void)
+{
+	struct sigaction	sa;
+
+	sigemptyset(&sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGPIPE);
+	sa.sa_handler = SIG_IGN;
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGPIPE, &sa, NULL);
 }

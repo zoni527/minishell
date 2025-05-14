@@ -12,7 +12,6 @@
 
 #include "minishell.h"
 
-
 /**
  * Wrapper function for ft_ma_calloc, which allocates memory from data->arena.
  * Performs a clean exit if there is no more memory available.
