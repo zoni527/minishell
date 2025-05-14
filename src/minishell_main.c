@@ -30,8 +30,8 @@ int	main(int argc, char *argv[], char *envp[])
 	initialize_data(&data, envp);
 	set_and_activate_primary_signal_handler(&data);
 	loop(&data);
-	clean(&data);
 	ft_putendl_fd("exit", STDERR_FILENO);
+	clean(&data);
 	return (data.last_rval);
 }
 
@@ -88,5 +88,6 @@ static void	initialize_data(t_minishell *data, char *envp[])
 	data->initial_env = (const char **)envp;
 	data->pipe_fds[READ] = -1;
 	data->pipe_fds[WRITE] = -1;
+	data->extra_fd = -1;
 	env_list_from_envp(data, data->initial_env);
 }

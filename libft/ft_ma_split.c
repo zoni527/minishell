@@ -14,7 +14,6 @@
 
 static size_t		word_count_delim(const char *s, char c);
 static const char	*ft_skip_over_char(const char *s, char c);
-static char			**ft_free_array(char **array, size_t len);
 static size_t		ft_len_till_c(const char *s, char c);
 
 char	**ft_ma_split(t_memarena *arena, char const *s, char c)
@@ -33,7 +32,7 @@ char	**ft_ma_split(t_memarena *arena, char const *s, char c)
 		s = ft_skip_over_char(s, c);
 		str_array[i] = ft_ma_substr(arena, s, 0, ft_len_till_c(s, c));
 		if (!str_array[i])
-			return (ft_free_array(str_array, i));
+			return (NULL);
 		s = ft_strchr(s, c);
 		i++;
 	}
@@ -74,12 +73,4 @@ static const char	*ft_skip_over_char(const char *s, char c)
 	while (*s && *s == c)
 		s++;
 	return (s);
-}
-
-static char	**ft_free_array(char **array, size_t len)
-{
-	while (len--)
-		free(array[len]);
-	free (array);
-	return (NULL);
 }

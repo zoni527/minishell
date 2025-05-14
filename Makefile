@@ -99,6 +99,8 @@ SRC :=	$(SRC_DIR)/tokenization/minishell_tokenization.c		\
 	$(SRC_DIR)/utils/minishell_data_reset_01.c			\
 	$(SRC_DIR)/utils/minishell_data_reset_02.c			\
 	$(SRC_DIR)/utils/minishell_user_input.c				\
+	$(SRC_DIR)/utils/minishell_memory_arena.c			\
+	$(SRC_DIR)/utils/minishell_quote_toggling.c			\
 	\
 	$(SRC_DIR)/minishell_main.c
 #------------------------------------------------------------------------------#

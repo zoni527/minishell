@@ -100,11 +100,9 @@ static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 	size_t	unexpanded_len;
 	size_t	expanded_len;
 
+	expanded_len = 0;
 	if (!var)
-	{
 		unexpanded_len = var_name_len(&token->value[var_index]);
-		expanded_len = 0;
-	}
 	else
 	{
 		unexpanded_len = ft_strlen(var->key);
@@ -112,10 +110,12 @@ static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 	}
 	old_len = ft_strlen(token->value);
 	new_len = old_len - 1 - unexpanded_len + expanded_len;
-	new = ft_ma_calloc(data->arena, new_len + 1, sizeof(char));
+	new = ms_calloc(data, new_len + 1, sizeof(char));
 	ft_strlcat(new, token->value, var_index);
 	if (var)
-		ft_strlcat(new, var->value, new_len + 1);
+		ft_strlcat(new, deactivate_quotes(var->value), new_len + 1);
+	if (var)
+		reactivate_quotes(var->value);
 	ft_strlcat(new, &token->value[var_index] + unexpanded_len, new_len + 1);
 	token->value = new;
 	return (var_index + expanded_len - 1);
@@ -165,11 +165,11 @@ static t_var	*question_mark_variable(t_minishell *data)
 	int		str_len;
 	int		last_rval;
 
-	variable = ft_ma_calloc(data->arena, 1, sizeof(t_var));
+	variable = ms_calloc(data, 1, sizeof(t_var));
 	variable->key = "?";
 	last_rval = (unsigned char)data->last_rval;
 	str_len = ft_int_digits(last_rval);
-	variable->value = ft_ma_calloc(data->arena, str_len + 1, sizeof(char));
+	variable->value = ms_calloc(data, str_len + 1, sizeof(char));
 	while (--str_len)
 	{
 		variable->value[str_len] = (last_rval % 10) + '0';

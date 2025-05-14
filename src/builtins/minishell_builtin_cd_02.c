@@ -27,14 +27,14 @@ static int	handle_tilde(t_minishell *data, char *path)
 	char	*home_path;
 	char	*new_home_path;
 
-	new_path = ft_ma_substr(data->arena, path, 1, (ft_strlen(path) - 1));
+	new_path = ms_substr(data, path, 1, (ft_strlen(path) - 1));
 	home_path = ms_getenv(data, "HOME");
 	if (home_path == NULL)
 	{
 		handle_error(data, "cd", ERROR_NOHOME);
 		return (EXIT_FAILURE);
 	}
-	new_home_path = ft_ma_strjoin(data->arena, home_path, new_path);
+	new_home_path = ms_strjoin(data, home_path, new_path);
 	if (change_dir(data, new_home_path) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	ms_setenv(data, "PWD", new_home_path);

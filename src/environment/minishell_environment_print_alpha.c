@@ -77,12 +77,12 @@ static void	print_env_token_with_quotes(t_minishell *data, t_var *token)
 
 	if (ft_strcmp(token->key, "_") == 0)
 		return ;
-	res = ft_ma_strjoin(data->arena, "declare -x ", token->key);
+	res = ms_strjoin(data, "declare -x ", token->key);
 	if (ft_strchr(token->raw, '=') != NULL)
 	{
-		res = ft_ma_strjoin(data->arena, res, "=\"");
-		res = ft_ma_strjoin(data->arena, res, token->value);
-		res = ft_ma_strjoin(data->arena, res, "\"");
+		res = ms_strjoin(data, res, "=\"");
+		res = ms_strjoin(data, res, token->value);
+		res = ms_strjoin(data, res, "\"");
 	}
 	ft_putendl_fd(res, 1);
 }

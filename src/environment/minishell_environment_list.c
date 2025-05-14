@@ -61,10 +61,9 @@ t_var	*create_new_env_var(t_minishell *data,
 {
 	t_var	*new_node;
 
-	new_node = ft_ma_malloc(data->arena, sizeof(t_var));
+	new_node = ms_calloc(data, 1, sizeof(t_var));
 	new_node->raw = raw;
 	new_node->key = key;
 	new_node->value = value;
-	new_node->next = NULL;
 	return (new_node);
 }

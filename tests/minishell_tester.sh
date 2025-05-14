@@ -191,12 +191,12 @@ printf "${GREEN}#--------------------------------#${CR}\n"
 printf "${GREEN}|        Test 8: <               |${CR}\n"
 printf "${GREEN}#--------------------------------#${CR}\n"
 
-echo "< minishell_tester.sh cat" | $MINISHELL > $MINIOUT
+echo "< ${TESTDIR}/minishell_tester.sh cat" | $MINISHELL > $MINIOUT
 echo "cat < Makefile" | $MINISHELL >> $MINIOUT
 echo "cat < Makefile < not_a_file" | $MINISHELL >> $MINIOUT
 echo "cat < not_a_file < Makefile" | $MINISHELL >> $MINIOUT
 echo "cat < src < Makefile" | $MINISHELL >> $MINIOUT
-echo "< minishell_tester.sh cat" | bash > $BASHOUT
+echo "< ${TESTDIR}/minishell_tester.sh cat" | bash > $BASHOUT
 echo "cat < Makefile" | bash >> $BASHOUT
 echo "cat < Makefile < not_a_file" | bash >> $BASHOUT
 echo "cat < not_a_file < Makefile" | bash >> $BASHOUT

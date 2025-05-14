@@ -66,13 +66,13 @@ extern volatile sig_atomic_t	g_signal;
 
 /* -------------------------------------------------------------------- colors*/
 
-# define BHCYN	"\e[1;96m"
-# define BGRN	"\e[1;32m"
-# define CRESET	"\e[0m"
+# define BHCYN	"\001\e[1;96m\002"
+# define BGRN	"\001\e[1;32m\002"
+# define CRESET	"\001\e[0m\002"
 
 /* ---------------------------------------------------------- string literals */
 
-# define STR_PROMPTSTART		"\e[1;96mmini🐚:\e[0m "
+# define STR_PROMPTSTART		"\001\e[1;96m\002mini🐚:\001\e[0m\002 "
 # define STR_PROMPTDELIM		" 🐢 "
 
 /* ----------------------------------------------------------- error messages */
@@ -86,7 +86,7 @@ extern volatile sig_atomic_t	g_signal;
 # define MSG_ERROR_DUP2			"ERROR: failed to dup2"
 # define MSG_ERROR_WRITE		"ERROR: failed to write"
 # define MSG_ERROR_EXECVE		"ERROR: made it past execve"
-# define MSG_ERROR_ENOMEM		"ERROR: system is out of memory"
+# define MSG_ERROR_ENOMEM		"No more heap memory available, exiting"
 # define MSG_ERROR_SYNTAX		"syntax error near unexpected token `"
 # define MSG_ERROR_NOSUCH		"No such file or directory"
 # define MSG_ERROR_TOOMANYARGS	"too many arguments"
@@ -138,6 +138,7 @@ typedef enum e_error
 	ERROR_ISADIR,
 	ERROR_NOTADIR,
 	ERROR_NOCMD,
+	ERROR_NOSUCHCMD,
 	ERROR_NOHOME,
 	ERROR_NOOLDPWD,
 	ERROR_BINPERM,
@@ -190,6 +191,7 @@ typedef struct s_minishell
 	pid_t				last_pid;
 	int					last_rval;
 	int					pipe_fds[2];
+	int					extra_fd;
 	struct sigaction	act_int;
 	struct sigaction	act_quit;
 	struct sigaction	act_int_old;
@@ -392,7 +394,7 @@ void			piping(t_minishell *data);
 
 /* ---------------------------------------------------- minishell_piping_02.c */
 
-void			child_process(t_minishell *data, int extra_fd);
+void			child_process(t_minishell *data);
 
 /* ================================= SIGNALS ================================ */
 
@@ -517,10 +519,10 @@ void			safe_pipe(t_minishell *data, int *new_pipe);
 
 /* --------------------------------------------- minishell_token_helpers_01.c */
 
-t_token			*copy_tokens_within_pipe(const t_minishell *data);
-t_token			*copy_cmd_and_args_within_pipe(const t_minishell *data);
-t_token			*copy_redirections_within_pipe(const t_minishell *data);
-t_token			*copy_token(const t_minishell *data, const t_token *token);
+t_token			*copy_tokens_within_pipe(t_minishell *data);
+t_token			*copy_cmd_and_args_within_pipe(t_minishell *data);
+t_token			*copy_redirections_within_pipe(t_minishell *data);
+t_token			*copy_token(t_minishell *data, const t_token *token);
 
 /* --------------------------------------------- minishell_token_helpers_02.c */
 
@@ -548,12 +550,26 @@ int				reset_data(t_minishell *data);
 
 /* ------------------------------------------------ minishell_data_reset_02.c */
 
-t_var			*copy_env_to_memarena(t_memarena *arena, const t_var *env_list);
+t_var			*copy_env_to_memarena(t_minishell *data, const t_var *env_list);
 void			append_var(t_var **env_list, t_var *var);
 
 /* --------------------------------------------------- minishell_user_input.c */
 
 int				read_user_input(t_minishell *data);
+
+/* ------------------------------------------------- minishell_memory_arena.c */
+
+void			*ms_calloc(t_minishell *data, size_t nmemb, size_t size);
+char			*ms_strdup(t_minishell *data, const char *s);
+char			*ms_strjoin(t_minishell *data, char const *s1, char const *s2);
+char			*ms_substr(t_minishell *data, char const *s,
+					unsigned int start, size_t len);
+char			**ms_split(t_minishell *data, char const *s, char c);
+
+/* ----------------------------------------------- minishell_quote_toggling.c */
+
+char			*deactivate_quotes(char *str);
+char			*reactivate_quotes(char *str);
 
 /* -------------------------------------------------------------------------- */
 #endif

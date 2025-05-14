@@ -54,7 +54,7 @@ bool	pretends_to_be_a_directory(t_minishell *data, const char *str)
 	len = ft_strlen(str);
 	if (str[len - 1] != '/')
 		return (false);
-	check = ft_ma_strdup(data->arena, str);
+	check = ms_strdup(data, str);
 	check[len - 1] = '\0';
 	if (access(check, F_OK) < 0)
 		return (false);

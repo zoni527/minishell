@@ -30,10 +30,10 @@ void	env_list_from_envp(t_minishell *data, const char **envp)
 	i = -1;
 	while (envp && envp[++i])
 	{
-		vals[0] = ft_ma_strdup(data->arena, envp[i]);
+		vals[0] = ms_strdup(data, envp[i]);
 		j = ft_char_index(vals[0], '=');
-		vals[1] = ft_ma_substr(data->arena, vals[0], 0, j);
-		vals[2] = ft_ma_substr(data->arena, vals[0],
+		vals[1] = ms_substr(data, vals[0], 0, j);
+		vals[2] = ms_substr(data, vals[0],
 				(j + 1), ft_strlen(vals[0]) - (j + 1));
 		if (current == NULL)
 		{
@@ -66,7 +66,7 @@ char	**create_envp_arr_from_custom_env(t_minishell *data)
 	i = -1;
 	list_len = 0;
 	list_len = get_env_list_size(data->minishell_env);
-	envp_arr = ft_ma_malloc(data->arena, (sizeof(char *) * (list_len + 1)));
+	envp_arr = ms_calloc(data, (list_len + 1), sizeof(char *));
 	current = data->minishell_env;
 	while (++i < list_len)
 	{

@@ -34,6 +34,9 @@ int	reset_data(t_minishell *data)
 	data->token_list = NULL;
 	data->hd_delimiters = NULL;
 	data->hd_file_names = NULL;
+	data->pipe_fds[READ] = -1;
+	data->pipe_fds[WRITE] = -1;
+	data->extra_fd = -1;
 	data->pipe_index = 0;
 	if (!data->minishell_env)
 	{
@@ -44,7 +47,7 @@ int	reset_data(t_minishell *data)
 	if (!env_copy)
 		clean_error_exit(data, MSG_ERROR_ENOMEM, EXIT_ENOMEM);
 	ft_reset_memarena(data->arena);
-	data->minishell_env = copy_env_to_memarena(data->arena, env_copy);
+	data->minishell_env = copy_env_to_memarena(data, env_copy);
 	free_env(&env_copy);
 	return (EXIT_SUCCESS);
 }

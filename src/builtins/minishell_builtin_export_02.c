@@ -26,7 +26,7 @@ static void	handle_no_equals(t_minishell *data, t_token *token)
 	char	*value;
 
 	raw = token->value;
-	key = ft_ma_strdup(data->arena, token->value);
+	key = ms_strdup(data, token->value);
 	if (ms_getenv(data, key) != NULL)
 		return ;
 	value = "\0";
@@ -49,23 +49,23 @@ static	void	handle_append(t_minishell *data, t_token *token, int i)
 	char	*value;
 	char	*value2;
 
-	key = ft_ma_substr(data->arena, token->value, 0, (i - 1));
+	key = ms_substr(data, token->value, 0, (i - 1));
 	if (token->value[i + 1] == '\0' && ms_getenv(data, key) == NULL)
 	{
 		value = "\0";
 	}
 	else if (ms_getenv(data, key) == NULL && token->value[i + 1] != '\0')
 	{
-		value = ft_ma_substr(data->arena, token->value,
+		value = ms_substr(data, token->value,
 				(i + 1), (ft_strlen(token->value) - (i + 1)));
 	}
 	else
 	{
-		value = ms_getenv(data, ft_ma_substr(data->arena,
+		value = ms_getenv(data, ms_substr(data,
 					token->value, 0, i -1));
-		value2 = ft_ma_substr(data->arena, token->value, (i + 1),
+		value2 = ms_substr(data, token->value, (i + 1),
 				ft_strlen(token->value) - (i + 1));
-		value = ft_ma_strjoin(data->arena, value, value2);
+		value = ms_strjoin(data, value, value2);
 	}
 	raw = create_raw(data, key, value);
 	ms_setenv_export(data, key, value, raw);
@@ -87,8 +87,8 @@ static void	handle_equals(t_minishell *data, t_token *token, int i)
 	char	*value;
 
 	raw = token->value;
-	key = ft_ma_substr(data->arena, token->value, 0, i);
-	value = ft_ma_substr(data->arena, token->value,
+	key = ms_substr(data, token->value, 0, i);
+	value = ms_substr(data, token->value,
 			(i + 1), (ft_strlen(token->value) - (i + 1)));
 	ms_setenv_export(data, key, value, raw);
 }
