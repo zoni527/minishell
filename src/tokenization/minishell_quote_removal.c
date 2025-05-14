@@ -43,6 +43,7 @@ void	quote_removal(t_minishell *data)
 					data->token_list->prev = NULL;
 			}
 		}
+		reactivate_quotes(token->value);
 		token = token->next;
 	}
 }

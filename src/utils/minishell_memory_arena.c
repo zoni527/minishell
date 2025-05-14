@@ -12,8 +12,17 @@
 
 #include "minishell.h"
 
-/* Utility wrapper functions for allocation, perform a clean exit on error. */
 
+/**
+ * Wrapper function for ft_ma_calloc, which allocates memory from data->arena.
+ * Performs a clean exit if there is no more memory available.
+ *
+ * @param data		Pointer to main data struct
+ * @param nmbemb	Number of elements to allocate
+ * @param size		Size of elements to allocate
+ *
+ * @return	Pointer to requested memory
+ */
 void	*ms_calloc(t_minishell *data, size_t nmemb, size_t size)
 {
 	void	*ptr;
@@ -24,6 +33,15 @@ void	*ms_calloc(t_minishell *data, size_t nmemb, size_t size)
 	return (ptr);
 }
 
+/**
+ * Wrapper function for ft_ma_strdup. Duplicates a string into data->arena.
+ * Performs a clean exit if there is no more memory available.
+ *
+ * @param data		Pointer to main data struct
+ * @param s			String to duplicate
+ *
+ * @return	Pointer to duplicated string in data->arena
+ */
 char	*ms_strdup(t_minishell *data, const char *s)
 {
 	char	*str;
@@ -34,6 +52,17 @@ char	*ms_strdup(t_minishell *data, const char *s)
 	return (str);
 }
 
+/**
+ * Wrapper function for ft_ma_strjoin. Joins two strings and returns the
+ * new string that is saved in data->arena.
+ * Performs a clean exit if there is no more memory available.
+ *
+ * @param data	Pointer to main data struct
+ * @param s1	First string to be joined
+ * @param s2	Second string to be joined
+ *
+ * @return	Pointer to joined string in data->arena
+ */
 char	*ms_strjoin(t_minishell *data, char const *s1, char const *s2)
 {
 	char	*joined_str;
@@ -44,6 +73,17 @@ char	*ms_strjoin(t_minishell *data, char const *s1, char const *s2)
 	return (joined_str);
 }
 
+/**
+ * Wrapper function for ft_ma_substr. Creates a substring inside data->arena.
+ * Performs a clean exit if there is no more memory available.
+ *
+ * @param data	Pointer to main data struct
+ * @param s		String to create substring from
+ * @param start	Starting index of substring
+ * @param len	Lenght of substring
+ *
+ * @return	Pointer to substring in data->arena
+ */
 char	*ms_substr(t_minishell *data, char const *s,
 				unsigned int start, size_t len)
 {
@@ -55,6 +95,17 @@ char	*ms_substr(t_minishell *data, char const *s,
 	return (substr);
 }
 
+/**
+ * Wrapper function for ft_ma_split. Creates a null terminated array of strings
+ * inside data->arena. Performs a clean exit if there is no more memory
+ * available.
+ *
+ * @param data	Pointer to main data struct
+ * @param s		String to be split
+ * @param c		Character to split the string by
+ *
+ * @return	Pointer to first element in array of strings in data->arena
+ */
 char	**ms_split(t_minishell *data, char const *s, char c)
 {
 	char	**str_array;

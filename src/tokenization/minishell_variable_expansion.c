@@ -100,11 +100,9 @@ static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 	size_t	unexpanded_len;
 	size_t	expanded_len;
 
+	expanded_len = 0;
 	if (!var)
-	{
 		unexpanded_len = var_name_len(&token->value[var_index]);
-		expanded_len = 0;
-	}
 	else
 	{
 		unexpanded_len = ft_strlen(var->key);
@@ -115,7 +113,9 @@ static size_t	expand_variable(t_minishell *data, t_token *token, t_var *var,
 	new = ms_calloc(data, new_len + 1, sizeof(char));
 	ft_strlcat(new, token->value, var_index);
 	if (var)
-		ft_strlcat(new, var->value, new_len + 1);
+		ft_strlcat(new, deactivate_quotes(var->value), new_len + 1);
+	if (var)
+		reactivate_quotes(var->value);
 	ft_strlcat(new, &token->value[var_index] + unexpanded_len, new_len + 1);
 	token->value = new;
 	return (var_index + expanded_len - 1);

@@ -566,5 +566,10 @@ char			*ms_substr(t_minishell *data, char const *s,
 					unsigned int start, size_t len);
 char			**ms_split(t_minishell *data, char const *s, char c);
 
+/* ----------------------------------------------- minishell_quote_toggling.c */
+
+char			*deactivate_quotes(char *str);
+char			*reactivate_quotes(char *str);
+
 /* -------------------------------------------------------------------------- */
 #endif
