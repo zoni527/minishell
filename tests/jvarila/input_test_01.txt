@@ -1,6 +1,0 @@
-echo Welcome!
-sleep 5
-echo Hello World!
-sleep 1
-echo Goodbye!
-exit 1000

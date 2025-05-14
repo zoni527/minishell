@@ -1,8 +1,0 @@
-echo Hello
-echo $?
-sleep 1
-echo $?
-cat README.md
-echo $?
-sleep 1 | sleep 2 | sleep 3
-echo $?

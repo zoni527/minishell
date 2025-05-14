@@ -1,9 +1,0 @@
-<< h1 << h2 << h3 << h4
-heredoc1
-h1
-heredoc2
-h2
-heredoc3
-h3
-heredoc4
-h4
