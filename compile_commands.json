@@ -1132,5 +1132,41 @@
    "obj/minishell_main.o"
   ],
   "file": "src/minishell_main.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_memory_arena.c",
+   "-o",
+   "obj/utils/minishell_memory_arena.o"
+  ],
+  "file": "src/utils/minishell_memory_arena.c"
+ },
+ {
+  "directory": "/home/jvarila/Repos/minishell",
+  "arguments": [
+   "cc",
+   "-Wall",
+   "-Wextra",
+   "-Werror",
+   "-I",
+   "./libft",
+   "-I",
+   "./include",
+   "-c",
+   "src/utils/minishell_quote_toggling.c",
+   "-o",
+   "obj/utils/minishell_quote_toggling.o"
+  ],
+  "file": "src/utils/minishell_quote_toggling.c"
  }
 ]
