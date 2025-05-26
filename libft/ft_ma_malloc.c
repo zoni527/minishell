@@ -28,10 +28,8 @@ void	*ft_ma_malloc(t_memarena *arena, size_t bytes_required)
 	void		*ptr;
 	size_t		bytes_available;
 
-	if (bytes_required <= 0)
+	if (bytes_required <= 0 || bytes_required > arena->capacity)
 		return (NULL);
-	if (bytes_required > arena->capacity)
-		ft_free_memarena_exit(arena, MSG_ERROR_CAPACITY);
 	bytes_available = arena->capacity - arena->bytes_used;
 	while (bytes_available < bytes_required)
 	{
