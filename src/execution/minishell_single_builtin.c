@@ -29,6 +29,8 @@ void	run_single_builtin(t_minishell *data)
 
 	std_in = -1;
 	std_out = -1;
+	if (get_builtin_type(data->token_list) == BLTN_EXIT)
+		builtins(data);
 	if (pipe_has_input_redirection(data) || pipe_has_heredoc(data))
 		std_in = safe_dup(data, STDIN_FILENO);
 	if (pipe_has_output_redirection(data) || pipe_has_append(data))
