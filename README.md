@@ -6,7 +6,6 @@ A command line interpreter using Linux system calls written in C, loosely based 
 - C compiler
 - Git
 - Make
-
 Project was developed and tested on Ubuntu 22.
 ### Steps
 1. Clone project
@@ -33,12 +32,13 @@ make
 - exit
 - export
 - unset
-### Variable expansion
-Supports inherited and user defined environment variables.
+### Variable setting, unsetting and expansion
+Supports inherited and user defined environment variables. Use `export` to define new ones and `unset`
+to remove them. A word of caution: don't `unset PATH`.
 ### Single and double quotes
 String concatenation, variable expansion in double quotes, and no expansion in single quotes.
 ### Redirections
-Input `(<)`, output (overwrite `(>)` and concatenation `(>>)`), and heredoc `(<<)`.
+Input `<`, output (overwrite `>` and concatenation `>>`), and heredoc `<<`.
 ### Piping
 Chain multiple commands with `|`.
 ### Signals
@@ -49,24 +49,16 @@ Try:
 > export o="o Hello world!"
 > ech$o
 ```
-## Concepts
-- Command line
-- Shell
-- Bash
-- Linux
-- Unix
-- Lexing
-- Tokens
-- Substitution
-- Parsing
-- Splitting
-- Expansion
+## Responsibilities
+During development both team members made contributions to most parts of the codebase, so the lists below don't mean exclusive responsibility, but main outlines.
+### Johnny Varila
+- User input parsing, tokenization, string concatenation, word splitting & variable expansion
+- Memory arena
+- Redirections & heredocs
+- Pipes
+- Error handling & messages
+### Ross Hvidsten
+- Builtins
+- Environment variable inheritance, setting & unsetting
+- PATH handling
 - Execution
-- Redirection
-- Piping
-- Processes
-- Files
-- Directories
-- Quotes
-- Environment
-- Environment variables
